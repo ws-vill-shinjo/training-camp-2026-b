@@ -1,0 +1,14 @@
+{
+  "name": "Training Camp 2026",
+  "image": "mcr.microsoft.com/devcontainers/ruby:1-3.4-bookworm",
+
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "22"
+    }
+  },
+
+  "forwardPorts": [3000, 3001],
+
+  "remoteUser": "vscode"
+}
