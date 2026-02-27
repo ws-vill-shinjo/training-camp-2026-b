@@ -1,77 +1,68 @@
 "use client";
 
-import { useState } from "react";
+import useSWR from "swr";
+import { apiClient } from "@/lib/api";
 
-// モックユーザーの型定義
-export type MockUser = {
-  id: number;
+export type User = {
   name: string;
-  email: string;
-  avatarUrl: string;
 };
 
-// ログイン済みとして扱うモックユーザー一覧
-// ハッカソン用にサンプルデータを用意しています
-const MOCK_USERS: MockUser[] = [
-  {
-    id: 1,
-    name: "山田 太郎",
-    email: "yamada@example.com",
-    avatarUrl: "https://i.pravatar.cc/150?img=1",
-  },
-  {
-    id: 2,
-    name: "鈴木 花子",
-    email: "suzuki@example.com",
-    avatarUrl: "https://i.pravatar.cc/150?img=2",
-  },
-  {
-    id: 3,
-    name: "佐藤 次郎",
-    email: "sato@example.com",
-    avatarUrl: "https://i.pravatar.cc/150?img=3",
-  },
-];
+type MeResponse = {
+  user: User | null;
+};
 
-// デフォルトでログインするユーザー（最初の1人目）
-const DEFAULT_USER = MOCK_USERS[0];
+// /api/auth/me を叩いてセッション中のユーザーを取得する
+const fetcher = (url: string) =>
+  apiClient.get<MeResponse>(url).then((res) => res.data);
 
 type UseAuthReturn = {
   /** 現在ログイン中のユーザー情報。未ログインの場合は null */
-  user: MockUser | null;
+  user: User | null;
   /** ログイン状態かどうか */
   isLoggedIn: boolean;
-  /** モックログインを実行する。user を省略すると DEFAULT_USER でログイン */
-  login: (user?: MockUser) => void;
-  /** ログアウトする */
-  logout: () => void;
-  /** 選択可能なモックユーザー一覧 */
-  mockUsers: MockUser[];
+  /** 初回ロード中かどうか */
+  isLoading: boolean;
+  /** ログイン（name と password を送信。password は "password" 固定） */
+  login: (name: string, password: string) => Promise<void>;
+  /** ログアウト */
+  logout: () => Promise<void>;
 };
 
 /**
- * モックログイン機構を提供するフック。
- * 実際の認証バックエンドは不要で、import してすぐに使えます。
+ * サーバーセッションと連携したモックログイン機構を提供するフック。
+ * バックエンド（Rails または Next.js API）が localhost:3001 で起動している必要があります。
  *
  * @example
  * const { user, isLoggedIn, login, logout } = useAuth();
  */
 export function useAuth(): UseAuthReturn {
-  const [user, setUser] = useState<MockUser | null>(null);
+  const { data, mutate, isLoading } = useSWR<MeResponse>(
+    "/api/auth/me",
+    fetcher,
+    {
+      // エラー時にリトライしない（バックエンド未起動時に無限リトライしないよう）
+      shouldRetryOnError: false,
+      revalidateOnFocus: false,
+    }
+  );
 
-  const login = (targetUser: MockUser = DEFAULT_USER) => {
-    setUser(targetUser);
+  const login = async (name: string, password: string) => {
+    await apiClient.post("/api/auth/login", { name, password });
+    // セッションが更新されたので再フェッチ
+    await mutate();
   };
 
-  const logout = () => {
-    setUser(null);
+  const logout = async () => {
+    await apiClient.delete("/api/auth/logout");
+    // キャッシュを即座にクリアしてから再フェッチ
+    await mutate({ user: null }, false);
   };
 
   return {
-    user,
-    isLoggedIn: user !== null,
+    user: data?.user ?? null,
+    isLoggedIn: !!(data?.user),
+    isLoading,
     login,
     logout,
-    mockUsers: MOCK_USERS,
   };
 }
