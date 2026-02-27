@@ -1,7 +1,6 @@
-# Training Camp 2026 - ハッカソンテンプレート
+# Training Camp 2026 devcontainer
 
-開発合宿（ハッカソン）用のスターターテンプレートです。
-環境構築なしですぐに開発を始められます。
+環境構築なしですぐに開発できるための devcontainer
 
 ## 必要な環境
 
@@ -55,7 +54,6 @@ yarn dev
 
 ```bash
 cd backend/rails
-bin/rails db:create db:migrate   # 初回のみ
 bin/rails server
 # → http://localhost:3001
 ```
@@ -76,7 +74,7 @@ yarn dev
 | バックエンド (選択式)  | Ruby on Rails 8.1 API モード または Next.js API Routes |
 | パッケージマネージャー | yarn (Node.js) / Bundler (Ruby)                        |
 | 言語バージョン         | Node.js 22 / Ruby 3.4                                  |
-| DB                     | 各チームが自由に選択（デフォルト: SQLite）             |
+| DB                     | 各チームが自由に選択                                   |
 
 ## チームでの作業開始手順
 
