@@ -25,10 +25,24 @@
   "customizations": {
     "vscode": {
       "extensions": [
-        "dbaeumer.vscode-eslint",
-        "esbenp.prettier-vscode",
-        "bradlc.vscode-tailwindcss",
-        "shopify.ruby-lsp"
+        // --- 共通 ---
+        "dbaeumer.vscode-eslint",          // ESLint
+        "esbenp.prettier-vscode",          // Prettier
+        "eamodio.gitlens",                 // Git 操作の強化
+        "usernamehw.errorlens",            // エラーをインラインで表示
+        "PKief.material-icon-theme",       // ファイルアイコン
+        "ms-vsliveshare.vsliveshare",      // ライブシェア（ペアプロ用）
+        "humao.rest-client",               // REST Client（API テスト用）
+        "mechatroner.rainbow-csv",         // CSV ビューワー
+        // --- フロントエンド（Next.js / TypeScript）---
+        "dsznajder.es7-react-js-snippets", // React スニペット
+        "formulahendry.auto-rename-tag",   // HTML タグの自動リネーム
+        "naumovs.color-highlight",         // カラーコードのプレビュー
+        // --- バックエンド（Rails / Ruby）---
+        "shopify.ruby-lsp",                // Ruby LSP
+        "Kasik96.latte",                   // ERB テンプレート
+        // --- DB ---
+        "qwtel.sqlite-viewer"              // SQLite ビューワー
       ]
     }
   },
