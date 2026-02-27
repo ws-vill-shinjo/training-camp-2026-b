@@ -1,0 +1,28 @@
+# Rails 生成物
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+
+# DB（SQLite はローカル用なので除外）
+/storage/*.sqlite3
+/storage/*.sqlite3-journal
+
+# 機密情報
+/config/master.key
+/config/credentials/*.key
+
+# 環境変数
+.env
+.env.local
+.env.*.local
+
+# バンドル
+/.bundle
+/vendor/bundle
+
+# テスト
+/coverage/
+
+# OS
+.DS_Store

@@ -11,14 +11,10 @@
     "ghcr.io/anthropics/devcontainer-features/claude-code:1.0": {}
   },
 
-  // Claude Code の認証情報を永続化
+  // ホスト（WSL）側の認証情報をコンテナにマウント
   "mounts": [
-    "source=claude-code-config-${devcontainerId},target=/home/vscode/.claude,type=volume"
+    "source=${localEnv:HOME}/.claude,target=/home/vscode/.claude,type=bind"
   ],
-
-  "containerEnv": {
-    "CLAUDE_CONFIG_DIR": "/home/vscode/.claude"
-  },
 
   // Next.js dev server (3000), Rails server (3001), DB 用ポート等
   "forwardPorts": [3000, 3001, 5432],
