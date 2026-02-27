@@ -8,7 +8,7 @@
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
     # フロントエンドのオリジンを許可（本番では実際のドメインに変更する）
-    origins "http://localhost:3000"
+    origins "http://localhost:3007"
 
     resource "*",
       headers: :any,

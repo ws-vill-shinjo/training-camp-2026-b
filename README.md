@@ -45,7 +45,7 @@ code .
 ```bash
 cd frontend
 yarn dev
-# → http://localhost:3000
+# → http://localhost:3007
 ```
 
 ### バックエンド（どちらか一方を選ぶ）
@@ -55,7 +55,7 @@ yarn dev
 ```bash
 cd backend/rails
 bin/rails server
-# → http://localhost:3001
+# → http://localhost:3008
 ```
 
 **Next.js API を使う場合**
@@ -63,7 +63,7 @@ bin/rails server
 ```bash
 cd backend/nextjs
 yarn dev
-# → http://localhost:3001
+# → http://localhost:3008
 ```
 
 ## 技術スタック
@@ -85,7 +85,7 @@ yarn dev
 
 > **バックエンドの切り替え方法**
 > フロントエンドの `/api/*` へのリクエストは `frontend/next.config.ts` の rewrites 設定で
-> バックエンド（デフォルト `http://localhost:3001`）にプロキシされます。
+> バックエンド（デフォルト `http://localhost:3008`）にプロキシされます。
 > 接続先を変えたい場合は `frontend/.env.local` に `API_URL=http://...` を設定してください。
 
 ## どこをいじるか
@@ -163,7 +163,7 @@ const res = await apiClient.post("/api/posts", { title: "hello" });
 
 ## 提供モック機能
 
-すぐに使えるモック機能が組み込まれています。動作確認は http://localhost:3000 から行えます。
+すぐに使えるモック機能が組み込まれています。動作確認は http://localhost:3007 から行えます。
 
 ### モックログイン（`useAuth`）
 
@@ -224,6 +224,6 @@ claude
 
 | ポート | 用途                                    |
 | ------ | --------------------------------------- |
-| 3000   | フロントエンド (Next.js)                |
-| 3001   | バックエンド (Rails または Next.js API) |
+| 3007   | フロントエンド (Next.js)                |
+| 3008   | バックエンド (Rails または Next.js API) |
 | 5432   | PostgreSQL（使う場合）                  |

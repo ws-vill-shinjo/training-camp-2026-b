@@ -30,7 +30,7 @@ type UseAuthReturn = {
 
 /**
  * サーバーセッションと連携したモックログイン機構を提供するフック。
- * バックエンド（Rails または Next.js API）が localhost:3001 で起動している必要があります。
+ * バックエンド（Rails または Next.js API）が localhost:3008 で起動している必要があります。
  *
  * @example
  * const { user, isLoggedIn, login, logout } = useAuth();

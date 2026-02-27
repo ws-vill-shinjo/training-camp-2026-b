@@ -16,8 +16,8 @@
     "source=${localEnv:HOME}/.claude,target=/home/vscode/.claude,type=bind"
   ],
 
-  // Next.js dev server (3000), Rails server (3001), DB 用ポート等
-  "forwardPorts": [3000, 3001, 5432],
+  // Next.js dev server (3007), Rails server (3008), DB 用ポート等
+  "forwardPorts": [3007, 3008, 5432],
 
   // コンテナ起動後にパッケージをインストール
   "postCreateCommand": "bash .devcontainer/setup.sh",

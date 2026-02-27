@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 // フロントエンドのオリジン（本番では実際のドメインに変更する）
-const ALLOWED_ORIGIN = "http://localhost:3000";
+const ALLOWED_ORIGIN = "http://localhost:3007";
 
 export function middleware(request: NextRequest) {
   const origin = request.headers.get("origin") ?? "";
