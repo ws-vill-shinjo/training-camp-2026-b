@@ -1,8 +1,25 @@
-# Omakase Ruby styling for Rails
+# Omakase Ruby styling for Rails をベースにする
 inherit_gem: { rubocop-rails-omakase: rubocop.yml }
 
-# Overwrite or add rules to create your own house style
-#
-# # Use `[a, [b, c]]` not `[ a, [ b, c ] ]`
-# Layout/SpaceInsideArrayLiteralBrackets:
-#   Enabled: false
+# ハッカソン向けの調整
+# 参加者が書きやすいように、細かすぎるルールは緩める
+
+AllCops:
+  # 自動生成ファイルは検査しない
+  Exclude:
+    - "db/schema.rb"
+    - "bin/**/*"
+    - "vendor/**/*"
+    - "node_modules/**/*"
+
+# 1行の文字数制限を緩める（デフォルト 120 → 160）
+Layout/LineLength:
+  Max: 160
+
+# frozen_string_literal マジックコメントは任意
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+# ドキュメントコメントは必須にしない
+Style/Documentation:
+  Enabled: false
