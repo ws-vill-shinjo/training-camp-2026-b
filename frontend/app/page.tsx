@@ -1,66 +1,82 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
+
+import { useAuth } from "@/hooks/useAuth";
+import { ShareButtons } from "@/components/ShareButtons";
 
 export default function Home() {
+  const { user, isLoggedIn, login, logout, mockUsers } = useAuth();
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>To get started, edit the page.tsx file.</h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className="container py-5">
+      <h1 className="mb-4">Training Camp 2026 🏕️</h1>
+
+      {/* ---- useAuth のデモ ---- */}
+      <section className="card mb-4">
+        <div className="card-header">
+          <h2 className="h5 mb-0">useAuth() のデモ</h2>
         </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        <div className="card-body">
+          {isLoggedIn && user ? (
+            <div className="d-flex align-items-center gap-3">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={user.avatarUrl}
+                alt={user.name}
+                width={48}
+                height={48}
+                className="rounded-circle"
+              />
+              <div>
+                <div className="fw-bold">{user.name}</div>
+                <div className="text-muted small">{user.email}</div>
+              </div>
+              <button className="btn btn-outline-danger btn-sm ms-auto" onClick={logout}>
+                ログアウト
+              </button>
+            </div>
+          ) : (
+            <div>
+              <p className="text-muted">ログインしていません</p>
+              {/* モックユーザーを選んでログイン */}
+              <div className="d-flex gap-2 flex-wrap">
+                {mockUsers.map((u) => (
+                  <button key={u.id} className="btn btn-primary btn-sm" onClick={() => login(u)}>
+                    {u.name} としてログイン
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
-      </main>
-    </div>
+      </section>
+
+      {/* ---- ShareButtons のデモ ---- */}
+      <section className="card mb-4">
+        <div className="card-header">
+          <h2 className="h5 mb-0">ShareButtons のデモ</h2>
+        </div>
+        <div className="card-body">
+          <ShareButtons url="https://example.com" text="Training Camp 2026 に参加中！" />
+        </div>
+      </section>
+
+      {/* ---- 使い方 ---- */}
+      <section className="card">
+        <div className="card-header">
+          <h2 className="h5 mb-0">使い方</h2>
+        </div>
+        <div className="card-body">
+          <h3 className="h6">useAuth()</h3>
+          <pre className="bg-light p-3 rounded small">{`import { useAuth } from "@/hooks/useAuth";
+
+const { user, isLoggedIn, login, logout } = useAuth();`}</pre>
+
+          <h3 className="h6 mt-3">ShareButtons</h3>
+          <pre className="bg-light p-3 rounded small">{`import { ShareButtons } from "@/components/ShareButtons";
+
+<ShareButtons url="https://example.com" text="シェアしよう！" />`}</pre>
+        </div>
+      </section>
+    </main>
   );
 }

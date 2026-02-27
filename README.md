@@ -43,7 +43,7 @@ code .
 
 ```bash
 cd frontend
-npm run dev
+yarn dev
 # → http://localhost:3000
 ```
 
@@ -62,7 +62,7 @@ bin/rails server -p 3001
 
 ```bash
 cd backend/nextjs
-npm run dev -- -p 3001
+yarn dev --port 3001
 # → http://localhost:3001
 ```
 

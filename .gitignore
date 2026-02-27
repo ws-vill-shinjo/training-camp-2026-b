@@ -12,5 +12,8 @@ Thumbs.db
 .env
 .env.local
 
+# npm（yarn を使うので不要）
+package-lock.json
+
 # ログ
 *.log
