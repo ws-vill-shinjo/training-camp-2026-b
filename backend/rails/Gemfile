@@ -42,7 +42,6 @@ group :development do
 
   # Rails コンソールを強化（補完・カラー表示・デバッグが快適になる）
   gem "pry-rails"
-
 end
 
 group :development, :test do

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -38,9 +39,9 @@ export default function ProfilePage() {
           <p className="display-4 fw-bold text-primary mb-4">{user.name}</p>
           <p className="text-muted mb-4">です</p>
           <div className="d-flex justify-content-center gap-2">
-            <a href="/" className="btn btn-outline-secondary">
+            <Link href="/" className="btn btn-outline-secondary">
               トップへ戻る
-            </a>
+            </Link>
             <button className="btn btn-outline-danger" onClick={handleLogout}>
               ログアウト
             </button>

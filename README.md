@@ -90,6 +90,79 @@ yarn dev
 > バックエンド（デフォルト `http://localhost:3001`）にプロキシされます。
 > 接続先を変えたい場合は `frontend/.env.local` に `API_URL=http://...` を設定してください。
 
+## どこをいじるか
+
+### 画面（ページ）を追加・変更する
+
+```
+frontend/app/          ← ここがメイン
+├── page.tsx           # トップページ（ログイン画面）
+├── profile/
+│   └── page.tsx       # プロフィールページ
+└── your-page/
+    └── page.tsx       # 新しいページはここに追加
+```
+
+新しいページを作るときは `frontend/app/` 以下にディレクトリを切って `page.tsx` を置くだけで URL が生えます。
+
+### 共通コンポーネントを追加・変更する
+
+```
+frontend/components/   ← 複数ページで使い回すものはここ
+├── Navbar.tsx         # ナビゲーションバー
+└── ShareButtons.tsx   # SNS シェアボタン
+```
+
+### バックエンドの API を追加・変更する
+
+**Rails の場合**
+
+```
+backend/rails/
+├── app/controllers/api/   ← API コントローラーはここ
+├── app/models/            ← モデルはここ
+├── config/routes.rb       ← ルーティング
+└── db/migrate/            ← マイグレーション
+```
+
+```bash
+# モデル・マイグレーション生成例
+cd backend/rails
+bin/rails generate model Post title:string body:text
+bin/rails db:migrate
+```
+
+**Next.js API の場合**
+
+```
+backend/nextjs/app/api/    ← API Route はここ
+└── auth/                  # 認証 API（サンプル）
+    ├── login/route.ts
+    ├── logout/route.ts
+    └── me/route.ts
+```
+
+新しい API は `backend/nextjs/app/api/your-endpoint/route.ts` を作れば `/api/your-endpoint` として動きます。
+
+### フロントエンドから API を呼ぶ
+
+```ts
+import { apiClient } from "@/lib/api";
+
+// GET /api/posts
+const res = await apiClient.get("/api/posts");
+
+// POST /api/posts
+const res = await apiClient.post("/api/posts", { title: "hello" });
+```
+
+`apiClient` は `frontend/lib/api.ts` で定義されています。`/api/*` へのリクエストは自動的にバックエンドへ転送されます。
+
+### スタイルを変更する
+
+- グローバルな CSS: `frontend/app/globals.css`
+- コンポーネント単位: 各 `.tsx` ファイル内で Bootstrap のクラスを使う
+
 ## 提供モック機能
 
 すぐに使えるモック機能が組み込まれています。動作確認は http://localhost:3000 から行えます。
