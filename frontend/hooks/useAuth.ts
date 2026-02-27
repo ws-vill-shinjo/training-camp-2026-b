@@ -47,9 +47,9 @@ export function useAuth(): UseAuthReturn {
   );
 
   const login = async (name: string, password: string) => {
-    await apiClient.post("/api/auth/login", { name, password });
-    // セッションが更新されたので再フェッチ
-    await mutate();
+    const res = await apiClient.post<MeResponse>("/api/auth/login", { name, password });
+    // レスポンスのユーザー情報をそのままキャッシュに入れる（再フェッチしない）
+    await mutate(res.data, false);
   };
 
   const logout = async () => {

@@ -13,6 +13,8 @@ fi
 if [ -d "backend/rails" ]; then
   echo "💎 backend/rails の Gem をインストール中..."
   bundle install --gemfile backend/rails/Gemfile
+  echo "🗄️  backend/rails のデータベースをセットアップ中..."
+  (cd backend/rails && bin/rails db:create db:migrate 2>/dev/null || true)
 fi
 
 # --- backend/nextjs のセットアップ（Next.js API を選んだチーム用）---
@@ -30,8 +32,8 @@ echo "  🚀 開発を始めるには:"
 echo "    フロントエンド  → cd frontend && yarn dev"
 echo ""
 echo "  バックエンドはいずれか一方を選んで起動:"
-echo "    Rails バックエンド   → cd backend/rails && bin/rails server -p 3001"
-echo "    Next.js バックエンド → cd backend/nextjs && yarn dev --port 3001"
+echo "    Rails バックエンド   → cd backend/rails && bin/rails server"
+echo "    Next.js バックエンド → cd backend/nextjs && yarn dev"
 echo ""
 echo "  🤖 Claude Code を使うには:"
 echo "    ターミナルで claude と入力"

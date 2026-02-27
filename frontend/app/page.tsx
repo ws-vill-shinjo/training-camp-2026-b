@@ -1,11 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import { ShareButtons } from "@/components/ShareButtons";
 
 export default function Home() {
-  const { user, isLoggedIn, isLoading, login, logout } = useAuth();
+  const { user, isLoggedIn, login, logout } = useAuth();
+  const router = useRouter();
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -17,6 +19,7 @@ export default function Home() {
     setSubmitting(true);
     try {
       await login(name, password);
+      router.push("/profile");
     } catch {
       setError("ログインに失敗しました。名前とパスワードを確認してください。");
     } finally {
@@ -40,9 +43,7 @@ export default function Home() {
           <h2 className="h5 mb-0">ログイン</h2>
         </div>
         <div className="card-body">
-          {isLoading ? (
-            <p className="text-muted">読み込み中...</p>
-          ) : isLoggedIn && user ? (
+          {isLoggedIn && user ? (
             /* ログイン済み */
             <div>
               <p className="mb-3">
