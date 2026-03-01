@@ -12,6 +12,7 @@ fi
 # --- backend/rails のセットアップ（Rails を選んだチーム用）---
 if [ -d "backend/rails" ]; then
   echo "💎 backend/rails の Gem をインストール中..."
+  bundle config path vendor/bundle
   bundle install --gemfile backend/rails/Gemfile
   echo "🗄️  backend/rails のデータベースをセットアップ中..."
   (cd backend/rails && bin/rails db:create db:migrate 2>/dev/null || true)
