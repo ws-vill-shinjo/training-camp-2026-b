@@ -116,5 +116,6 @@ export const upgradeBonus = (id: string, config: BonusMaster): boolean => {
   store.upgradeBonusLevel(id);
   store.rebuildRuntimeModifiers();
   store.rebuildEffectiveProductionStats();
+  store.rebuildTapYield();
   return true;
 };
