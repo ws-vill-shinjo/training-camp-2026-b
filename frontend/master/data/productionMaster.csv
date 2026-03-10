@@ -1,1 +1,4 @@
 id,name,maxLevel,yieldType,baseYield,yieldGrowth,yieldTable,baseCycleMs,cycleReduceRate,costType,baseCost,costGrowth,costTable,qrUnlockEnabled,encyclopediaId,imageSrc
+farm,農場,10,growth,1,0.5,,5000,0.9,growth,10,1.5,,false,enc_farm,/images/farm.png
+mine,鉱山,8,table,,,1;2;5;10;20;40;80;160,8000,1,table,0,1,20;60;150;400;1000;2500;6000;15000,true,enc_mine,/images/mine.png
+factory,工場,5,fixed,100,0,,3000,0.85,growth,500,2.0,,false,enc_factory,/images/factory.png

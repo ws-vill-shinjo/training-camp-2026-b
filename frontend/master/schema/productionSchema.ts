@@ -7,8 +7,8 @@ export const ProductionMasterSchema = z
     name: z.string().min(1),
     maxLevel: z.number().int().min(1),
     yieldType: YieldTypeSchema,
-    baseYield: z.number().positive(),
-    yieldGrowth: z.number().min(0),
+    baseYield: z.number().positive().optional(),
+    yieldGrowth: z.number().min(0).optional(),
     yieldTable: NumberTableSchema.default([]),
     baseCycleMs: z.number().positive(),
     cycleReduceRate: z.number().positive().max(1),
@@ -21,6 +21,20 @@ export const ProductionMasterSchema = z
     imageSrc: z.string().min(1),
   })
   .superRefine((data, ctx) => {
+    if (data.yieldType !== "table" && data.baseYield === undefined) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `yieldType が "table" 以外のとき baseYield は必須です (id: ${data.id})`,
+        path: ["baseYield"],
+      });
+    }
+    if (data.yieldType !== "table" && data.yieldGrowth === undefined) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `yieldType が "table" 以外のとき yieldGrowth は必須です (id: ${data.id})`,
+        path: ["yieldGrowth"],
+      });
+    }
     if (data.yieldType === "table" && data.yieldTable.length < data.maxLevel) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
