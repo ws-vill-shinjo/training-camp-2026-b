@@ -6,6 +6,7 @@ import { createEventSlice } from "./slices/eventSlice";
 import { createMetaSlice } from "./slices/metaSlice";
 import { createProductionRuntimeSlice } from "./slices/productionRuntimeSlice";
 import { createProductionSlice } from "./slices/productionSlice";
+import { createTapRuntimeSlice } from "./slices/tapRuntimeSlice";
 import type { GameStore } from "../types/store";
 
 // 永続化対象のキー
@@ -13,7 +14,6 @@ type PersistedState = Pick<
   GameStore,
   // economySlice
   | "money"
-  | "tapLevel"
   // productionSlice
   | "productionLevels"
   | "lastProducedAtByProduction"
@@ -37,13 +37,13 @@ const useGameStore = create<GameStore>()(
       ...createEventSlice(...a),
       ...createMetaSlice(...a),
       ...createProductionRuntimeSlice(...a),
+      ...createTapRuntimeSlice(...a),
     }),
     {
       name: "game-store",
       storage: createJSONStorage(() => localStorage),
       partialize: (state): PersistedState => ({
         money: state.money,
-        tapLevel: state.tapLevel,
         productionLevels: state.productionLevels,
         lastProducedAtByProduction: state.lastProducedAtByProduction,
         bonusLevels: state.bonusLevels,

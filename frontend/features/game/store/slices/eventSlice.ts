@@ -6,32 +6,30 @@ export const createEventSlice: StateCreator<GameStore, [], [], EventSlice> = (se
   activeEvents: [],
   seenEvents: {},
 
-  rollEvent: (now) => {
-    // lastEventCheckAt を更新。イベント抽選ロジックはゲーム設計に応じて実装する
+  recordEventCheck: (now) => {
     set({ lastEventCheckAt: now });
   },
 
-  activateEvent: (event: GameEvent) => {
+  addActiveEvent: (event: GameEvent) => {
     set((state) => ({
       activeEvents: [...state.activeEvents, event],
     }));
-    // 成功時に必ず markEventSeen を実行（冪等）
-    get().markEventSeen(event.id);
+    get().recordSeenEvent(event.id);
   },
 
-  cleanupExpiredEvents: (now) => {
+  removeExpiredEvents: (now) => {
     set((state) => ({
       activeEvents: state.activeEvents.filter((e) => e.startedAt + e.durationMs > now),
     }));
   },
 
-  markEventSeen: (eventId) => {
+  recordSeenEvent: (eventId) => {
     set((state) => ({
       seenEvents: { ...state.seenEvents, [eventId]: true },
     }));
   },
 
-  hasSeenEvent: (eventId) => {
+  isEventSeen: (eventId) => {
     return get().seenEvents[eventId] === true;
   },
 });

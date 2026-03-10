@@ -3,6 +3,7 @@
 import { differenceInMilliseconds } from "date-fns";
 import { useEffect, useRef } from "react";
 import { useInterval, useRafLoop } from "react-use";
+import { rollAndActivateEvent } from "../domain/event";
 import { runOfflineCatchup } from "../domain/offline";
 import { runTick } from "../domain/tick";
 import useGameStore from "../store/useGameStore";
@@ -18,6 +19,7 @@ const runResume = (): void => {
   store.rebuildBaseProductionStats();
   store.rebuildRuntimeModifiers();
   store.rebuildEffectiveProductionStats();
+  store.rebuildTapYield();
   runOfflineCatchup(Date.now());
 };
 
@@ -41,6 +43,7 @@ export const useGameLoop = (): void => {
         state.rebuildBaseProductionStats();
         state.rebuildRuntimeModifiers();
         state.rebuildEffectiveProductionStats();
+        state.rebuildTapYield();
       }
 
       lastTickAtRef.current = now;
@@ -59,6 +62,6 @@ export const useGameLoop = (): void => {
   // --- イベント抽選（EVENT_CHECK_INTERVAL_MS ごと）---
   useInterval(() => {
     const now = Date.now();
-    useGameStore.getState().rollEvent(now);
+    rollAndActivateEvent(now);
   }, EVENT_CHECK_INTERVAL_MS);
 };
