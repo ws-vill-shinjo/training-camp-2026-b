@@ -1,4 +1,5 @@
 import { calcCycles, calcGain } from "./production";
+import { cleanupAndRebuildEvents } from "./event";
 import useGameStore from "../store/useGameStore";
 
 /**
@@ -15,7 +16,6 @@ export const runTick = (now: number): void => {
     lastProducedAtByProduction,
     addMoney,
     setLastProducedAt,
-    cleanupExpiredEvents,
   } = useGameStore.getState();
 
   for (const id of Object.keys(productionLevels)) {
@@ -34,6 +34,6 @@ export const runTick = (now: number): void => {
     }
   }
 
-  // 期限切れイベントクリーンアップ
-  cleanupExpiredEvents(now);
+  // 期限切れイベントクリーンアップ & 修飾子再構築
+  cleanupAndRebuildEvents(now);
 };

@@ -16,13 +16,8 @@ export const OFFLINE_MAX_MS = 8 * 60 * 60 * 1000;
  *   rebuildBaseProductionStats() → rebuildRuntimeModifiers() → rebuildEffectiveProductionStats()
  */
 export const runOfflineCatchup = (now: number): void => {
-  const {
-    lastActiveAt,
-    productionLevels,
-    effectiveProductionStats,
-    addMoney,
-    setLastProducedAt,
-  } = useGameStore.getState();
+  const { lastActiveAt, productionLevels, effectiveProductionStats, addMoney, setLastProducedAt } =
+    useGameStore.getState();
 
   const elapsedMs = Math.min(now - lastActiveAt.getTime(), OFFLINE_MAX_MS);
   if (elapsedMs <= 0) return;
