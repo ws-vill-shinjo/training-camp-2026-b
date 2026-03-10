@@ -19,6 +19,7 @@ const runResume = (): void => {
   store.rebuildBaseProductionStats();
   store.rebuildRuntimeModifiers();
   store.rebuildEffectiveProductionStats();
+  store.rebuildTapYield();
   runOfflineCatchup(Date.now());
 };
 
@@ -42,6 +43,7 @@ export const useGameLoop = (): void => {
         state.rebuildBaseProductionStats();
         state.rebuildRuntimeModifiers();
         state.rebuildEffectiveProductionStats();
+        state.rebuildTapYield();
       }
 
       lastTickAtRef.current = now;

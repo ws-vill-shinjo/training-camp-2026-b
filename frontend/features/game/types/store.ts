@@ -64,9 +64,16 @@ export interface ProductionRuntimeSlice {
   rebuildEffectiveProductionStats: () => void;
 }
 
+export interface TapRuntimeSlice {
+  /** タップ 1 回の収益（非永続化・再開／ボーナス更新時に再計算） */
+  tapYield: string;
+  rebuildTapYield: () => void;
+}
+
 export type GameStore = EconomySlice &
   ProductionSlice &
   BonusSlice &
   EventSlice &
   MetaSlice &
-  ProductionRuntimeSlice;
+  ProductionRuntimeSlice &
+  TapRuntimeSlice;
