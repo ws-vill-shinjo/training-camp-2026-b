@@ -1,6 +1,7 @@
 import { StateCreator } from "zustand";
 import { getMasterRegistry } from "../../../../master/registry/getMasterRegistry";
 import { buildRuntimeModifiers } from "../../domain/bonus";
+import { buildEventModifiers, combineModifiers } from "../../domain/event";
 import {
   buildAllBaseStats,
   buildBaseStatForId,
@@ -21,7 +22,6 @@ export const createProductionRuntimeSlice: StateCreator<
   },
   effectiveProductionStats: {},
 
-  /** 全施設の baseStat をマスターレジストリから再構築する */
   rebuildBaseProductionStats: () => {
     const { productionLevels } = get();
     set({ baseProductionStats: buildAllBaseStats(productionLevels) });
@@ -38,11 +38,13 @@ export const createProductionRuntimeSlice: StateCreator<
     }));
   },
 
-  /** ボーナスレベルからランタイム修飾子を全件再構築する */
+  /** ボーナスとイベントの修飾子を合成してランタイム修飾子を全件再構築する */
   rebuildRuntimeModifiers: () => {
-    const { bonusLevels } = get();
-    const bonusMasters = Object.values(getMasterRegistry().bonus);
-    set({ runtimeModifiers: buildRuntimeModifiers(bonusMasters, bonusLevels) });
+    const { bonusLevels, activeEvents } = get();
+    const registry = getMasterRegistry();
+    const bonusMods = buildRuntimeModifiers(Object.values(registry.bonus), bonusLevels);
+    const eventMods = buildEventModifiers(activeEvents, registry.event);
+    set({ runtimeModifiers: combineModifiers(bonusMods, eventMods) });
   },
 
   /**
@@ -50,9 +52,11 @@ export const createProductionRuntimeSlice: StateCreator<
    * グローバル修飾子が全施設に影響するため全件再構築と同等の処理を行う。
    */
   rebuildRuntimeModifiersForProduction: () => {
-    const { bonusLevels } = get();
-    const bonusMasters = Object.values(getMasterRegistry().bonus);
-    set({ runtimeModifiers: buildRuntimeModifiers(bonusMasters, bonusLevels) });
+    const { bonusLevels, activeEvents } = get();
+    const registry = getMasterRegistry();
+    const bonusMods = buildRuntimeModifiers(Object.values(registry.bonus), bonusLevels);
+    const eventMods = buildEventModifiers(activeEvents, registry.event);
+    set({ runtimeModifiers: combineModifiers(bonusMods, eventMods) });
   },
 
   /**

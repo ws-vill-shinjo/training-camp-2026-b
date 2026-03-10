@@ -40,11 +40,11 @@ export interface EventSlice {
   lastEventCheckAt: number;
   activeEvents: GameEvent[];
   seenEvents: Record<string, true>;
-  rollEvent: (now: number) => void;
-  activateEvent: (event: GameEvent) => void;
-  cleanupExpiredEvents: (now: number) => void;
-  markEventSeen: (eventId: string) => void;
-  hasSeenEvent: (eventId: string) => boolean;
+  recordEventCheck: (now: number) => void;
+  addActiveEvent: (event: GameEvent) => void;
+  removeExpiredEvents: (now: number) => void;
+  recordSeenEvent: (eventId: string) => void;
+  isEventSeen: (eventId: string) => boolean;
 }
 
 export interface MetaSlice {
