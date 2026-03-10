@@ -12,8 +12,7 @@ type MeResponse = {
 };
 
 // /api/auth/me を叩いてセッション中のユーザーを取得する
-const fetcher = (url: string) =>
-  apiClient.get<MeResponse>(url).then((res) => res.data);
+const fetcher = (url: string) => apiClient.get<MeResponse>(url).then((res) => res.data);
 
 type UseAuthReturn = {
   /** 現在ログイン中のユーザー情報。未ログインの場合は null */
@@ -36,15 +35,11 @@ type UseAuthReturn = {
  * const { user, isLoggedIn, login, logout } = useAuth();
  */
 export function useAuth(): UseAuthReturn {
-  const { data, mutate, isLoading } = useSWR<MeResponse>(
-    "/api/auth/me",
-    fetcher,
-    {
-      // エラー時にリトライしない（バックエンド未起動時に無限リトライしないよう）
-      shouldRetryOnError: false,
-      revalidateOnFocus: false,
-    }
-  );
+  const { data, mutate, isLoading } = useSWR<MeResponse>("/api/auth/me", fetcher, {
+    // エラー時にリトライしない（バックエンド未起動時に無限リトライしないよう）
+    shouldRetryOnError: false,
+    revalidateOnFocus: false,
+  });
 
   const login = async (name: string, password: string) => {
     const res = await apiClient.post<MeResponse>("/api/auth/login", { name, password });
@@ -60,7 +55,7 @@ export function useAuth(): UseAuthReturn {
 
   return {
     user: data?.user ?? null,
-    isLoggedIn: !!(data?.user),
+    isLoggedIn: !!data?.user,
     isLoading,
     login,
     logout,
