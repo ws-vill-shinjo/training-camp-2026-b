@@ -4,6 +4,9 @@ export type { Decimal };
 /** decimal.js が受け付ける入力型 (string | number | bigint | Decimal) */
 export type DecimalValue = Decimal.Value;
 
+import type { BaseStat, EffectiveStat, Modifier, RuntimeModifiers } from "./production";
+export type { BaseStat, EffectiveStat, Modifier, RuntimeModifiers };
+
 export type GameEvent = {
   id: string;
   durationMs: number;
@@ -51,12 +54,9 @@ export interface MetaSlice {
 }
 
 export interface ProductionRuntimeSlice {
-  baseProductionStats: Record<string, { baseYield: string; baseCycleMs: number }>;
-  runtimeModifiers: {
-    global: { yieldMultiplier: string; cycleMultiplier: string };
-    byProduction: Record<string, { yieldMultiplier: string; cycleMultiplier: string }>;
-  };
-  effectiveProductionStats: Record<string, { yield: string; cycleMs: number }>;
+  baseProductionStats: Record<string, BaseStat>;
+  runtimeModifiers: RuntimeModifiers;
+  effectiveProductionStats: Record<string, EffectiveStat>;
 
   rebuildBaseProductionStats: () => void;
   updateBaseProductionStat: (id: string) => void;
