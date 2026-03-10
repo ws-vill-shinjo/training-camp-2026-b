@@ -1,5 +1,4 @@
 import Decimal from "decimal.js";
-import { buildEffectiveStatFromBase } from "./production";
 import useGameStore from "../store/useGameStore";
 
 /** オフライン進行の上限時間 (ms) = 8時間 */
@@ -9,18 +8,18 @@ export const OFFLINE_MAX_MS = 8 * 60 * 60 * 1000;
  * 復帰時の追いつき一括計算。
  *
  * - elapsedMs = min(now - lastActiveAt, OFFLINE_MAX_MS) で全施設を一括計算
+ * - effectiveProductionStats は呼び出し前の rebuild 済み値を参照専用で使用する
  * - オフライン中はイベント変動を扱わない（安全モード）
- * - ボーナスは離脱時点のスナップショット固定
- *   （呼び出し前に rebuildBaseProductionStats / rebuildRuntimeModifiers /
- *    rebuildEffectiveProductionStats を先行実行すること）
+ * - effectiveStat が未構築の施設はスキップ
+ *
+ * 呼び出し前に必ず実行:
+ *   rebuildBaseProductionStats() → rebuildRuntimeModifiers() → rebuildEffectiveProductionStats()
  */
 export const runOfflineCatchup = (now: number): void => {
   const {
     lastActiveAt,
     productionLevels,
     effectiveProductionStats,
-    baseProductionStats,
-    runtimeModifiers,
     addMoney,
     setLastProducedAt,
   } = useGameStore.getState();
@@ -29,14 +28,8 @@ export const runOfflineCatchup = (now: number): void => {
   if (elapsedMs <= 0) return;
 
   for (const id of Object.keys(productionLevels)) {
-    const stat =
-      effectiveProductionStats[id] ??
-      buildEffectiveStatFromBase(
-        baseProductionStats[id].baseYield,
-        baseProductionStats[id].baseCycleMs,
-        runtimeModifiers,
-        id
-      );
+    const stat = effectiveProductionStats[id];
+    if (!stat) continue;
 
     const cycles = Math.floor(elapsedMs / stat.cycleMs);
     if (cycles <= 0) continue;

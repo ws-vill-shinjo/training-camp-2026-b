@@ -1,18 +1,17 @@
-import { buildEffectiveStatFromBase, calcCycles, calcGain } from "./production";
+import { calcCycles, calcGain } from "./production";
 import useGameStore from "../store/useGameStore";
 
 /**
  * 1 Tick の生産処理。
- * - effectiveProductionStats[id] を参照し、なければ base から算出（フォールバック）
+ * - effectiveProductionStats[id] は productionRuntimeSlice が管理する値を参照専用で使用する
  * - Tick 内では effectiveProductionStats の再計算を行わない
+ * - effectiveStat が未構築の施設はスキップ（onResume / upgrade 時に必ず再構築すること）
  * - 期限切れイベントのクリーンアップを末尾で実行
  */
 export const runTick = (now: number): void => {
   const {
     productionLevels,
     effectiveProductionStats,
-    baseProductionStats,
-    runtimeModifiers,
     lastProducedAtByProduction,
     addMoney,
     setLastProducedAt,
@@ -20,14 +19,8 @@ export const runTick = (now: number): void => {
   } = useGameStore.getState();
 
   for (const id of Object.keys(productionLevels)) {
-    const stat =
-      effectiveProductionStats[id] ??
-      buildEffectiveStatFromBase(
-        baseProductionStats[id].baseYield,
-        baseProductionStats[id].baseCycleMs,
-        runtimeModifiers,
-        id
-      );
+    const stat = effectiveProductionStats[id];
+    if (!stat) continue;
 
     const lastProducedAt = lastProducedAtByProduction[id] ?? 0;
     const elapsed = now - lastProducedAt;

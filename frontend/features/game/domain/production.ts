@@ -1,5 +1,6 @@
 import Decimal from "decimal.js";
 import type { ProductionMaster } from "../../../master/schema/productionSchema";
+import { getMasterRegistry } from "../../../master/registry/getMasterRegistry";
 import type {
   BaseStat,
   EffectiveStat,
@@ -40,14 +41,6 @@ export const calcCycleMs = (config: ProductionMaster, level: number): number =>
   config.baseCycleMs * Math.pow(config.cycleReduceRate, level - 1);
 
 // ---------------------------------------------------------------------------
-// レベルアップコスト導出
-// ---------------------------------------------------------------------------
-
-/** cost(level) = baseCost * (costGrowth ^ (level - 1)) */
-export const calcCost = (config: ProductionMaster, level: number): Decimal =>
-  new Decimal(config.baseCost).times(new Decimal(config.costGrowth).pow(level - 1));
-
-// ---------------------------------------------------------------------------
 // baseProductionStat 導出（store の baseProductionStats[id] へ書く値）
 // ---------------------------------------------------------------------------
 
@@ -55,6 +48,24 @@ export const calcBaseProductionStat = (config: ProductionMaster, level: number):
   baseYield: calcYield(config, level).toFixed(),
   baseCycleMs: calcCycleMs(config, level),
 });
+
+/** マスターレジストリから id の config を取得して BaseStat を算出する */
+export const buildBaseStatForId = (id: string, level: number): BaseStat => {
+  const config = getMasterRegistry().production[id];
+  if (!config) throw new Error(`production master が見つかりません: ${id}`);
+  return calcBaseProductionStat(config, level);
+};
+
+/** 解放済み施設すべての BaseStat を一括構築する */
+export const buildAllBaseStats = (
+  productionLevels: Record<string, number>
+): Record<string, BaseStat> => {
+  const stats: Record<string, BaseStat> = {};
+  for (const [id, level] of Object.entries(productionLevels)) {
+    stats[id] = buildBaseStatForId(id, level);
+  }
+  return stats;
+};
 
 // ---------------------------------------------------------------------------
 // effectiveStat 導出

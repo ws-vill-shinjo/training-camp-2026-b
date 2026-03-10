@@ -20,7 +20,6 @@ export type GameEvent = {
 
 export interface EconomySlice {
   money: string;
-  tapLevel: number;
   addMoney: (amount: DecimalValue) => void;
   spendMoney: (cost: DecimalValue) => boolean;
 }
