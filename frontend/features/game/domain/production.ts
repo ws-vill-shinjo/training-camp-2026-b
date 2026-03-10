@@ -1,53 +1,28 @@
 import Decimal from "decimal.js";
-
-export type YieldType = "growth" | "fixed" | "table";
-
-export type ProductionConfig = {
-  id: string;
-  /** yield の計算方式 */
-  yieldType: YieldType;
-  /** yieldType=growth / fixed 時の基準 yield */
-  baseYield: string;
-  /** yieldType=growth 時の 1 レベルあたり増加率 */
-  yieldGrowth?: number;
-  /** yieldType=table 時の yield テーブル（index = level - 1） */
-  yieldTable?: string[];
-  /** サイクル基準 ms */
-  baseCycleMs: number;
-  /** レベルごとのサイクル短縮率（0 < rate <= 1） */
-  cycleReduceRate: number;
-  /** レベルアップコスト計算に使う基準コスト */
-  baseCost: string;
-  /** レベルアップごとのコスト増加率 */
-  costGrowthRate: number;
-};
-
-export type EffectiveStat = {
-  yield: string;
-  cycleMs: number;
-};
-
-export type RuntimeModifiers = {
-  global: { yieldMultiplier: string; cycleMultiplier: string };
-  byProduction: Record<string, { yieldMultiplier: string; cycleMultiplier: string }>;
-};
+import type { ProductionMaster } from "../../../master/schema/productionSchema";
+import type {
+  BaseStat,
+  EffectiveStat,
+  ProductionProgress,
+  RuntimeModifiers,
+} from "../types/production";
 
 // ---------------------------------------------------------------------------
 // レベル別 yield 導出
 // ---------------------------------------------------------------------------
 
 /** yield(level) を Decimal で返す */
-export const calcYield = (config: ProductionConfig, level: number): Decimal => {
+export const calcYield = (config: ProductionMaster, level: number): Decimal => {
   switch (config.yieldType) {
     case "growth": {
       const growth = config.yieldGrowth ?? 0;
       // yield(level) = baseYield * (1 + yieldGrowth * (level - 1))
-      return new Decimal(config.baseYield).times(1 + growth * (level - 1));
+      return new Decimal(config.baseYield ?? 0).times(1 + growth * (level - 1));
     }
     case "fixed":
-      return new Decimal(config.baseYield);
+      return new Decimal(config.baseYield ?? 0);
     case "table": {
-      const entry = (config.yieldTable ?? [])[level - 1];
+      const entry = config.yieldTable[level - 1];
       if (entry === undefined) {
         throw new RangeError(`yieldTable に level=${level} のエントリがありません`);
       }
@@ -61,25 +36,22 @@ export const calcYield = (config: ProductionConfig, level: number): Decimal => {
 // ---------------------------------------------------------------------------
 
 /** cycle(level) = baseCycleMs * (cycleReduceRate ^ (level - 1)) */
-export const calcCycleMs = (config: ProductionConfig, level: number): number =>
+export const calcCycleMs = (config: ProductionMaster, level: number): number =>
   config.baseCycleMs * Math.pow(config.cycleReduceRate, level - 1);
 
 // ---------------------------------------------------------------------------
 // レベルアップコスト導出
 // ---------------------------------------------------------------------------
 
-/** cost(level) = baseCost * (costGrowthRate ^ (level - 1)) */
-export const calcCost = (config: ProductionConfig, level: number): Decimal =>
-  new Decimal(config.baseCost).times(new Decimal(config.costGrowthRate).pow(level - 1));
+/** cost(level) = baseCost * (costGrowth ^ (level - 1)) */
+export const calcCost = (config: ProductionMaster, level: number): Decimal =>
+  new Decimal(config.baseCost).times(new Decimal(config.costGrowth).pow(level - 1));
 
 // ---------------------------------------------------------------------------
 // baseProductionStat 導出（store の baseProductionStats[id] へ書く値）
 // ---------------------------------------------------------------------------
 
-export const calcBaseProductionStat = (
-  config: ProductionConfig,
-  level: number
-): { baseYield: string; baseCycleMs: number } => ({
+export const calcBaseProductionStat = (config: ProductionMaster, level: number): BaseStat => ({
   baseYield: calcYield(config, level).toFixed(),
   baseCycleMs: calcCycleMs(config, level),
 });
@@ -122,7 +94,7 @@ export const buildEffectiveStatFromBase = (
  *   cleanedModifiers を返す
  */
 export const buildEffectiveStats = (
-  baseProductionStats: Record<string, { baseYield: string; baseCycleMs: number }>,
+  baseProductionStats: Record<string, BaseStat>,
   modifiers: RuntimeModifiers
 ): {
   effectiveProductionStats: Record<string, EffectiveStat>;
@@ -181,15 +153,6 @@ export const calcProgress = (elapsedMs: number, effectiveCycleMs: number): numbe
 // ---------------------------------------------------------------------------
 // 施設単位の進捗取得
 // ---------------------------------------------------------------------------
-
-export type ProductionProgress = {
-  /** 現サイクル内の進捗率 0〜100 */
-  progress: number;
-  /** 今サイクルの経過 ms */
-  elapsedInCycle: number;
-  /** サイクル ms */
-  cycleMs: number;
-};
 
 export const getProductionProgress = (
   stat: EffectiveStat,
