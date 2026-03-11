@@ -2,6 +2,7 @@
 
 import { differenceInMilliseconds } from "date-fns";
 import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import { useInterval, useRafLoop } from "react-use";
 import { rollAndActivateEvent } from "../domain/event";
 import { runOfflineCatchup } from "../domain/offline";
@@ -26,6 +27,7 @@ const runResume = (): void => {
 export const useGameLoop = (): void => {
   const lastTickAtRef = useRef<number>(0);
   const resumedRef = useRef<boolean>(false);
+  const pathname = usePathname();
 
   // --- 初回マウント時の復帰処理 ---
   useEffect(() => {
@@ -60,8 +62,9 @@ export const useGameLoop = (): void => {
     }
   });
 
-  // --- イベント抽選（EVENT_CHECK_INTERVAL_MS ごと）---
+  // --- イベント抽選（EVENT_CHECK_INTERVAL_MS ごと、Home 画面のみ）---
   useInterval(() => {
+    if (pathname !== "/") return;
     const now = Date.now();
     rollAndActivateEvent(now);
   }, EVENT_CHECK_INTERVAL_MS);
