@@ -38,9 +38,11 @@ export const TapZone = () => {
     >
       <Image
         src="/images/TapCarrotField.png"
-        alt="potato"
+        alt="TapField"
         width={320}
         height={320}
+        loading="eager"
+        priority
         draggable={false}
         className="mt-5"
       />

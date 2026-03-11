@@ -8,6 +8,7 @@ import useGameStore from "@/features/game/store/useGameStore";
 import { EventNotificationDialog } from "@/features/game/components/EventNotificationDialog";
 import { ProductionFacilities } from "@/features/game/components/ProductionFacilities";
 import { TapZone } from "@/features/game/components/TapZone";
+import { SettingsButton } from "@/components/SettingsButton";
 
 const GameLoop = () => {
   useGameLoop();
@@ -28,7 +29,12 @@ export default function Home() {
       {registryReady && <GameLoop />}
       <EventNotificationDialog />
       <Header>
-        <h1 className="text-4xl">ホーム</h1>
+        <div className="relative w-full flex items-center justify-center">
+          <h1 className="text-4xl">ホーム</h1>
+          <div className="absolute right-8 flex items-center h-full">
+            <SettingsButton />
+          </div>
+        </div>
       </Header>
       <div className="max-w-lg mx-auto py-4 flex flex-col gap-4">
         <div className="flex justify-end mr-4">
