@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import Image from "next/image";
 import { Header } from "@/components/Header";
 import { Money } from "@/features/game/components/Money";
 import { useGameLoop } from "@/features/game/hooks/useGameLoop";
@@ -29,14 +30,6 @@ export default function Home() {
       <GameLoop />
       <OpeningStory />
       <EventNotificationDialog />
-      <Header>
-        <div className="relative w-full flex items-center justify-center">
-          <h1 className="text-4xl">ホーム</h1>
-          <div className="absolute right-8 flex items-center h-full">
-            <SettingsButton />
-          </div>
-        </div>
-      </Header>
       <div className="max-w-lg mx-auto py-4 flex flex-col gap-4">
         <div className="flex justify-end mr-4">
           <Money />
