@@ -1,12 +1,12 @@
-export type ProductionMaster = {
+export type BonusMaster = {
   id: string;
   name: string;
   qrUnlockEnabled: boolean;
 };
 
-// TODO: 正式なものに変更する
-export const productionMaster: ProductionMaster[] = [
-  { id: "production-1", name: "生産ライン1", qrUnlockEnabled: true },
-  { id: "production-2", name: "生産ライン2", qrUnlockEnabled: true },
-  { id: "production-3", name: "生産ライン3", qrUnlockEnabled: false },
+export const bonusMaster: BonusMaster[] = [
+  { id: "Sakuraya", name: "咲蔵家", qrUnlockEnabled: true },
+  { id: "Michinoekigaisensakurashinjosyuku", name: "道の駅がいせんさくら新庄宿", qrUnlockEnabled: true },
+  { id: "Wakihonjinkishirotei", name: "脇本陣木代邸", qrUnlockEnabled: true },
+  { id: "Miyukibashi", name: "御幸橋", qrUnlockEnabled: true },
 ];
