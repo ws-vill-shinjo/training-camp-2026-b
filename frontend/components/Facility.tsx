@@ -22,7 +22,7 @@ const items = [
 
 function ItemCard({ img, label, progress }) {
   return (
-    <Card className="overflow-hidden w-80 rounded-xl border-none shadow-md p-0 gap-0">
+    <Card className="overflow-hidden w-80 rounded-xl border-none shadow-md p-0 gap-0 w-70">
       <div className="flex items-center gap-0 px-3 py-3" style={{ backgroundColor: "#b5d9a8" }}>
         <img src={img} alt={label} className="w-10 h-10 rounded-md object-cover flex-shrink-0" />
         <span className="text-white text-lg font-bold tracking-wide ms-4">{label}</span>
@@ -36,7 +36,8 @@ function ItemCard({ img, label, progress }) {
 
 export const Facility = () => {
   return (
-    <div className="flex flex-col items-center p-5 gap-4 p-0">
+    <div className="flex flex-col items-center justify-center mx-auto p-5 gap-4 bg-gray-300 w-80 mt-5">
+      <h1 className="text-center font-bold text-xl text-white">施設一覧</h1>
       {items.map((item) => (
         <ItemCard key={item.label} {...item} />
       ))}
