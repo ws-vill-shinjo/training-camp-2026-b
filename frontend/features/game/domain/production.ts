@@ -15,9 +15,9 @@ import type {
 export const calcYield = (config: ProductionMaster, level: number): number => {
   switch (config.yieldType) {
     case "growth": {
-      const growth = config.yieldGrowth ?? 0;
-      // yield(level) = baseYield * (1 + yieldGrowth * (level - 1))
-      return (config.baseYield ?? 0) * (1 + growth * (level - 1));
+      const growth = config.yieldGrowth ?? 1;
+      // yield(level) = baseYield * yieldGrowth ^ (level - 1)
+      return (config.baseYield ?? 0) * Math.pow(growth, level - 1);
     }
     case "fixed":
       return config.baseYield ?? 0;
@@ -35,9 +35,7 @@ export const calcYield = (config: ProductionMaster, level: number): number => {
 // レベル別 cycleMs 導出
 // ---------------------------------------------------------------------------
 
-/** cycle(level) = baseCycleMs * (cycleReduceRate ^ (level - 1)) */
-export const calcCycleMs = (config: ProductionMaster, level: number): number =>
-  config.baseCycleMs * Math.pow(config.cycleReduceRate, level - 1);
+export const calcCycleMs = (config: ProductionMaster): number => config.baseCycleMs;
 
 // ---------------------------------------------------------------------------
 // baseProductionStat 導出（store の baseProductionStats[id] へ書く値）
@@ -45,7 +43,7 @@ export const calcCycleMs = (config: ProductionMaster, level: number): number =>
 
 export const calcBaseProductionStat = (config: ProductionMaster, level: number): BaseStat => ({
   baseYield: String(calcYield(config, level)),
-  baseCycleMs: calcCycleMs(config, level),
+  baseCycleMs: calcCycleMs(config),
 });
 
 /** マスターレジストリから id の config を取得して BaseStat を算出する */

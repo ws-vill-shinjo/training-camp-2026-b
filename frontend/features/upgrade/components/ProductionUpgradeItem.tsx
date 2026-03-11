@@ -26,7 +26,7 @@ export function ProductionUpgradeItem({ id }: Props) {
 
   const displayLevel = Math.max(level, 1);
   const displayYield = calcYield(config, displayLevel);
-  const displayCycleSeconds = calcCycleMs(config, displayLevel) / 1000;
+  const displayCycleSeconds = calcCycleMs(config) / 1000;
 
   return (
     <Card className="flex-col gap-2 px-4 py-3">

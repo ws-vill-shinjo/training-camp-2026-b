@@ -11,14 +11,14 @@ import { Accum, ModifierAxis } from "../types/bonus";
 /**
  * valueType ごとにレベルの効果量を算出する。
  *
- * growth: effect(level) = baseValue + valueGrowth * (level - 1)
+ * growth: effect(level) = baseValue * valueGrowth ^ (level - 1)
  * fixed:  effect(level) = baseValue
  * table:  effect(level) = valueTable[level - 1]
  */
 export const calcEffect = (config: BonusMaster, level: number): number => {
   switch (config.valueType) {
     case "growth":
-      return config.baseValue + config.valueGrowth * (level - 1);
+      return config.baseValue * Math.pow(config.valueGrowth, level - 1);
     case "fixed":
       return config.baseValue;
     case "table": {
