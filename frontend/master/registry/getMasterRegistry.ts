@@ -1,6 +1,5 @@
 import { loadMasters, type CsvFetcher } from "../loader/loadMasters";
 import { buildMasterRegistry, type MasterRegistry } from "./buildMasterRegistry";
-import useGameStore from "../../features/game/store/useGameStore";
 
 let registry: MasterRegistry | null = null;
 
@@ -12,7 +11,6 @@ export const initializeMasterRegistry = async (fetcher?: CsvFetcher): Promise<vo
   if (registry !== null) return;
   const validated = await loadMasters(fetcher);
   registry = buildMasterRegistry(validated);
-  useGameStore.setState({ registryReady: true });
 };
 
 /**
