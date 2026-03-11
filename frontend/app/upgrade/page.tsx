@@ -7,6 +7,7 @@ import useGameStore from "@/features/game/store/useGameStore";
 import { Money } from "@/features/game/components/Money";
 import { ProductionUpgradeItem } from "@/features/upgrade/components/ProductionUpgradeItem";
 import { BonusUpgradeItem } from "@/features/upgrade/components/BonusUpgradeItem";
+import { TapUpgradeItem } from "@/features/upgrade/components/TapUpgradeItem";
 import { useUpgradeIds } from "@/features/upgrade/hooks/useUpgradeIds";
 import { Button } from "@/components/ui/button";
 import { QrCode } from "lucide-react";
@@ -49,6 +50,10 @@ export default function UpgradePage() {
       <div className="max-w-lg mx-auto p-4">
         <div className="flex justify-end">
           <Money />
+        </div>
+        <div className="space-y-2 py-3">
+          <p className="text-sm font-bold text-muted-foreground">タップ強化</p>
+          <TapUpgradeItem />
         </div>
         <div className="space-y-2 py-3">
           <p className="text-sm font-bold text-muted-foreground">施設一覧</p>
