@@ -6,6 +6,7 @@ import { FloatingLabel } from "./FloatingLabel";
 import { useState } from "react";
 import { tap } from "@/features/game/domain/tap";
 import useGameStore from "@/features/game/store/useGameStore";
+import useSound from "use-sound";
 
 // 型を別途定義
 type FloatingLabelType = {
@@ -18,6 +19,7 @@ type FloatingLabelType = {
 export const TapZone = () => {
   const tapYield = useGameStore((s) => s.tapYield);
   const [labels, setLabels] = useState<FloatingLabelType[]>([]);
+  const [play] = useSound("/sounds/drop_money.mp3");
 
   const handlePointerDown = (e: React.PointerEvent) => {
     e.preventDefault();
@@ -33,6 +35,7 @@ export const TapZone = () => {
     <Card
       role="button"
       onPointerDown={handlePointerDown}
+      onClick={() => play()}
       className="relative flex justify-center items-center pt-5 bg-transparent border-none shadow-none ring-0 cursor-pointer select-none"
     >
       <Image
