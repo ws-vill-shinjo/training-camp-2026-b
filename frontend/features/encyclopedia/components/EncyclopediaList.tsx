@@ -3,14 +3,9 @@
 import { useState } from "react";
 import { EncyclopediaGridItem } from "./EncyclopediaGridItem";
 import { EncyclopediaDetail } from "./EncyclopediaDetail";
-import type { EncyclopediaEntry } from "../hooks/useEncyclopediaEntries";
+import type { EncyclopediaEntry } from "../types/encyclopedia";
 import { SECTION_ORDER, SECTION_LABEL } from "../types/encyclopedia";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
 type Props = {
   entries: EncyclopediaEntry[];
@@ -38,31 +33,28 @@ export const EncyclopediaList = ({ entries }: Props) => {
           const unlockedCount = section.filter((e) => e.unlocked).length;
 
           return (
-            <section key={type}>
-              <div className="flex items-center gap-2 mb-4">
-                <h2 className="text-base font-semibold">{SECTION_LABEL[type]}</h2>
-                <span className="text-xs text-muted-foreground">
-                  {unlockedCount} / {section.length}
-                </span>
-              </div>
-              <div className="grid grid-cols-3 gap-3">
-                {section.map((entry) => (
-                  <EncyclopediaGridItem key={entry.id} entry={entry} onSelect={setSelected} />
-                ))}
-              </div>
-            </section>
+            <Card key={type}>
+              <CardHeader>
+                <div className="flex items-center gap-2">
+                  <CardTitle>{SECTION_LABEL[type]}</CardTitle>
+                  <span className="text-xs text-muted-foreground">
+                    {unlockedCount} / {section.length}
+                  </span>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-4 gap-x-4 gap-y-6">
+                  {section.map((entry) => (
+                    <EncyclopediaGridItem key={entry.id} entry={entry} onSelect={setSelected} />
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
           );
         })}
       </div>
 
-      <Dialog open={selected !== null} onOpenChange={(open) => { if (!open) setSelected(null); }}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{selected?.title}</DialogTitle>
-          </DialogHeader>
-          {selected && <EncyclopediaDetail entry={selected} />}
-        </DialogContent>
-      </Dialog>
+      <EncyclopediaDetail entry={selected} onClose={() => setSelected(null)} />
     </>
   );
 };

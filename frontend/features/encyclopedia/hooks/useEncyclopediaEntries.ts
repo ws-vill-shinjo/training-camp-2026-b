@@ -2,8 +2,7 @@ import { useMemo } from "react";
 import type { EncyclopediaMaster } from "../../../master/schema/encyclopediaSchema";
 import { getMasterRegistry } from "../../../master/registry/getMasterRegistry";
 import useGameStore from "../../game/store/useGameStore";
-
-export type EncyclopediaEntry = EncyclopediaMaster & { unlocked: boolean };
+import { EncyclopediaEntry } from "../types/encyclopedia";
 
 /** sourceType / sourceId に基づいて解放済みかどうかを判定してエントリを返す */
 export const useEncyclopediaEntries = (): EncyclopediaEntry[] => {

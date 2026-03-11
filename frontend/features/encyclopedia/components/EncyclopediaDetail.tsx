@@ -1,41 +1,38 @@
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card";
+import Image from "next/image";
+import { Card, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import type { EncyclopediaEntry } from "../hooks/useEncyclopediaEntries";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import type { EncyclopediaEntry } from "../types/encyclopedia";
 import { SECTION_LABEL } from "../types/encyclopedia";
 
 type Props = {
-  entry: EncyclopediaEntry;
+  entry: EncyclopediaEntry | null;
+  onClose: () => void;
 };
 
-export const EncyclopediaDetail = ({ entry }: Props) => {
-  const { unlocked, title, shortText, detailText, sourceType } = entry;
-
-  return (
-    <Card className={`h-full ${!unlocked ? "opacity-50 grayscale" : ""}`}>
-      <CardHeader>
-        <div className="flex items-start justify-between gap-2">
-          <CardTitle>{unlocked ? title : "???"}</CardTitle>
-          <Badge variant="secondary" className="shrink-0">
-            {SECTION_LABEL[sourceType] ?? sourceType}
-          </Badge>
+export const EncyclopediaDetail = ({ entry, onClose }: Props) => (
+  <Dialog
+    open={entry !== null}
+    onOpenChange={(open) => {
+      if (!open) onClose();
+    }}
+  >
+    <DialogContent>
+      {entry && (
+        <div className="flex flex-col py-4 gap-4">
+          <Card className="relative mx-4 aspect-square overflow-hidden">
+            <Image src={entry.imageSrc} alt={entry.title} fill className="object-cover" />
+          </Card>
+          <div className="flex items-start justify-between gap-2 px-4">
+            <CardTitle>{entry.title}</CardTitle>
+            <Badge variant="secondary" className="shrink-0">
+              {SECTION_LABEL[entry.sourceType] ?? entry.sourceType}
+            </Badge>
+          </div>
+          <CardDescription className="px-4">{entry.shortText}</CardDescription>
+          <p className="px-4 text-sm text-foreground/80">{entry.detailText}</p>
         </div>
-        <CardDescription>{unlocked ? shortText : "解放すると閲覧できます"}</CardDescription>
-      </CardHeader>
-
-      {unlocked && (
-        <CardContent>
-          <p className="text-sm text-foreground/80">{detailText}</p>
-        </CardContent>
       )}
-
-      {!unlocked && <CardFooter className="text-muted-foreground text-xs">🔒 未解放</CardFooter>}
-    </Card>
-  );
-};
+    </DialogContent>
+  </Dialog>
+);

@@ -1,7 +1,5 @@
-import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import type { EncyclopediaEntry } from "../hooks/useEncyclopediaEntries";
-import { SECTION_LABEL } from "../types/encyclopedia";
+import { Card } from "@/components/ui/card";
+import type { EncyclopediaEntry } from "../types/encyclopedia";
 
 type Props = {
   entry: EncyclopediaEntry;
@@ -9,26 +7,28 @@ type Props = {
 };
 
 export const EncyclopediaGridItem = ({ entry, onSelect }: Props) => {
-  const { unlocked, title, shortText, sourceType } = entry;
+  const { unlocked, title } = entry;
 
   return (
-    <div className={`aspect-square ${!unlocked ? "pointer-events-none" : ""}`}>
-      <Card
-        onClick={() => onSelect?.(entry)}
-        className={`h-full overflow-hidden transition-shadow ${unlocked ? "cursor-pointer hover:shadow-md" : "opacity-50 grayscale"}`}
-      >
-        <CardHeader className="h-full justify-between">
-          <div className="flex items-start justify-between gap-2">
-            <CardTitle className="line-clamp-2">{unlocked ? title : "???"}</CardTitle>
-            <Badge variant="secondary" className="shrink-0">
-              {SECTION_LABEL[sourceType] ?? sourceType}
-            </Badge>
-          </div>
-          <CardDescription className="line-clamp-3">
-            {unlocked ? shortText : "🔒 解放すると閲覧できます"}
-          </CardDescription>
-        </CardHeader>
-      </Card>
-    </div>
+    <Card
+      role="button"
+      tabIndex={unlocked ? 0 : -1}
+      aria-disabled={!unlocked}
+      onClick={() => unlocked && onSelect?.(entry)}
+      onKeyDown={(e) => e.key === "Enter" && unlocked && onSelect?.(entry)}
+      className={`
+        aspect-square w-full flex flex-col items-center justify-between
+        p-1.5 rounded-2xl select-none
+        ${unlocked ? "cursor-pointer hover:brightness-95 active:scale-95 transition-transform" : "pointer-events-none grayscale opacity-50"}
+      `}
+    >
+      {/* アイコン領域：残りスペースを占有 */}
+      <div className="flex-1 w-full flex items-center justify-center text-2xl">🌿</div>
+
+      {/* ラベル：常に表示 */}
+      <span className="shrink-0 w-full text-center text-xs leading-tight line-clamp-2">
+        {title}
+      </span>
+    </Card>
   );
 };
