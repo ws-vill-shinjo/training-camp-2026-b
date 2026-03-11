@@ -17,6 +17,7 @@ export const SettingsButton = () => {
       originalSetItem(key, value);
     };
     localStorage.removeItem("game-store");
+    localStorage.removeItem("opening_story_shown");
     window.location.reload();
   };
 

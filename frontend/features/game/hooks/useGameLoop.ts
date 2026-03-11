@@ -62,9 +62,10 @@ export const useGameLoop = (): void => {
     }
   });
 
-  // --- イベント抽選（EVENT_CHECK_INTERVAL_MS ごと、Home 画面のみ）---
+  // --- イベント抽選（EVENT_CHECK_INTERVAL_MS ごと、Home 画面かつオープニングストーリー終了後のみ）---
   useInterval(() => {
     if (pathname !== "/") return;
+    if (!localStorage.getItem("opening_story_shown")) return;
     const now = Date.now();
     rollAndActivateEvent(now);
   }, EVENT_CHECK_INTERVAL_MS);
