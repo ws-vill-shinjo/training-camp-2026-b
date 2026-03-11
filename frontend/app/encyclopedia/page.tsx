@@ -12,7 +12,7 @@ export default function EncyclopediaPage() {
       <Header>
         <h1 className="text-4xl">図鑑</h1>
       </Header>
-      <div className="p-4">
+      <div className="max-w-lg mx-auto p-4">
         <EncyclopediaList entries={entries} />
       </div>
     </>

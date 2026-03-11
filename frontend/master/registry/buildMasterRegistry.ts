@@ -2,6 +2,7 @@ import type { ProductionMaster } from "../schema/productionSchema";
 import type { BonusMaster } from "../schema/bonusSchema";
 import type { EventMaster } from "../schema/eventSchema";
 import type { EncyclopediaMaster } from "../schema/encyclopediaSchema";
+import type { TapMaster } from "../schema/tapSchema";
 import type { ValidatedMasters } from "../loader/validateMasters";
 
 export type MasterRegistry = {
@@ -9,6 +10,7 @@ export type MasterRegistry = {
   bonus: Record<string, BonusMaster>;
   event: Record<string, EventMaster>;
   encyclopedia: Record<string, EncyclopediaMaster>;
+  tap: Record<string, TapMaster>;
 };
 
 export function buildMasterRegistry(validated: ValidatedMasters): MasterRegistry {
@@ -17,5 +19,6 @@ export function buildMasterRegistry(validated: ValidatedMasters): MasterRegistry
     bonus: Object.fromEntries(validated.bonus.map((m) => [m.id, m])),
     event: Object.fromEntries(validated.event.map((m) => [m.id, m])),
     encyclopedia: Object.fromEntries(validated.encyclopedia.map((m) => [m.id, m])),
+    tap: Object.fromEntries(validated.tap.map((m) => [m.id, m])),
   };
 }

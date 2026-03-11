@@ -12,7 +12,7 @@ import useGameStore from "../store/useGameStore";
 const TICK_MS = 500;
 
 /** イベント抽選の実行間隔 (ms) */
-const EVENT_CHECK_INTERVAL_MS = 30000;
+const EVENT_CHECK_INTERVAL_MS = 5 * 60 * 1000;
 
 const runResume = (): void => {
   const store = useGameStore.getState();
@@ -55,6 +55,7 @@ export const useGameLoop = (): void => {
     const now = Date.now();
     if (now - lastTickAtRef.current >= TICK_MS) {
       lastTickAtRef.current = now;
+      useGameStore.setState({ tickAt: now });
       runTick(now);
     }
   });

@@ -5,10 +5,6 @@ ItalianTomato,イタリアントマト,10,growth,3,0.7,,7000,0.88,growth,50,1.7,
 Yamabuki,やまぶき,10,growth,5,0.8,,8000,0.88,growth,100,1.7,,false,Yamabuki,/images/Yamabuki.png
 Genbokishiitake,原木シイタケ,10,growth,8,0.9,,9000,0.87,growth,200,1.8,,false,Genbokishiitake,/images/Genbokishiitake.png
 ShinjoRakkyou,新庄らっきょう,10,growth,12,1.0,,10000,0.87,growth,400,1.8,,false,ShinjoRakkyou,/images/ShinjoRakkyou.png
-Sakuraya,咲蔵家,8,growth,20,1.2,,12000,0.85,growth,800,2.0,,false,Sakuraya,/images/Sakuraya.png
-Michinoekigaisensakurashinjosyuku,道の駅がいせんさくら新庄宿,8,growth,35,1.5,,15000,0.85,growth,1500,2.0,,false,Michinoekigaisensakurashinjosyuku,/images/Michinoekigaisensakurashinjosyuku.jpg
-Wakihonjinkishirotei,脇本陣木代邸,8,growth,55,1.8,,18000,0.83,growth,3000,2.1,,false,Wakihonjinkishirotei,/images/Wakihonjinkishirotei.jpg
-Miyukibashi,御幸橋,8,growth,80,2.0,,20000,0.83,growth,6000,2.1,,false,Miyukibashi,/images/Miyukibashi.jpg
 Mochidukisenbei,餅月せんべい,6,growth,120,2.5,,25000,0.82,growth,12000,2.2,,false,Mochidukisenbei,/images/Mochidukisenbei.png
 Shinjomiso,新庄みそ,6,growth,180,3.0,,30000,0.82,growth,25000,2.2,,false,Shinjomiso,/images/Shinjomiso.jpg
 Sarunashijamu,サルナシジャム,6,growth,260,3.5,,35000,0.80,growth,50000,2.3,,false,Sarunashijamu,/images/Sarunashijamu.png

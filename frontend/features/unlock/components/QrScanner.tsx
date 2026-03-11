@@ -3,48 +3,16 @@
 import { useEffect, useRef } from "react";
 import QrScannerLib from "qr-scanner";
 import { parseQrPayload } from "../domain/parser";
-import { processQrUnlock, UnlockResult } from "../domain/unlock";
+import { processQrUnlock } from "../domain/unlock";
+import type { UnlockResult } from "../types/qr";
 import { emitQrUnlockResult } from "../../game/domain/event";
-
-// 使用側のコード
-{
-  /* <button className="btn btn-secondary mb-4" onClick={() => isCamera((prev) => !prev)}>
-  {camera ? "QRスキャナーを閉じる" : "QRスキャナーを開く"}
-</button>
-{camera && (
-  <div className="mb-4">
-    <h2 className="h5">QRコードスキャナー</h2>
-    <p>QRコードをスキャンしてコンテンツをアンロックできます。</p>
-    <QrScanner
-      onSuccess={(result) => {
-        isCamera(false);
-        setUnlockResult(result);
-      }}
-    />
-  </div>
-)}
-
-<Dialog open={unlockResult !== null} onOpenChange={(open) => { if (!open) setUnlockResult(null); }}>
-  <DialogContent>
-    <DialogHeader>
-      <DialogTitle>
-        {unlockResult?.alreadyUnlocked ? "すでにアンロック済み" : "アンロック成功！"}
-      </DialogTitle>
-      <DialogDescription>
-        {unlockResult?.alreadyUnlocked
-          ? `「${unlockResult.contentId}」はすでに解放されています。`
-          : `「${unlockResult?.contentId}」を解放しました！`}
-      </DialogDescription>
-    </DialogHeader>
-  </DialogContent>
-</Dialog> */
-}
 
 type Props = {
   onSuccess?: (result: UnlockResult & { success: true }) => void;
+  onError?: (message: string) => void;
 };
 
-export function QrScanner({ onSuccess }: Props) {
+export const QrScanner = ({ onSuccess, onError }: Props) => {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -57,18 +25,17 @@ export function QrScanner({ onSuccess }: Props) {
 
         const payload = parseQrPayload(raw);
         if (!payload) {
-          alert(`無効なQRコードです: ${raw}`);
+          onError?.(`無効なQRコードです: ${raw}`);
           return;
         }
 
         const unlockResult = processQrUnlock(payload.contentId);
-        console.log("Unlock result:", unlockResult);
         emitQrUnlockResult(unlockResult);
 
         if (unlockResult.success) {
           onSuccess?.(unlockResult);
         } else {
-          alert(`アンロックに失敗しました: ${unlockResult.reason}`);
+          onError?.(`アンロックに失敗しました: ${unlockResult.reason}`);
         }
       },
       { returnDetailedScanResult: true }
@@ -79,7 +46,11 @@ export function QrScanner({ onSuccess }: Props) {
     return () => {
       scanner.destroy();
     };
-  }, [onSuccess]);
+  }, [onSuccess, onError]);
 
-  return <video ref={videoRef} style={{ width: "100%", maxWidth: "400px" }} />;
-}
+  return (
+    <div className="relative w-full aspect-square overflow-hidden rounded-2xl">
+      <video ref={videoRef} className="absolute inset-0 w-full h-full object-cover" />
+    </div>
+  );
+};

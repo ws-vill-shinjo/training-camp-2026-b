@@ -30,10 +30,12 @@ export const createProductionRuntimeSlice: StateCreator<
   /** 単一施設の baseStat をマスターレジストリから更新する */
   updateBaseProductionStat: (id) => {
     const level = get().productionLevels[id] ?? 1;
+    const stat = buildBaseStatForId(id, level);
+    if (!stat) return;
     set((state) => ({
       baseProductionStats: {
         ...state.baseProductionStats,
-        [id]: buildBaseStatForId(id, level),
+        [id]: stat,
       },
     }));
   },

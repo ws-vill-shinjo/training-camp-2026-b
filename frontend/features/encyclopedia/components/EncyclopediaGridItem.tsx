@@ -18,7 +18,7 @@ export const EncyclopediaGridItem = ({ entry, onSelect }: Props) => {
       onClick={() => unlocked && onSelect?.(entry)}
       onKeyDown={(e) => e.key === "Enter" && unlocked && onSelect?.(entry)}
       className={`
-        flex flex-col gap-1 select-none
+        flex flex-col gap-1 select-none min-w-0
         ${unlocked ? "cursor-pointer" : "pointer-events-none grayscale opacity-50"}
       `}
     >

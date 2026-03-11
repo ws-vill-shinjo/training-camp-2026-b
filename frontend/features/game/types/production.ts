@@ -50,3 +50,10 @@ export type ProductionProgress = {
   /** サイクル ms */
   cycleMs: number;
 };
+
+export type ProductionFacilityItem = {
+  id: string;
+  name: string;
+  imageSrc: string;
+  progress: number;
+};

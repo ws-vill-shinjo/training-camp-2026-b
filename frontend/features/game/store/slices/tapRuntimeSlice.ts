@@ -1,9 +1,7 @@
 import { StateCreator } from "zustand";
 import { getMasterRegistry } from "../../../../master/registry/getMasterRegistry";
-import { calcTapYield } from "../../domain/tap";
+import { calcTapYield, TAP_MASTER_ID } from "../../domain/tap";
 import { GameStore, TapRuntimeSlice } from "../../types/store";
-
-const TAP_BONUS_ID = "tap";
 
 export const createTapRuntimeSlice: StateCreator<GameStore, [], [], TapRuntimeSlice> = (
   set,
@@ -12,8 +10,10 @@ export const createTapRuntimeSlice: StateCreator<GameStore, [], [], TapRuntimeSl
   tapYield: "1",
 
   rebuildTapYield: () => {
-    const { bonusLevels } = get();
-    const tapBonus = getMasterRegistry().bonus[TAP_BONUS_ID];
-    set({ tapYield: calcTapYield(tapBonus, bonusLevels).toFixed() });
+    const tapMaster = getMasterRegistry().tap[TAP_MASTER_ID];
+    if (!tapMaster) return;
+
+    const level = Math.max(1, get().bonusLevels[TAP_MASTER_ID] ?? 1);
+    set({ tapYield: calcTapYield(tapMaster, level).toFixed() });
   },
 });
