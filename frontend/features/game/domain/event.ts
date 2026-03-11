@@ -1,4 +1,3 @@
-import Decimal from "decimal.js";
 import { createNanoEvents } from "nanoevents";
 import type { EventMaster } from "../../../master/schema/eventSchema";
 import { getMasterRegistry } from "../../../master/registry/getMasterRegistry";
@@ -20,13 +19,12 @@ export const gameEventEmitter = createNanoEvents<GameDomainEventMap>();
 
 /**
  * 有効期限内のイベントから RuntimeModifiers を構築する。
- * effectType が yieldMultiplier / cycleMultiplier / productionBoost / productionFreeze
- * のものだけを対象にする。
+ * effectType が yieldMultiplier / cycleMultiplier のものだけを対象にする。
  */
 
 const resolveAxis = (effectType: EventMaster["effectType"]): ModifierAxis => {
-  if (effectType === "yieldMultiplier" || effectType === "productionBoost") return "yield";
-  if (effectType === "cycleMultiplier" || effectType === "productionFreeze") return "cycle";
+  if (effectType === "yieldMultiplier") return "yield";
+  if (effectType === "cycleMultiplier") return "cycle";
   return null;
 };
 
@@ -34,9 +32,9 @@ export const buildEventModifiers = (
   activeEvents: GameEvent[],
   eventMasters: Record<string, EventMaster>
 ): RuntimeModifiers => {
-  let globalYield = new Decimal(1);
-  let globalCycle = new Decimal(1);
-  const perProd: Record<string, { yield: Decimal; cycle: Decimal }> = {};
+  let globalYield = 1;
+  let globalCycle = 1;
+  const perProd: Record<string, { yield: number; cycle: number }> = {};
 
   for (const ev of activeEvents) {
     const master = eventMasters[ev.id];
@@ -45,21 +43,21 @@ export const buildEventModifiers = (
     const axis = resolveAxis(master.effectType);
     if (!axis) continue;
 
-    const value = new Decimal(ev.value);
+    const value = Number(ev.value);
 
     if (master.targetType === "global") {
-      if (axis === "yield") globalYield = globalYield.times(value);
-      else globalCycle = globalCycle.times(value);
+      if (axis === "yield") globalYield *= value;
+      else globalCycle *= value;
     } else if (master.targetType === "production" && master.targetId) {
-      perProd[master.targetId] ??= { yield: new Decimal(1), cycle: new Decimal(1) };
-      perProd[master.targetId][axis] = perProd[master.targetId][axis].times(value);
+      perProd[master.targetId] ??= { yield: 1, cycle: 1 };
+      perProd[master.targetId][axis] *= value;
     }
   }
 
   const byProduction: RuntimeModifiers["byProduction"] = {};
   for (const [id, mod] of Object.entries(perProd)) {
-    const y = mod.yield.toFixed();
-    const c = mod.cycle.toFixed();
+    const y = String(mod.yield);
+    const c = String(mod.cycle);
     if (y !== "1" || c !== "1") {
       byProduction[id] = { yieldMultiplier: y, cycleMultiplier: c };
     }
@@ -67,8 +65,8 @@ export const buildEventModifiers = (
 
   return {
     global: {
-      yieldMultiplier: globalYield.toFixed(),
-      cycleMultiplier: globalCycle.toFixed(),
+      yieldMultiplier: String(globalYield),
+      cycleMultiplier: String(globalCycle),
     },
     byProduction,
   };
@@ -83,8 +81,8 @@ export const buildEventModifiers = (
  * bonusModifiers と eventModifiers を組み合わせる用途を想定。
  */
 export const combineModifiers = (a: RuntimeModifiers, b: RuntimeModifiers): RuntimeModifiers => {
-  const globalYield = new Decimal(a.global.yieldMultiplier).times(b.global.yieldMultiplier);
-  const globalCycle = new Decimal(a.global.cycleMultiplier).times(b.global.cycleMultiplier);
+  const globalYield = Number(a.global.yieldMultiplier) * Number(b.global.yieldMultiplier);
+  const globalCycle = Number(a.global.cycleMultiplier) * Number(b.global.cycleMultiplier);
 
   // 両方の byProduction キーをマージ
   const allIds = new Set([...Object.keys(a.byProduction), ...Object.keys(b.byProduction)]);
@@ -93,8 +91,8 @@ export const combineModifiers = (a: RuntimeModifiers, b: RuntimeModifiers): Runt
   for (const id of allIds) {
     const aLocal = a.byProduction[id] ?? { yieldMultiplier: "1", cycleMultiplier: "1" };
     const bLocal = b.byProduction[id] ?? { yieldMultiplier: "1", cycleMultiplier: "1" };
-    const y = new Decimal(aLocal.yieldMultiplier).times(bLocal.yieldMultiplier).toFixed();
-    const c = new Decimal(aLocal.cycleMultiplier).times(bLocal.cycleMultiplier).toFixed();
+    const y = String(Number(aLocal.yieldMultiplier) * Number(bLocal.yieldMultiplier));
+    const c = String(Number(aLocal.cycleMultiplier) * Number(bLocal.cycleMultiplier));
     if (y !== "1" || c !== "1") {
       byProduction[id] = { yieldMultiplier: y, cycleMultiplier: c };
     }
@@ -102,35 +100,11 @@ export const combineModifiers = (a: RuntimeModifiers, b: RuntimeModifiers): Runt
 
   return {
     global: {
-      yieldMultiplier: globalYield.toFixed(),
-      cycleMultiplier: globalCycle.toFixed(),
+      yieldMultiplier: String(globalYield),
+      cycleMultiplier: String(globalCycle),
     },
     byProduction,
   };
-};
-
-// ---------------------------------------------------------------------------
-// イベント耐性
-// ---------------------------------------------------------------------------
-
-/**
- * ボーナスの eventResist 効果量を合計して耐性値（0 以上の数値）を返す。
- * rollAndActivateEvent でランダム判定に使用する。
- */
-const calcEventResist = (): number => {
-  const registry = getMasterRegistry();
-  const store = useGameStore.getState();
-  let resist = 0;
-
-  for (const config of Object.values(registry.bonus)) {
-    if (config.effectType !== "eventResist") continue;
-    const level = store.bonusLevels[config.id] ?? 0;
-    if (level <= 0) continue;
-    // effectType=eventResist の value は耐性確率の増加量（0〜1 の範囲を想定）
-    resist += config.baseValue + (config.valueGrowth ?? 0) * (level - 1);
-  }
-
-  return Math.min(resist, 1);
 };
 
 // ---------------------------------------------------------------------------
@@ -154,12 +128,14 @@ const selectWeightedRandom = (masters: EventMaster[]): EventMaster | null => {
 
 const applyInstantEffect = (master: EventMaster): void => {
   const store = useGameStore.getState();
-  const value = String(master.value);
+  const value = Number(master.value);
 
   if (master.effectType === "moneyGain") {
     store.addMoney(value);
   } else if (master.effectType === "moneyLoss") {
-    store.spendMoney(value);
+    if (!store.spendMoney(value)) {
+      store.addMoney(-store.getMoney());
+    }
   }
 };
 
@@ -220,10 +196,6 @@ export const rollAndActivateEvent = (now: number): void => {
   const selected = selectWeightedRandom(candidates);
   if (!selected) return;
 
-  // 耐性判定: resist が高いほどイベント発動確率が下がる
-  const resist = calcEventResist();
-  if (Math.random() < resist) return;
-
   activateEvent(selected, now);
 };
 
@@ -254,12 +226,7 @@ export const cleanupAndRebuildEvents = (now: number): void => {
   const hasDurationModifier = expired.some((ev) => {
     const master = registry.event[ev.id];
     if (!master) return false;
-    return (
-      master.effectType === "yieldMultiplier" ||
-      master.effectType === "cycleMultiplier" ||
-      master.effectType === "productionBoost" ||
-      master.effectType === "productionFreeze"
-    );
+    return master.effectType === "yieldMultiplier" || master.effectType === "cycleMultiplier";
   });
 
   if (hasDurationModifier) {

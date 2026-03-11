@@ -1,17 +1,16 @@
 "use client";
+
+import dynamic from "next/dynamic";
 import numbro from "numbro";
 import { Card } from "@/components/ui/card";
 import useGameStore from "@/features/game/store/useGameStore";
 import { CircleDollarSignIcon } from "lucide-react";
 
-export const Money = () => {
-  const getMoneyDecimal = useGameStore((s) => s.getMoneyDecimal);
-
-  useGameStore((s) => s.money);
-  const value = getMoneyDecimal().toNumber();
+const MoneyComponent = () => {
+  const value = useGameStore((s) => s.getMoney());
   const formattedMoney =
     value >= 1_000_000
-      ? numbro(value).format({ average: true }).toUpperCase()
+      ? numbro(value).format({ average: true, mantissa: 1, trimMantissa: true })
       : numbro(value).format({ thousandSeparated: true, mantissa: 0 });
 
   return (
@@ -23,3 +22,5 @@ export const Money = () => {
     </Card>
   );
 };
+
+export const Money = dynamic(() => Promise.resolve(MoneyComponent), { ssr: false });

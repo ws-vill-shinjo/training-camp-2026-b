@@ -44,7 +44,7 @@ export const createProductionRuntimeSlice: StateCreator<
   rebuildRuntimeModifiers: () => {
     const { bonusLevels, activeEvents } = get();
     const registry = getMasterRegistry();
-    const bonusMods = buildRuntimeModifiers(Object.values(registry.bonus), bonusLevels);
+    const bonusMods = buildRuntimeModifiers(Object.values(registry.bonus), bonusLevels, Object.keys(registry.production));
     const eventMods = buildEventModifiers(activeEvents, registry.event);
     set({ runtimeModifiers: combineModifiers(bonusMods, eventMods) });
   },
@@ -56,7 +56,7 @@ export const createProductionRuntimeSlice: StateCreator<
   rebuildRuntimeModifiersForProduction: () => {
     const { bonusLevels, activeEvents } = get();
     const registry = getMasterRegistry();
-    const bonusMods = buildRuntimeModifiers(Object.values(registry.bonus), bonusLevels);
+    const bonusMods = buildRuntimeModifiers(Object.values(registry.bonus), bonusLevels, Object.keys(registry.production));
     const eventMods = buildEventModifiers(activeEvents, registry.event);
     set({ runtimeModifiers: combineModifiers(bonusMods, eventMods) });
   },

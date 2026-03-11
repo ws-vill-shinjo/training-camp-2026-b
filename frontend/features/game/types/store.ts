@@ -1,9 +1,3 @@
-import Decimal from "decimal.js";
-export type { Decimal };
-
-/** decimal.js が受け付ける入力型 (string | number | bigint | Decimal) */
-export type DecimalValue = Decimal.Value;
-
 import type { BaseStat, EffectiveStat, Modifier, RuntimeModifiers } from "./production";
 export type { BaseStat, EffectiveStat, Modifier, RuntimeModifiers };
 
@@ -20,9 +14,9 @@ export type GameEvent = {
 
 export interface EconomySlice {
   money: string;
-  getMoneyDecimal: () => Decimal;
-  addMoney: (amount: DecimalValue) => void;
-  spendMoney: (cost: DecimalValue) => boolean;
+  getMoney: () => number;
+  addMoney: (amount: number) => void;
+  spendMoney: (cost: number) => boolean;
 }
 
 export interface ProductionSlice {
@@ -51,7 +45,6 @@ export interface EventSlice {
 export interface MetaSlice {
   lastActiveAt: Date;
   version: number;
-  registryReady: boolean;
   tickAt: number;
 }
 
@@ -67,6 +60,11 @@ export interface ProductionRuntimeSlice {
   rebuildEffectiveProductionStats: () => void;
 }
 
+export interface TapSlice {
+  tapLevel: number;
+  upgradeTapLevel: () => void;
+}
+
 export interface TapRuntimeSlice {
   /** タップ 1 回の収益（非永続化・再開／ボーナス更新時に再計算） */
   tapYield: string;
@@ -78,5 +76,6 @@ export type GameStore = EconomySlice &
   BonusSlice &
   EventSlice &
   MetaSlice &
+  TapSlice &
   ProductionRuntimeSlice &
   TapRuntimeSlice;

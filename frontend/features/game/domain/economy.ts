@@ -1,4 +1,3 @@
-import Decimal from "decimal.js";
 import type { CostConfig } from "../types/economy";
 import useGameStore from "../store/useGameStore";
 
@@ -8,24 +7,24 @@ import useGameStore from "../store/useGameStore";
 
 /**
  * costType ごとにレベルアップコストを算出する。
- * 返却値は常に Decimal で統一し、UI 層には DecimalString または format 済み文字列のみ渡すこと。
  *
- * growth: cost(level) = baseCost * (costGrowth ^ (level - 1))
+ * growth: cost(1) = baseCost, cost(level) = baseCost * (costGrowth ^ (level - 1))  (level >= 2)
  * fixed:  cost(level) = baseCost
  * table:  cost(level) = costTable[level - 1]
  */
-export const calcCost = (config: CostConfig, level: number): Decimal => {
+export const calcCost = (config: CostConfig, level: number): number => {
   switch (config.costType) {
     case "growth":
-      return new Decimal(config.baseCost).times(new Decimal(config.costGrowth).pow(level - 1));
+      if (level <= 1) return config.baseCost;
+      return config.baseCost * Math.pow(config.costGrowth, level - 1);
     case "fixed":
-      return new Decimal(config.baseCost);
+      return config.baseCost;
     case "table": {
       const entry = config.costTable[level - 1];
       if (entry === undefined) {
         throw new RangeError(`costTable に level=${level} のエントリがありません`);
       }
-      return new Decimal(entry);
+      return entry;
     }
   }
 };
@@ -35,7 +34,7 @@ export const calcCost = (config: CostConfig, level: number): Decimal => {
 // ---------------------------------------------------------------------------
 
 /** 現在の所持金でコストを払えるか判定する */
-export const canAfford = (money: string, cost: Decimal): boolean => new Decimal(money).gte(cost);
+export const canAfford = (money: string, cost: number): boolean => Number(money) >= cost;
 
 // ---------------------------------------------------------------------------
 // プロダクションアップグレード
@@ -57,5 +56,7 @@ export const upgradeProduction = (id: string, config: CostConfig): boolean => {
   store.upgradeProductionLevel(id);
   store.updateBaseProductionStat(id);
   store.rebuildEffectiveProductionStats();
+  // 初回アンロック時は lastProducedAt を現在時刻で初期化し、tick での大量計算を防ぐ
+  if (currentLevel === 0) store.setLastProducedAt(id, Date.now());
   return true;
 };

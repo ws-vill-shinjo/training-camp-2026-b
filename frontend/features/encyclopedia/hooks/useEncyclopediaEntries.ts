@@ -5,14 +5,11 @@ import type { EncyclopediaEntry } from "../types/encyclopedia";
 
 /** sourceType / sourceId に基づいて解放済みかどうかを判定してエントリを返す */
 export const useEncyclopediaEntries = (): EncyclopediaEntry[] => {
-  const registryReady = useGameStore((s) => s.registryReady);
   const productionLevels = useGameStore((s) => s.productionLevels);
   const bonusLevels = useGameStore((s) => s.bonusLevels);
   const seenEvents = useGameStore((s) => s.seenEvents);
 
   return useMemo(() => {
-    if (!registryReady) return [];
-
     const encyclopediaMap = getMasterRegistry().encyclopedia;
 
     return Object.values(encyclopediaMap).map((entry) => {
@@ -26,5 +23,5 @@ export const useEncyclopediaEntries = (): EncyclopediaEntry[] => {
       }
       return { ...entry, unlocked };
     });
-  }, [registryReady, productionLevels, bonusLevels, seenEvents]);
+  }, [productionLevels, bonusLevels, seenEvents]);
 };

@@ -1,8 +1,11 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Yuji_Syuku } from "next/font/google";
 import "./globals.css";
 import { Footer } from "@/components/Footer";
 import { GameProvider } from "@/features/game/components/GameProvider";
+import { Header } from "@/components/Header";
+import Image from "next/image";
+import { SettingsButton } from "@/components/SettingsButton";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,14 +17,23 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const yujiSyuku = Yuji_Syuku({
+  variable: "--font-yuji-syuku",
+  weight: "400",
+  preload: false,
+});
+
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
 };
 
 export const metadata: Metadata = {
-  title: "Training Camp 2026",
-  description: "ハッカソン用スターターテンプレート",
+  title: "新庄村ファーマー",
+  description: "新庄村ファーマー",
+  icons: {
+    icon: "/title.png",
+  },
 };
 
 export default function RootLayout({
@@ -30,8 +42,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ja">
-      <body className={`${geistSans.variable} ${geistMono.variable} bg-[#F0F9EC]`}>
+    <html lang="ja" className={`${geistSans.variable} ${geistMono.variable} ${yujiSyuku.variable}`}>
+      <body className="bg-[#F0F9EC]">
+        <Header>
+          <div className="relative w-full flex items-center justify-center">
+            <Image
+              src="/title.png"
+              alt="ホーム"
+              height={40}
+              width={260}
+              className="object-contain"
+            />
+            <div className="absolute right-8 flex items-center h-full">
+              <SettingsButton />
+            </div>
+          </div>
+        </Header>
         <div className="mb-24 overflow-x-hidden">
           <GameProvider>{children}</GameProvider>
         </div>
