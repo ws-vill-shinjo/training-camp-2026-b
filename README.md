@@ -140,7 +140,7 @@ backend/nextjs/app/api/    ← API Route はここ
     └── me/route.ts
 ```
 
-新しい API は `backend/nextjs/app/api/your-endpoint/route.ts` を作れば `/api/your-endpoint` として動きます
+新しい API は `backend/nextjs/app/api/your-endpoint/route.ts` を作れば `/api/your-endpoint` として動きます。
 
 ### フロントエンドから API を呼ぶ
 
