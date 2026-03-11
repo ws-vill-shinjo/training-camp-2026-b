@@ -23,19 +23,15 @@ type FloatingLabelType = {
 };
 
 export function ProductionItem({ id, level }: Props) {
-  const registryReady = useGameStore((s) => s.registryReady);
   const effectiveYield = useGameStore((s) => s.effectiveProductionStats[id]?.yield);
   const [labels, setLabels] = useState<FloatingLabelType[]>([]);
   const stat = useGameStore((s) => s.effectiveProductionStats[id]);
 
-  // 早期returnより前に定義
   const handleComplete = useCallback(() => {
     const amount = Math.round(Number(effectiveYield ?? 1));
     setLabels((prev) => [...prev, { id: Date.now(), x: 150, y: 30, amount }]);
   }, [effectiveYield]);
 
-  // 早期returnはHooksをすべて呼んだ後
-  if (!registryReady) return null;
   const master = getMasterRegistry().production[id];
   if (!master) return null;
 
