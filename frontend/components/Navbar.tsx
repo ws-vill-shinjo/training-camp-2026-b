@@ -48,10 +48,7 @@ export function Navbar() {
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <button
-                    className="btn btn-outline-light btn-sm"
-                    onClick={handleLogout}
-                  >
+                  <button className="btn btn-outline-light btn-sm" onClick={handleLogout}>
                     ログアウト
                   </button>
                 </li>
