@@ -5,6 +5,7 @@ import useGameStore from "@/features/game/store/useGameStore";
 import { EventNotificationDialog } from "@/features/game/components/EventNotificationDialog";
 import { Facility } from "@/components/Facility";
 import { TapZone } from "@/components/TapZone";
+import { Money } from "@/components/Money";
 
 const GameLoop = () => {
   useGameLoop();
@@ -22,6 +23,7 @@ export default function Home() {
         <h1 className="text-4xl">ホーム</h1>
       </Header>
       <main>
+        <Money />
         <Facility />
         <TapZone />
       </main>
