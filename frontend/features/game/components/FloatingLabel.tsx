@@ -6,7 +6,7 @@ type Props = {
   id: number;
   x: number;
   y: number;
-  amount: string;
+  amount: number;
   onComplete: (id: number) => void;
 };
 
