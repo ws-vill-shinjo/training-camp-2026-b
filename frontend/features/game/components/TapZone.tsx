@@ -5,12 +5,15 @@ import { tap } from "@/features/game/domain/tap";
 import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
 import { CircleDollarSignIcon } from "lucide-react";
+import useGameStore from "../store/useGameStore";
 
 type FloatingLabel = {
   id: number;
   x: number;
   y: number;
 };
+
+const store = useGameStore.getState();
 
 export const TapZone = () => {
   const [labels, setLabels] = useState<FloatingLabel[]>([]);
@@ -56,7 +59,7 @@ export const TapZone = () => {
           >
             <div className="flex items-center gap-1 text-yellow-400">
               <CircleDollarSignIcon size={20} />
-              <span>+1</span>
+              <span>+{store.tapYield}</span>
             </div>
           </motion.span>
         ))}
