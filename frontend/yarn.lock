@@ -2374,6 +2374,11 @@ cosmiconfig@^9.0.0:
     js-yaml "^4.1.0"
     parse-json "^5.2.0"
 
+countup.js@^2.8.0:
+  version "2.10.0"
+  resolved "https://registry.yarnpkg.com/countup.js/-/countup.js-2.10.0.tgz#5199c923a33b51cb9fbfc0d4c0672c554dea394f"
+  integrity sha512-QQpZx7oYxsR+OeITlZe46fY/OQjV11oBqjY8wgIXzLU2jIz8GzOrbMhqKLysGY8bWI3T1ZNrYkwGzKb4JNgyzg==
+
 cross-spawn@^7.0.3, cross-spawn@^7.0.5, cross-spawn@^7.0.6:
   version "7.0.6"
   resolved "https://registry.yarnpkg.com/cross-spawn/-/cross-spawn-7.0.6.tgz#8a58fe78f00dcd70c370451759dfbfaf03e8ee9f"
@@ -4844,6 +4849,13 @@ raw-body@^3.0.0, raw-body@^3.0.1:
     http-errors "~2.0.1"
     iconv-lite "~0.7.0"
     unpipe "~1.0.0"
+
+react-countup@^6.5.3:
+  version "6.5.3"
+  resolved "https://registry.yarnpkg.com/react-countup/-/react-countup-6.5.3.tgz#e892aa3eab2d6ba9c3cdba30bf4ed6764826d848"
+  integrity sha512-udnqVQitxC7QWADSPDOxVWULkLvKUWrDapn5i53HE4DPRVgs+Y5rr4bo25qEl8jSh+0l2cToJgGMx+clxPM3+w==
+  dependencies:
+    countup.js "^2.8.0"
 
 react-dom@19.2.3:
   version "19.2.3"
