@@ -1,6 +1,7 @@
 "use client";
 
 import numbro from "numbro";
+import { useEffect } from "react";
 import { Header } from "@/components/Header";
 import { getMasterRegistry } from "@/master/registry/getMasterRegistry";
 import useGameStore from "@/features/game/store/useGameStore";
@@ -20,6 +21,7 @@ function ProductionItem({
   level,
   maxLevel,
   money,
+  effectiveStat,
 }: {
   id: string;
   name: string;
@@ -27,6 +29,7 @@ function ProductionItem({
   level: number;
   maxLevel: number;
   money: string;
+  effectiveStat?: { yield: string; cycleMs: number };
 }) {
   const registry = getMasterRegistry();
   const config = registry.production[id];
@@ -40,41 +43,50 @@ function ProductionItem({
     upgradeProduction(id, config);
   };
 
+  const displayYield = level > 0 && effectiveStat ? effectiveStat.yield : "0";
+  const displayCycleSeconds = level > 0 && effectiveStat ? effectiveStat.cycleMs / 1000 : 0;
+
   return (
-    <Card className="flex-row items-center gap-3 px-4 py-3">
-      <div className="flex-shrink-0">
-        <Image
-          src={imageSrc}
-          alt={name}
-          width={48}
-          height={48}
-          className="rounded-md object-cover"
-        />
+    <Card className="flex-col gap-2 px-4 py-3">
+      <div className="flex items-center gap-3">
+        <div className="flex-shrink-0">
+          <Image
+            src={imageSrc}
+            alt={name}
+            width={48}
+            height={48}
+            className="rounded-md object-cover"
+          />
+        </div>
+        <p className="font-semibold text-sm w-28 flex-shrink-0 truncate">{name}</p>
+        <p className="text-xs text-muted-foreground w-16 flex-shrink-0 text-center">
+          Lv.{level} / {maxLevel}
+        </p>
+        <div className="flex-1" />
+        {isMaxLevel ? (
+          <span className="text-xs font-semibold text-muted-foreground w-14 text-center">MAX</span>
+        ) : isQrLocked ? (
+          <span className="text-xs font-semibold text-muted-foreground w-14 text-center">
+            QRコードでアンロック
+          </span>
+        ) : (
+          <Button
+            size="sm"
+            disabled={!canAfford}
+            onClick={handleUpgrade}
+            className="flex-shrink-0 flex flex-col h-auto py-1 w-20 bg-[#6ab87a] hover:bg-[#57a567] text-white"
+          >
+            <span>{level === 0 ? "アンロック" : "強化"}</span>
+            {cost && (
+              <span className="text-xs opacity-80">{numbro(cost).format({ average: true })}</span>
+            )}
+          </Button>
+        )}
       </div>
-      <p className="font-semibold text-sm w-28 flex-shrink-0 truncate">{name}</p>
-      <p className="text-xs text-muted-foreground w-16 flex-shrink-0 text-center">
-        Lv.{level} / {maxLevel}
-      </p>
-      <div className="flex-1" />
-      {isMaxLevel ? (
-        <span className="text-xs font-semibold text-muted-foreground w-14 text-center">MAX</span>
-      ) : isQrLocked ? (
-        <span className="text-xs font-semibold text-muted-foreground w-14 text-center">
-          QRコードでアンロック
-        </span>
-      ) : (
-        <Button
-          size="sm"
-          disabled={!canAfford}
-          onClick={handleUpgrade}
-          className="flex-shrink-0 flex flex-col h-auto py-1 w-20 bg-[#6ab87a] hover:bg-[#57a567] text-white"
-        >
-          <span>{level === 0 ? "アンロック" : "強化"}</span>
-          {cost && (
-            <span className="text-xs opacity-80">{numbro(cost).format({ average: true })}</span>
-          )}
-        </Button>
-      )}
+      <div className="flex gap-4 text-xs text-muted-foreground">
+        <span>生産量: {numbro(displayYield).format({ average: true })}</span>
+        <span>生産時間: {displayCycleSeconds.toFixed(1)}秒</span>
+      </div>
     </Card>
   );
 }
@@ -139,6 +151,15 @@ export default function UpgradePage() {
   const productionLevels = useGameStore((s) => s.productionLevels);
   const bonusLevels = useGameStore((s) => s.bonusLevels);
   const money = useGameStore((s) => s.money);
+  const effectiveProductionStats = useGameStore((s) => s.effectiveProductionStats);
+
+  useEffect(() => {
+    if (!registryReady) return;
+    const store = useGameStore.getState();
+    store.rebuildBaseProductionStats();
+    store.rebuildRuntimeModifiers();
+    store.rebuildEffectiveProductionStats();
+  }, [registryReady]);
 
   if (!registryReady) {
     return (
@@ -172,6 +193,7 @@ export default function UpgradePage() {
             level={productionLevels[p.id] ?? 0}
             maxLevel={p.maxLevel}
             money={money}
+            effectiveStat={effectiveProductionStats[p.id]}
           />
         ))}
       </div>
