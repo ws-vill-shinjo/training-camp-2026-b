@@ -10,6 +10,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Decimal from "decimal.js";
 import Image from "next/image";
+import { Money } from "@/components/Money";
 
 function formatNumber(value: Decimal | number | string): string {
   const d = new Decimal(value);
@@ -106,7 +107,13 @@ function BonusItem({
   return (
     <Card className="flex-row items-center gap-3 px-4 py-3">
       <div className="flex-shrink-0">
-        <Image src={imageSrc} alt={name} width={48} height={48} className="rounded-md object-cover" />
+        <Image
+          src={imageSrc}
+          alt={name}
+          width={48}
+          height={48}
+          className="rounded-md object-cover"
+        />
       </div>
       <p className="font-semibold text-sm w-28 flex-shrink-0 truncate">{name}</p>
       <p className="text-xs text-muted-foreground w-16 flex-shrink-0 text-center">
@@ -156,9 +163,7 @@ export default function UpgradePage() {
       <Header>
         <h1 className="text-4xl">素材強化</h1>
       </Header>
-      <div className="max-w-lg mx-auto p-4">
-        <p className="text-right text-sm font-semibold">所持金: {money}</p>
-      </div>
+      <Money />
       <div className="max-w-lg mx-auto px-4 space-y-2 py-3">
         <p className="text-sm font-bold text-muted-foreground">施設一覧</p>
         {productions.map((p) => (
