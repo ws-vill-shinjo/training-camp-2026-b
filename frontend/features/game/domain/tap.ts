@@ -1,29 +1,30 @@
 import Decimal from "decimal.js";
-import type { BonusMaster } from "../../../master/schema/bonusSchema";
-import { calcEffect } from "./bonus";
+import type { TapMaster } from "../../../master/schema/tapSchema";
 import useGameStore from "../store/useGameStore";
 
-/** タップボーナスのマスター ID */
-const TAP_BONUS_ID = "tap";
-
-/** タップ 1 回あたりの基礎収益 */
-const BASE_TAP_YIELD = new Decimal(1);
+export const TAP_MASTER_ID = "tap";
 
 // ---------------------------------------------------------------------------
 // タップ収益計算
 // ---------------------------------------------------------------------------
 
-/**
- * tap ボーナスのレベルからタップ 1 回の収益を返す。
- * level=0（未取得）の場合は基礎収益をそのまま返す。
- */
-export const calcTapYield = (
-  tapBonus: BonusMaster | undefined,
-  bonusLevels: Record<string, number>
-): Decimal => {
-  const level = tapBonus ? (bonusLevels[TAP_BONUS_ID] ?? 0) : 0;
-  if (level <= 0) return BASE_TAP_YIELD;
-  return BASE_TAP_YIELD.times(calcEffect(tapBonus!, level));
+/** tap マスターのレベルからタップ 1 回の収益を返す */
+export const calcTapYield = (config: TapMaster, level: number): Decimal => {
+  switch (config.yieldType) {
+    case "growth": {
+      const growth = config.yieldGrowth ?? 0;
+      return new Decimal(config.baseYield ?? 0).times(1 + growth * Math.max(0, level - 1));
+    }
+    case "fixed":
+      return new Decimal(config.baseYield ?? 0);
+    case "table": {
+      const entry = config.yieldTable[level - 1];
+      if (entry === undefined) {
+        throw new RangeError(`yieldTable に level=${level} のエントリがありません`);
+      }
+      return new Decimal(entry);
+    }
+  }
 };
 
 // ---------------------------------------------------------------------------

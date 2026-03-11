@@ -20,6 +20,7 @@ export type GameEvent = {
 
 export interface EconomySlice {
   money: string;
+  getMoneyDecimal: () => Decimal;
   addMoney: (amount: DecimalValue) => void;
   spendMoney: (cost: DecimalValue) => boolean;
 }
@@ -51,6 +52,7 @@ export interface MetaSlice {
   lastActiveAt: Date;
   version: number;
   registryReady: boolean;
+  tickAt: number;
 }
 
 export interface ProductionRuntimeSlice {
