@@ -2,7 +2,6 @@
 
 import numbro from "numbro";
 import Image from "next/image";
-import Decimal from "decimal.js";
 import { getMasterRegistry } from "@/master/registry/getMasterRegistry";
 import useGameStore from "@/features/game/store/useGameStore";
 import { calcCost, upgradeProduction } from "@/features/game/domain/economy";
@@ -24,7 +23,7 @@ export function ProductionUpgradeItem({ id }: Props) {
   const isMaxLevel = level >= maxLevel;
   const isQrLocked = level === 0 && qrUnlockEnabled;
   const cost = isMaxLevel ? null : calcCost(config, level + 1);
-  const canAfford = cost ? new Decimal(money).gte(cost) : false;
+  const canAfford = cost ? Number(money) >= cost : false;
 
   const displayYield = level > 0 && baseStat ? baseStat.baseYield : "0";
   const displayCycleSeconds = level > 0 && baseStat ? baseStat.baseCycleMs / 1000 : 0;

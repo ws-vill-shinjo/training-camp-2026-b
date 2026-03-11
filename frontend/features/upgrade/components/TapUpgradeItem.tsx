@@ -2,7 +2,6 @@
 
 import numbro from "numbro";
 import Image from "next/image";
-import Decimal from "decimal.js";
 import { getMasterRegistry } from "@/master/registry/getMasterRegistry";
 import useGameStore from "@/features/game/store/useGameStore";
 import { calcCost } from "@/features/game/domain/economy";
@@ -18,13 +17,13 @@ export function TapUpgradeItem() {
   const { name, imageSrc, maxLevel } = config;
   const isMaxLevel = level >= maxLevel;
   const cost = isMaxLevel ? null : calcCost(config, level + 1);
-  const canAfford = cost ? new Decimal(money).gte(cost) : false;
+  const canAfford = cost ? Number(money) >= cost : false;
 
   const currentYield = calcTapYield(config, level);
 
   const handleUpgrade = () => {
     const store = useGameStore.getState();
-    if (cost && !new Decimal(store.money).gte(cost)) return;
+    if (cost && Number(store.money) < cost) return;
     if (cost) store.spendMoney(cost);
     store.upgradeTapLevel();
     store.rebuildTapYield();
@@ -63,7 +62,7 @@ export function TapUpgradeItem() {
         )}
       </div>
       <div className="flex gap-4 text-xs text-muted-foreground">
-        <span>タップ収益: {numbro(currentYield.toNumber()).format({ average: true })}</span>
+        <span>タップ収益: {numbro(currentYield).format({ average: true })}</span>
       </div>
     </Card>
   );

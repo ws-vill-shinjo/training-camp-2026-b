@@ -1,4 +1,3 @@
-import Decimal from "decimal.js";
 import useGameStore from "../store/useGameStore";
 
 /** オフライン進行の上限時間 (ms) = 8時間 */
@@ -29,7 +28,7 @@ export const runOfflineCatchup = (now: number): void => {
     const cycles = Math.floor(elapsedMs / stat.cycleMs);
     if (cycles <= 0) continue;
 
-    const gain = new Decimal(cycles).times(stat.yield);
+    const gain = cycles * Number(stat.yield);
     const remainderMs = elapsedMs % stat.cycleMs;
 
     addMoney(gain);
