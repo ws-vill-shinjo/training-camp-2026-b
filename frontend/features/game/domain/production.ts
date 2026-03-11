@@ -90,9 +90,10 @@ export const buildEffectiveStatFromBase = (
   const effectiveYield =
     Number(baseYield) * Number(gMod.yieldMultiplier) * Number(local.yieldMultiplier);
 
-  // effectiveCycleMs = baseCycleMs * global.cycleMultiplier * local.cycleMultiplier
+  // effectiveCycleMs = baseCycleMs / (global.cycleMultiplier * local.cycleMultiplier)
+  // cycleMultiplier は速度倍率なので割ることでサイクル時間を短縮する（1.1 = 10%速く）
   const effectiveCycleMs =
-    baseCycleMs * Number(gMod.cycleMultiplier) * Number(local.cycleMultiplier);
+    baseCycleMs / (Number(gMod.cycleMultiplier) * Number(local.cycleMultiplier));
 
   return { yield: String(effectiveYield), cycleMs: effectiveCycleMs };
 };

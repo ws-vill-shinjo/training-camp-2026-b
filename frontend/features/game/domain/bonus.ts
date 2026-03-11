@@ -43,32 +43,32 @@ const resolveAxis = (effectType: BonusMaster["effectType"]): ModifierAxis => {
   return null;
 };
 
-const resolveTarget = (
-  config: BonusMaster,
-  globalAccum: Accum,
-  perProd: Record<string, Accum>
-): Accum | null => {
-  if (config.targetType === "global") return globalAccum;
-  if (config.targetType === "production" && config.targetId) {
-    return (perProd[config.targetId] ??= initAccum());
-  }
-  return null;
-};
-
 const applyBonusEffect = (
   config: BonusMaster,
   level: number,
   globalAccum: Accum,
-  perProd: Record<string, Accum>
+  perProd: Record<string, Accum>,
+  allProductionIds: string[]
 ): void => {
   const axis = resolveAxis(config.effectType);
   if (!axis) return;
 
-  const target = resolveTarget(config, globalAccum, perProd);
-  if (!target) return;
-
   const effect = calcEffect(config, level);
-  target[axis] *= effect;
+
+  if (config.targetType === "global") {
+    globalAccum[axis] *= effect;
+    return;
+  }
+
+  if (config.targetType === "production" && config.targetId) {
+    (perProd[config.targetId] ??= initAccum())[axis] *= effect;
+  }
+
+  if (config.targetType === "allProduction") {
+    for (const id of allProductionIds) {
+      (perProd[id] ??= initAccum())[axis] *= effect;
+    }
+  }
 };
 
 /**
@@ -79,7 +79,8 @@ const applyBonusEffect = (
  */
 export const buildRuntimeModifiers = (
   bonusMasters: BonusMaster[],
-  bonusLevels: Record<string, number>
+  bonusLevels: Record<string, number>,
+  allProductionIds: string[]
 ): RuntimeModifiers => {
   // 適用順固定
   const sorted = [...bonusMasters].sort((a, b) => a.id.localeCompare(b.id));
@@ -90,7 +91,7 @@ export const buildRuntimeModifiers = (
   for (const config of sorted) {
     const level = bonusLevels[config.id] ?? 0;
     if (level <= 0) continue;
-    applyBonusEffect(config, level, globalAccum, perProd);
+    applyBonusEffect(config, level, globalAccum, perProd, allProductionIds);
   }
 
   // 乗数が両方 1 のエントリは保持しない

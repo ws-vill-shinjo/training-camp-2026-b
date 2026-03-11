@@ -23,8 +23,10 @@ export function BonusUpgradeItem({ id }: Props) {
   const isQrLocked = level === 0 && qrUnlockEnabled;
   const cost = isMaxLevel ? null : calcCost(config, level + 1);
   const canAfford = cost ? Number(money) >= cost : false;
-  const currentMultiplier = level > 0 ? calcEffect(config, level) : 1;
-  const yieldIncreasePercent = ((currentMultiplier - 1) * 100).toFixed(0);
+  const displayLevel = isMaxLevel ? level : level + 1;
+  const multiplier = calcEffect(config, displayLevel);
+  const increasePercent = ((multiplier - 1) * 100).toFixed(0);
+  const effectLabel = config.effectType === "yieldMultiplier" ? "生産量上昇" : "生産速度上昇";
 
   return (
     <Card className="flex-col gap-2 px-4 py-3">
@@ -56,14 +58,14 @@ export function BonusUpgradeItem({ id }: Props) {
             className="flex-shrink-0 flex flex-col h-auto py-1 w-20 bg-[#6ab87a] hover:bg-[#57a567] text-white"
           >
             <span>{level === 0 ? "アンロック" : "強化"}</span>
-            {cost && (
-              <span className="text-xs opacity-80">{formatNumber(cost)}</span>
-            )}
+            {cost && <span className="text-xs opacity-80">{formatNumber(cost)}</span>}
           </Button>
         )}
       </div>
       <div className="flex gap-4 text-xs text-muted-foreground">
-        <span>生産量上昇: +{yieldIncreasePercent}%</span>
+        <span>
+          {effectLabel}: +{increasePercent}%
+        </span>
       </div>
     </Card>
   );
