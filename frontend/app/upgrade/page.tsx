@@ -11,7 +11,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Decimal from "decimal.js";
 import Image from "next/image";
-import { Money } from "@/components/Money";
+import { Money } from "@/features/game/components/Money";
 
 function ProductionItem({
   id,
