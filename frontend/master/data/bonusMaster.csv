@@ -1,5 +1,5 @@
 id,name,maxLevel,targetType,targetId,effectType,valueType,baseValue,valueGrowth,valueTable,costType,baseCost,costGrowth,costTable,qrUnlockEnabled,encyclopediaId,imageSrc
-Sakuraya,咲蔵家,10,allProduction,,yieldMultiplier,growth,1.1,1.07,,growth,500,1.8,,true,Sakuraya,/images/Sakuraya.png
-Michinoekigaisensakurashinjosyuku,道の駅がいせんさくら新庄宿,10,allProduction,,yieldMultiplier,growth,1.1,1.07,,growth,5000,2.0,,true,Michinoekigaisensakurashinjosyuku,/images/Michinoekigaisensakurashinjosyuku.jpg
-Wakihonjinkishirotei,脇本陣木代邸,10,allProduction,,cycleMultiplier,growth,1.1,1.07,,growth,10000,2.0,,true,Wakihonjinkishirotei,/images/Wakihonjinkishirotei.jpg
-Miyukibashi,御幸橋,10,allProduction,,cycleMultiplier,growth,1.1,1.07,,growth,1000,1.8,,true,Miyukibashi,/images/Miyukibashi.jpg
+Sakuraya,咲蔵家,10,allProduction,,yieldMultiplier,growth,1.1,1.07,,growth,25000,2.2,,true,Sakuraya,/images/Sakuraya.png
+Michinoekigaisensakurashinjosyuku,道の駅がいせんさくら新庄宿,10,allProduction,,yieldMultiplier,growth,1.1,1.07,,growth,200000,2.2,,true,Michinoekigaisensakurashinjosyuku,/images/Michinoekigaisensakurashinjosyuku.jpg
+Wakihonjinkishirotei,脇本陣木代邸,10,allProduction,,cycleMultiplier,growth,1.1,1.07,,growth,500000,2.2,,true,Wakihonjinkishirotei,/images/Wakihonjinkishirotei.jpg
+Miyukibashi,御幸橋,10,allProduction,,cycleMultiplier,growth,1.1,1.07,,growth,50000,2.2,,true,Miyukibashi,/images/Miyukibashi.jpg
