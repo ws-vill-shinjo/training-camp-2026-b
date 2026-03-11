@@ -29,8 +29,11 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Training Camp 2026",
-  description: "ハッカソン用スターターテンプレート",
+  title: "新庄村ファーマー",
+  description: "新庄村ファーマー",
+  icons: {
+    icon: "/title.png",
+  },
 };
 
 export default function RootLayout({
