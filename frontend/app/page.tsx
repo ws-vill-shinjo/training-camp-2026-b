@@ -9,6 +9,7 @@ import { EventNotificationDialog } from "@/features/game/components/EventNotific
 import { ProductionFacilities } from "@/features/game/components/ProductionFacilities";
 import { TapZone } from "@/features/game/components/TapZone";
 import { SettingsButton } from "@/components/SettingsButton";
+import { OpeningStory } from "@/features/game/components/OpeningStory";
 
 const GameLoop = () => {
   useGameLoop();
@@ -26,6 +27,7 @@ export default function Home() {
   return (
     <div>
       <GameLoop />
+      <OpeningStory />
       <EventNotificationDialog />
       <Header>
         <div className="relative w-full flex items-center justify-center">
