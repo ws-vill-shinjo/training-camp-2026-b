@@ -34,18 +34,6 @@ export function ProductionItem({ id, level }: Props) {
     setLabels((prev) => [...prev, { id: Date.now(), x: 150, y: 30, amount }]);
   }, [effectiveYield]);
 
-  const handlePointerDown = useCallback(
-    (e: React.PointerEvent) => {
-      const rect = e.currentTarget.getBoundingClientRect();
-      const amount = Math.round(Number(effectiveYield ?? 1));
-      setLabels((prev) => [
-        ...prev,
-        { id: Date.now(), x: e.clientX - rect.left, y: e.clientY - rect.top, amount },
-      ]);
-    },
-    [effectiveYield]
-  );
-
   // 早期returnはHooksをすべて呼んだ後
   if (!registryReady) return null;
   const master = getMasterRegistry().production[id];
