@@ -55,6 +55,7 @@ export const useGameLoop = (): void => {
     const now = Date.now();
     if (now - lastTickAtRef.current >= TICK_MS) {
       lastTickAtRef.current = now;
+      useGameStore.setState({ tickAt: now });
       runTick(now);
     }
   });

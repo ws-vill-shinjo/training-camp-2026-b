@@ -51,6 +51,7 @@ export interface MetaSlice {
   lastActiveAt: Date;
   version: number;
   registryReady: boolean;
+  tickAt: number;
 }
 
 export interface ProductionRuntimeSlice {
