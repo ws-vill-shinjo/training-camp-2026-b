@@ -1,7 +1,8 @@
 import Image from "next/image";
 import { Card, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import type { EncyclopediaEntry } from "../types/encyclopedia";
 import { SECTION_LABEL } from "../types/encyclopedia";
 
@@ -18,6 +19,9 @@ export const EncyclopediaDetail = ({ entry, onClose }: Props) => (
     }}
   >
     <DialogContent>
+      <VisuallyHidden>
+        <DialogTitle>{entry?.title ?? ""}</DialogTitle>
+      </VisuallyHidden>
       {entry && (
         <div className="flex flex-col py-4 gap-4">
           <Card className="relative mx-4 aspect-square overflow-hidden">
