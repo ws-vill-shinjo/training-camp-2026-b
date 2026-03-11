@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { Card } from "@/components/ui/card";
 import { getMasterRegistry } from "@/master/registry/getMasterRegistry";
+import useGameStore from "@/features/game/store/useGameStore";
 import { ProductionItemProgress } from "./ProductionItemProgress";
 
 type Props = {
@@ -11,6 +12,8 @@ type Props = {
 };
 
 export function ProductionItem({ id, level }: Props) {
+  const registryReady = useGameStore((s) => s.registryReady);
+  if (!registryReady) return null;
   const master = getMasterRegistry().production[id];
   if (!master) return null;
 
