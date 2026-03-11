@@ -25,6 +25,7 @@
     "qr-scanner": "^1.4.2",
     "radix-ui": "^1.4.3",
     "react": "19.2.3",
+    "react-countup": "^6.5.3",
     "react-dom": "19.2.3",
     "react-use": "^17.6.0",
     "shadcn": "^4.0.2",

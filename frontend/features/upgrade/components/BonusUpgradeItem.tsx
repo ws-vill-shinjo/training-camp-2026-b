@@ -47,7 +47,7 @@ export function BonusUpgradeItem({ id }: Props) {
         {isMaxLevel ? (
           <span className="text-xs font-semibold text-muted-foreground w-14 text-center">MAX</span>
         ) : isQrLocked ? (
-          <span className="text-xs font-semibold text-muted-foreground w-20 text-center">
+          <span className="flex-shrink-0 text-xs font-semibold text-white w-20 text-center bg-gray-300 rounded-md px-1 py-1 leading-tight">
             QRコードでアンロック
           </span>
         ) : (
