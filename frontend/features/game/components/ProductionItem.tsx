@@ -6,13 +6,31 @@ import { Card } from "@/components/ui/card";
 import { getMasterRegistry } from "@/master/registry/getMasterRegistry";
 import useGameStore from "@/features/game/store/useGameStore";
 import { ProductionItemProgress } from "./ProductionItemProgress";
+import { AnimatePresence } from "motion/react";
+import { FloatingLabel } from "./FloatingLabel";
+import { useState, useCallback } from "react";
+
 type Props = {
   id: string;
   level: number;
 };
 
+type FloatingLabelType = {
+  id: number;
+  x: number;
+  y: number;
+  amount: number;
+};
+
 export function ProductionItem({ id, level }: Props) {
+  const effectiveYield = useGameStore((s) => s.effectiveProductionStats[id]?.yield);
+  const [labels, setLabels] = useState<FloatingLabelType[]>([]);
   const stat = useGameStore((s) => s.effectiveProductionStats[id]);
+
+  const handleComplete = useCallback(() => {
+    const amount = Math.round(Number(effectiveYield ?? 1));
+    setLabels((prev) => [...prev, { id: Date.now(), x: 150, y: 30, amount }]);
+  }, [effectiveYield]);
 
   const master = getMasterRegistry().production[id];
   if (!master) return null;
@@ -37,7 +55,20 @@ export function ProductionItem({ id, level }: Props) {
         <span>収益: {yieldValue}</span>
         <span>生産時間: {cycleSeconds}s</span>
       </div>
-      <ProductionItemProgress id={id} />
+      <ProductionItemProgress id={id} onComplete={handleComplete} />
+
+      <AnimatePresence>
+        {labels.map((label) => (
+          <FloatingLabel
+            key={label.id}
+            id={label.id}
+            x={label.x}
+            y={label.y}
+            amount={label.amount}
+            onComplete={(id) => setLabels((prev) => prev.filter((l) => l.id !== id))}
+          />
+        ))}
+      </AnimatePresence>
     </Card>
   );
 }

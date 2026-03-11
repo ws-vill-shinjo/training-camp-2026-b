@@ -12,7 +12,7 @@ type FloatingLabelType = {
   id: number;
   x: number;
   y: number;
-  amount: string;
+  amount: number;
 };
 
 export const TapZone = () => {
@@ -25,7 +25,7 @@ export const TapZone = () => {
     const rect = e.currentTarget.getBoundingClientRect();
     setLabels((prev) => [
       ...prev,
-      { id: Date.now(), x: e.clientX - rect.left, y: e.clientY - rect.top, amount: tapYield },
+      { id: Date.now(), x: e.clientX - rect.left, y: e.clientY - rect.top, amount: Math.round(Number(tapYield ?? 1)) },
     ]);
   };
 
