@@ -34,7 +34,9 @@ export const EncyclopediaDetail = ({ entry, onClose }: Props) => (
             </Badge>
           </div>
           <CardDescription className="px-4">{entry.shortText}</CardDescription>
-          <p className="px-4 text-sm text-foreground/80">{entry.detailText}</p>
+          <p className="px-4 text-sm text-foreground/80">
+            {entry.unlocked ? entry.detailText : "???"}
+          </p>
         </div>
       )}
     </DialogContent>
