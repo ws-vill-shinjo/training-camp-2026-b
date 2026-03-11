@@ -3,7 +3,8 @@
 import { useEffect, useRef } from "react";
 import QrScannerLib from "qr-scanner";
 import { parseQrPayload } from "../domain/parser";
-import { emitQrUnlockResult, processQrUnlock, UnlockResult } from "../domain/unlock";
+import { processQrUnlock, UnlockResult } from "../domain/unlock";
+import { emitQrUnlockResult } from "../../game/domain/event";
 
 // 使用側のコード
 {
