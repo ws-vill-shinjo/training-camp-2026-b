@@ -1,6 +1,7 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Footer } from "@/components/Footer";
 import { GameProvider } from "@/features/game/components/GameProvider";
 
 const geistSans = Geist({
@@ -12,6 +13,11 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
 
 export const metadata: Metadata = {
   title: "Training Camp 2026",
@@ -25,8 +31,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
-      <body className={`${geistSans.variable} ${geistMono.variable} p-4`}>
-        <GameProvider>{children}</GameProvider>
+      <body className={`${geistSans.variable} ${geistMono.variable} bg-[#F0F9EC]`}>
+        <div className="mb-24">
+          <GameProvider>{children}</GameProvider>
+        </div>
+        <Footer />
       </body>
     </html>
   );
