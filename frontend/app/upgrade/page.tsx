@@ -86,6 +86,7 @@ function BonusItem({
   level,
   maxLevel,
   money,
+  productionLevels,
 }: {
   id: string;
   name: string;
@@ -93,11 +94,14 @@ function BonusItem({
   level: number;
   maxLevel: number;
   money: string;
+  productionLevels: Record<string, number>;
 }) {
   const config = getMasterRegistry().bonus[id];
   const isMaxLevel = level >= maxLevel;
   const cost = isMaxLevel ? null : calcCost(config, level + 1);
   const canAfford = cost ? new Decimal(money).gte(cost) : false;
+  const isFacilityLocked =
+    level === 0 && config.targetId != null && (productionLevels[config.targetId] ?? 0) < 1;
 
   return (
     <Card className="flex-row items-center gap-3 px-4 py-3">
@@ -117,6 +121,10 @@ function BonusItem({
       <div className="flex-1" />
       {isMaxLevel ? (
         <span className="text-xs font-semibold text-muted-foreground w-14 text-center">MAX</span>
+      ) : isFacilityLocked ? (
+        <span className="text-xs font-semibold text-muted-foreground w-20 text-center">
+          施設が未開放です
+        </span>
       ) : (
         <Button
           size="sm"
@@ -186,6 +194,7 @@ export default function UpgradePage() {
             level={bonusLevels[b.id] ?? 0}
             maxLevel={b.maxLevel}
             money={money}
+            productionLevels={productionLevels}
           />
         ))}
       </div>
