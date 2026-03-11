@@ -25,10 +25,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
+<<<<<<< HEAD
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <Header title="Home" />
         {children}
       </body>
+=======
+      <body className={`${geistSans.variable} ${geistMono.variable} p-4`}>{children}</body>
+>>>>>>> main
     </html>
   );
 }

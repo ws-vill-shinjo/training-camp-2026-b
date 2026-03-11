@@ -6,6 +6,7 @@ import type { GameDomainEventMap, ModifierAxis } from "../types/event";
 import type { RuntimeModifiers } from "../types/production";
 import type { GameEvent } from "../types/store";
 import useGameStore from "../store/useGameStore";
+import { gameEvents } from "../events/gameEvents";
 
 // ---------------------------------------------------------------------------
 // UI 通知用エミッター
@@ -264,5 +265,25 @@ export const cleanupAndRebuildEvents = (now: number): void => {
   if (hasDurationModifier) {
     store.rebuildRuntimeModifiers();
     store.rebuildEffectiveProductionStats();
+  }
+};
+
+// ---------------------------------------------------------------------------
+// QR アンロック結果の通知
+// ---------------------------------------------------------------------------
+
+type QrUnlockResult =
+  | { success: true; contentId: string; alreadyUnlocked: boolean }
+  | { success: false; reason: string };
+
+/**
+ * QR アンロック処理の結果に応じてイベントを emit する。
+ * unlock.ts の processQrUnlock の結果を受け取って呼ぶ。
+ */
+export const emitQrUnlockResult = (result: QrUnlockResult): void => {
+  if (result.success) {
+    gameEvents.emit("qr:unlockSuccess", { contentId: result.contentId });
+  } else {
+    gameEvents.emit("qr:unlockFailed", { reason: result.reason });
   }
 };
