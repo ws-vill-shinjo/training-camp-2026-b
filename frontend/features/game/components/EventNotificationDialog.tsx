@@ -12,18 +12,20 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import Image from "next/image";
 
 type PendingEvent = {
   master: EventMaster;
+  amount: number;
 };
 
 export const EventNotificationDialog = () => {
   const [queue, setQueue] = useState<PendingEvent[]>([]);
 
   useEffect(() => {
-    const unbind = gameEventEmitter.on("eventActivated", (_event, master) => {
-      setQueue((prev) => [...prev, { master }]);
+    const unbind = gameEventEmitter.on("eventActivated", (event, master) => {
+      setQueue((prev) => [...prev, { master, amount: Number(event.value) }]);
     });
     return unbind;
   }, []);
@@ -39,14 +41,14 @@ export const EventNotificationDialog = () => {
     <Dialog open={open} onOpenChange={(o) => { if (!o) handleClose(); }}>
       <DialogContent showCloseButton={false}>
         {current?.master.imageSrc && (
-          <div className="relative aspect-square w-full overflow-hidden rounded-lg">
+          <Card className="relative aspect-square w-full overflow-hidden rounded-lg p-0">
             <Image
               src={current.master.imageSrc}
               alt={current.master.name}
               fill
               className="object-cover"
             />
-          </div>
+          </Card>
         )}
         <DialogHeader>
           <DialogTitle>{current?.master.name}</DialogTitle>
@@ -54,11 +56,11 @@ export const EventNotificationDialog = () => {
         </DialogHeader>
         {current && (
           <p className={`text-center text-lg font-bold ${current.master.effectType === "moneyGain" ? "text-green-600" : "text-red-600"}`}>
-            {current.master.effectType === "moneyGain" ? "+" : "-"}{current.master.value.toLocaleString()} コイン
+            {current.master.effectType === "moneyGain" ? "+" : "-"}{current.amount.toLocaleString()} コイン
           </p>
         )}
         <DialogFooter>
-          <Button onClick={handleClose}>OK</Button>
+          <Button onClick={handleClose} className="bg-[#B5D9A8] text-[#484234] hover:bg-[#9fcb91] w-full">OK</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
