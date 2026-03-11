@@ -5,6 +5,8 @@ import { DecimalValue, EconomySlice, GameStore } from "../../types/store";
 export const createEconomySlice: StateCreator<GameStore, [], [], EconomySlice> = (set, get) => ({
   money: "0",
 
+  getMoneyDecimal: () => new Decimal(get().money),
+
   addMoney: (amount: DecimalValue) => {
     const next = new Decimal(get().money).plus(amount);
     set({ money: next.toFixed() });

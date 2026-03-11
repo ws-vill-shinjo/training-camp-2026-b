@@ -50,9 +50,9 @@ export const calcBaseProductionStat = (config: ProductionMaster, level: number):
 });
 
 /** マスターレジストリから id の config を取得して BaseStat を算出する */
-export const buildBaseStatForId = (id: string, level: number): BaseStat => {
+export const buildBaseStatForId = (id: string, level: number): BaseStat | null => {
   const config = getMasterRegistry().production[id];
-  if (!config) throw new Error(`production master が見つかりません: ${id}`);
+  if (!config) return null;
   return calcBaseProductionStat(config, level);
 };
 
@@ -62,7 +62,8 @@ export const buildAllBaseStats = (
 ): Record<string, BaseStat> => {
   const stats: Record<string, BaseStat> = {};
   for (const [id, level] of Object.entries(productionLevels)) {
-    stats[id] = buildBaseStatForId(id, level);
+    const stat = buildBaseStatForId(id, level);
+    if (stat) stats[id] = stat;
   }
   return stats;
 };

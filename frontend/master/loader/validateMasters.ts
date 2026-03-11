@@ -6,12 +6,14 @@ import {
   EncyclopediaMasterArraySchema,
   type EncyclopediaMaster,
 } from "../schema/encyclopediaSchema";
+import { TapMasterArraySchema, type TapMaster } from "../schema/tapSchema";
 
 export type RawMasters = {
   production: unknown;
   bonus: unknown;
   event: unknown;
   encyclopedia: unknown;
+  tap: unknown;
 };
 
 export type ValidatedMasters = {
@@ -19,6 +21,7 @@ export type ValidatedMasters = {
   bonus: BonusMaster[];
   event: EventMaster[];
   encyclopedia: EncyclopediaMaster[];
+  tap: TapMaster[];
 };
 
 export type ValidationResult =
@@ -32,6 +35,7 @@ export function validateMasters(raw: RawMasters): ValidationResult {
   const bonusResult = BonusMasterArraySchema.safeParse(raw.bonus);
   const eventResult = EventMasterArraySchema.safeParse(raw.event);
   const encyclopediaResult = EncyclopediaMasterArraySchema.safeParse(raw.encyclopedia);
+  const tapResult = TapMasterArraySchema.safeParse(raw.tap);
 
   if (!productionResult.success) {
     errors.push(...formatZodErrors("productionMaster", productionResult.error));
@@ -45,6 +49,9 @@ export function validateMasters(raw: RawMasters): ValidationResult {
   if (!encyclopediaResult.success) {
     errors.push(...formatZodErrors("encyclopediaMaster", encyclopediaResult.error));
   }
+  if (!tapResult.success) {
+    errors.push(...formatZodErrors("tapMaster", tapResult.error));
+  }
 
   if (errors.length > 0) return { success: false, errors };
 
@@ -52,42 +59,20 @@ export function validateMasters(raw: RawMasters): ValidationResult {
   const bonus = bonusResult.data!;
   const event = eventResult.data!;
   const encyclopedia = encyclopediaResult.data!;
+  const tap = tapResult.data!;
 
-  // 交差検証
-  const productionIds = new Set(production.map((p) => p.id));
-  const bonusIds = new Set(bonus.map((b) => b.id));
-  const eventIds = new Set(event.map((e) => e.id));
-
-  for (const b of bonus) {
-    if (b.targetType === "production" && b.targetId && !productionIds.has(b.targetId)) {
-      errors.push(
-        `bonusMaster[${b.id}].targetId="${b.targetId}" は productionMaster に存在しません`
-      );
-    }
-  }
-
+  // 交差検証（encyclopediaMaster の重複IDチェックのみ）
   const encIds = new Set<string>();
   for (const enc of encyclopedia) {
     if (encIds.has(enc.id)) {
       errors.push(`encyclopediaMaster に重複idがあります: ${enc.id}`);
     }
     encIds.add(enc.id);
-
-    const exists =
-      (enc.sourceType === "production" && productionIds.has(enc.sourceId)) ||
-      (enc.sourceType === "bonus" && bonusIds.has(enc.sourceId)) ||
-      (enc.sourceType === "event" && eventIds.has(enc.sourceId));
-
-    if (!exists) {
-      errors.push(
-        `encyclopediaMaster[${enc.id}].sourceId="${enc.sourceId}" は ${enc.sourceType}Master に存在しません`
-      );
-    }
   }
 
   if (errors.length > 0) return { success: false, errors };
 
-  return { success: true, data: { production, bonus, event, encyclopedia } };
+  return { success: true, data: { production, bonus, event, encyclopedia, tap } };
 }
 
 function formatZodErrors(masterName: string, error: z.ZodError): string[] {
