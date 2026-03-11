@@ -7,13 +7,12 @@ import { rollAndActivateEvent } from "../domain/event";
 import { runOfflineCatchup } from "../domain/offline";
 import { runTick } from "../domain/tick";
 import useGameStore from "../store/useGameStore";
-import { getMasterRegistry } from "../../../master/registry/getMasterRegistry";
 
 /** ドメイン Tick の最小間隔 (ms) */
 const TICK_MS = 500;
 
 /** イベント抽選の実行間隔 (ms) */
-const EVENT_CHECK_INTERVAL_MS = 20000;
+const EVENT_CHECK_INTERVAL_MS = 5 * 60 * 1000;
 
 const runResume = (): void => {
   const store = useGameStore.getState();
