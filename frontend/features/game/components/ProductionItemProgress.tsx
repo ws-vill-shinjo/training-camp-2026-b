@@ -3,19 +3,39 @@
 import { Progress } from "@/components/ui/progress";
 import { getProductionProgress } from "@/features/game/domain/production";
 import useGameStore from "@/features/game/store/useGameStore";
+import { useEffect, useRef } from "react";
 
 type Props = {
   id: string;
+  onComplete?: () => void;
 };
 
-export function ProductionItemProgress({ id }: Props) {
+export function ProductionItemProgress({ id, onComplete }: Props) {
   const tickAt = useGameStore((s) => s.tickAt);
   const stat = useGameStore((s) => s.effectiveProductionStats[id]);
   const lastProducedAt = useGameStore((s) => s.lastProducedAtByProduction[id] ?? tickAt);
 
-  if (!stat) return null;
+  const progress = stat ? getProductionProgress(stat, lastProducedAt, tickAt).progress : 0;
 
-  const { progress } = getProductionProgress(stat, lastProducedAt, tickAt);
+  // onComplete の最新参照を ref で保持
+  const onCompleteRef = useRef(onComplete);
+  useEffect(() => {
+    onCompleteRef.current = onComplete;
+  }, [onComplete]);
+
+  // lastProducedAt が増加したとき = 生産サイクル完了
+  const prevLastProducedAt = useRef<number | null>(null);
+  useEffect(() => {
+    if (
+      prevLastProducedAt.current !== null &&
+      lastProducedAt > prevLastProducedAt.current
+    ) {
+      onCompleteRef.current?.();
+    }
+    prevLastProducedAt.current = lastProducedAt;
+  }, [lastProducedAt]);
+
+  if (!stat) return null;
 
   return (
     <div className="px-3 py-2" style={{ backgroundColor: "#b5d9a8" }}>
