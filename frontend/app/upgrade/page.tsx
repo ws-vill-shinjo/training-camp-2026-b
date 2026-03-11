@@ -5,12 +5,18 @@ import { useRouter } from "next/navigation";
 import { Header } from "@/components/Header";
 import useGameStore from "@/features/game/store/useGameStore";
 import { Money } from "@/features/game/components/Money";
+import { useGameLoop } from "@/features/game/hooks/useGameLoop";
 import { ProductionUpgradeItem } from "@/features/upgrade/components/ProductionUpgradeItem";
 import { BonusUpgradeItem } from "@/features/upgrade/components/BonusUpgradeItem";
 import { TapUpgradeItem } from "@/features/upgrade/components/TapUpgradeItem";
 import { useUpgradeIds } from "@/features/upgrade/hooks/useUpgradeIds";
 import { Button } from "@/components/ui/button";
 import { QrCode } from "lucide-react";
+
+const GameLoop = () => {
+  useGameLoop();
+  return null;
+};
 
 export default function UpgradePage() {
   const router = useRouter();
@@ -37,6 +43,7 @@ export default function UpgradePage() {
 
   return (
     <>
+      {registryReady && <GameLoop />}
       <Header>
         <h1 className="text-4xl">素材強化</h1>
         <Button
