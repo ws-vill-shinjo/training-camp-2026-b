@@ -191,8 +191,10 @@ export default function UpgradePage() {
       <Header>
         <h1 className="text-4xl">素材強化</h1>
       </Header>
-      <div className="max-w-lg mx-auto">
-        <Money />
+      <div className="max-w-lg mx-auto py-4">
+        <div className="flex justify-end mr-4">
+          <Money />
+        </div>
         <div className="px-4 space-y-2 py-3">
           <p className="text-sm font-bold text-muted-foreground">施設一覧</p>
           {productions.map((p) => (
