@@ -16,7 +16,6 @@ const GameLoop = () => {
 };
 
 export default function Home() {
-  const registryReady = useGameStore((s) => s.registryReady);
   const productionLevels = useGameStore((s) => s.productionLevels);
 
   const items = useMemo(
@@ -26,7 +25,7 @@ export default function Home() {
 
   return (
     <div>
-      {registryReady && <GameLoop />}
+      <GameLoop />
       <EventNotificationDialog />
       <Header>
         <div className="relative w-full flex items-center justify-center">

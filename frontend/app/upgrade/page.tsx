@@ -20,30 +20,18 @@ const GameLoop = () => {
 
 export default function UpgradePage() {
   const router = useRouter();
-  const { registryReady, productionIds, bonusIds } = useUpgradeIds();
+  const { productionIds, bonusIds } = useUpgradeIds();
 
   useEffect(() => {
-    if (!registryReady) return;
     const store = useGameStore.getState();
     store.rebuildBaseProductionStats();
     store.rebuildRuntimeModifiers();
     store.rebuildEffectiveProductionStats();
-  }, [registryReady]);
-
-  if (!registryReady) {
-    return (
-      <>
-        <Header>
-          <h1 className="text-4xl">素材強化</h1>
-        </Header>
-        <div className="max-w-lg mx-auto p-4 text-sm text-muted-foreground">読み込み中...</div>
-      </>
-    );
-  }
+  }, []);
 
   return (
     <>
-      {registryReady && <GameLoop />}
+      <GameLoop />
       <Header>
         <h1 className="text-4xl">素材強化</h1>
         <Button

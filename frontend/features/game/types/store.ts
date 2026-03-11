@@ -51,7 +51,6 @@ export interface EventSlice {
 export interface MetaSlice {
   lastActiveAt: Date;
   version: number;
-  registryReady: boolean;
   tickAt: number;
 }
 
