@@ -1,13 +1,21 @@
 "use client";
-import { Header } from "@/components/Header";
 
-export default function Home() {
+import { Facility } from "@/components/Facility";
+import { Footer } from "@/components/Footer";
+import { Header } from "@/components/Header";
+import { TapZone } from "@/components/TapZone";
+
+export default function HOME() {
   return (
     <div>
       <Header>
         <h1 className="text-4xl">ホーム</h1>
       </Header>
-      <div className="max-w-lg mx-auto p-4">TBD</div>
+      <main>
+        <Facility />
+        <TapZone />
+      </main>
+      <Footer />
     </div>
   );
 }
