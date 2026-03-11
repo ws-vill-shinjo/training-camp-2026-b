@@ -52,6 +52,11 @@ export const EventNotificationDialog = () => {
           <DialogTitle>{current?.master.name}</DialogTitle>
           <DialogDescription>{current?.master.flavorText}</DialogDescription>
         </DialogHeader>
+        {current && (
+          <p className={`text-center text-lg font-bold ${current.master.effectType === "moneyGain" ? "text-green-600" : "text-red-600"}`}>
+            {current.master.effectType === "moneyGain" ? "+" : "-"}{current.master.value.toLocaleString()} コイン
+          </p>
+        )}
         <DialogFooter>
           <Button onClick={handleClose}>OK</Button>
         </DialogFooter>
