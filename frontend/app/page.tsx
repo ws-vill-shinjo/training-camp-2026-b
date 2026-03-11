@@ -30,8 +30,8 @@ export default function Home() {
       <Header>
         <h1 className="text-4xl">ホーム</h1>
       </Header>
-      <div className="px-4 py-4 flex flex-col gap-4">
-        <div className="flex justify-end">
+      <div className="max-w-lg mx-auto py-4 flex flex-col gap-4">
+        <div className="flex justify-end mr-4">
           <Money />
         </div>
         <ProductionFacilities items={items} />
