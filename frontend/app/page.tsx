@@ -11,6 +11,11 @@ export default function HOME() {
       <Header>
         <h1 className="text-4xl">ホーム</h1>
       </Header>
+      <main>
+        <Facility />
+        <TapZone />
+      </main>
+      <Footer />
     </div>
   );
 }
