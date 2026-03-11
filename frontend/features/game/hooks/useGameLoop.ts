@@ -7,6 +7,7 @@ import { rollAndActivateEvent } from "../domain/event";
 import { runOfflineCatchup } from "../domain/offline";
 import { runTick } from "../domain/tick";
 import useGameStore from "../store/useGameStore";
+import { getMasterRegistry } from "../../../master/registry/getMasterRegistry";
 
 /** ドメイン Tick の最小間隔 (ms) */
 const TICK_MS = 500;

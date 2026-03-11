@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 import { Header } from "@/components/Header";
-import { Money } from "@/components/Money";
+import { Money } from "@/features/game/components/Money";
 import { useGameLoop } from "@/features/game/hooks/useGameLoop";
 import useGameStore from "@/features/game/store/useGameStore";
 import { EventNotificationDialog } from "@/features/game/components/EventNotificationDialog";
@@ -31,7 +31,9 @@ export default function Home() {
         <h1 className="text-4xl">ホーム</h1>
       </Header>
       <div className="px-4 py-4 flex flex-col gap-4">
-        <Money />
+        <div className="flex justify-end">
+          <Money />
+        </div>
         <ProductionFacilities items={items} />
         <TapZone />
       </div>
