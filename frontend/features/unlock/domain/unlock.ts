@@ -1,33 +1,36 @@
-import { productionMaster } from "../../game/data/productionMaster";
+import { getMasterRegistry } from "../../../master/registry/getMasterRegistry";
 import useGameStore from "../../game/store/useGameStore";
-
-export type UnlockTarget = { type: "production"; id: string } | { type: "bonus"; id: string };
+import { UnlockResult, UnlockTarget } from "../types/qr";
 
 /** contentId に対応するアンロック対象を返す。qrUnlockEnabled=false または未存在なら null。 */
-export function resolveUnlockTarget(contentId: string): UnlockTarget | null {
-  const production = productionMaster.find((p) => p.id === contentId && p.qrUnlockEnabled);
-  if (production) return { type: "production", id: production.id };
+export const resolveUnlockTarget = (contentId: string): UnlockTarget | null => {
+  try {
+    const registry = getMasterRegistry();
 
+    const production = registry.production[contentId];
+    if (production?.qrUnlockEnabled) return { type: "production", id: contentId };
+
+    const bonus = registry.bonus[contentId];
+    if (bonus?.qrUnlockEnabled) return { type: "bonus", id: contentId };
+  } catch {
+    // レジストリ未初期化
+  }
   return null;
-}
+};
 
 /**
  * contentId がアンロック可能かどうかを判定する。
  * TODO: 必要に応じてレベル上限チェックや前提条件チェックを追加する
  */
-export function canUnlockContent(contentId: string): boolean {
+export const canUnlockContent = (contentId: string): boolean => {
   return resolveUnlockTarget(contentId) !== null;
-}
-
-export type UnlockResult =
-  | { success: true; contentId: string; alreadyUnlocked: boolean }
-  | { success: false; reason: string };
+};
 
 /**
  * QR コードのアンロック処理を行う。
  * - 既解放コンテンツは冪等成功（副作用なし）
  */
-export function processQrUnlock(contentId: string): UnlockResult {
+export const processQrUnlock = (contentId: string): UnlockResult => {
   const target = resolveUnlockTarget(contentId);
   if (!target) {
     return { success: false, reason: `Unknown contentId: ${contentId}` };
@@ -51,4 +54,4 @@ export function processQrUnlock(contentId: string): UnlockResult {
   }
 
   return { success: true, contentId, alreadyUnlocked: false };
-}
+};
