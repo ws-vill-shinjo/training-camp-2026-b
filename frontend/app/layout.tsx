@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Footer } from "@/components/Footer";
+import { GameProvider } from "@/features/game/components/GameProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,7 +32,7 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body className={`${geistSans.variable} ${geistMono.variable} bg-[#F0F9EC]`}>
-        {children}
+        <GameProvider>{children}</GameProvider>
         <Footer />
       </body>
     </html>
