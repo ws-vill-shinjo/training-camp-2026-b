@@ -7,13 +7,10 @@ import { TapZone } from "@/components/TapZone";
 
 export default function HOME() {
   return (
-    <div className="flex flex-col min-h-screen">
-      <Header title="Home" />
-      <main className="flex-1 bg-[#f0f9ec] p-4">
-        <Facility />
-        <TapZone />
-      </main>
-      <Footer />
+    <div>
+      <Header>
+        <h1 className="text-4xl">ホーム</h1>
+      </Header>
     </div>
   );
 }

@@ -2,17 +2,19 @@
 
 import { useEncyclopediaEntries } from "@/features/encyclopedia/hooks/useEncyclopediaEntries";
 import { EncyclopediaList } from "@/features/encyclopedia/components/EncyclopediaList";
-import { mockEncyclopediaEntries } from "@/features/encyclopedia/mocks/encyclopediaMock";
-
-const USE_MOCK = true;
+import { Header } from "@/components/Header";
 
 export default function EncyclopediaPage() {
-  const fetched = useEncyclopediaEntries();
-  const entries = USE_MOCK ? mockEncyclopediaEntries : fetched;
+  const entries = useEncyclopediaEntries();
 
   return (
-    <div>
-      <EncyclopediaList entries={entries} />
-    </div>
+    <>
+      <Header>
+        <h1 className="text-4xl">図鑑</h1>
+      </Header>
+      <div className="p-4">
+        <EncyclopediaList entries={entries} />
+      </div>
+    </>
   );
 }
