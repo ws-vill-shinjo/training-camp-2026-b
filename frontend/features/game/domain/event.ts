@@ -158,7 +158,9 @@ const applyInstantEffect = (master: EventMaster): void => {
   if (master.effectType === "moneyGain") {
     store.addMoney(value);
   } else if (master.effectType === "moneyLoss") {
-    store.spendMoney(value);
+    if (!store.spendMoney(value)) {
+      store.addMoney(-store.getMoney());
+    }
   }
 };
 

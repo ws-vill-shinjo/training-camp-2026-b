@@ -13,7 +13,7 @@ import useGameStore from "../store/useGameStore";
 const TICK_MS = 100;
 
 /** イベント抽選の実行間隔 (ms) */
-const EVENT_CHECK_INTERVAL_MS = 5 * 1000;
+const EVENT_CHECK_INTERVAL_MS = 60 * 1000;
 
 const runResume = (): void => {
   const store = useGameStore.getState();
