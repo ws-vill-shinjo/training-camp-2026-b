@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Footer } from "@/components/Footer";
@@ -13,6 +13,11 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
 export const metadata: Metadata = {
   title: "Training Camp 2026",
   description: "ハッカソン用スターターテンプレート",
@@ -25,9 +30,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} w-screen h-screen overflow-hidden`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} bg-[#F0F9EC]`}>
         {children}
         <Footer />
       </body>
