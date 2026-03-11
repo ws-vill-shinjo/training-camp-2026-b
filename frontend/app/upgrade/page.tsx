@@ -1,14 +1,18 @@
 "use client";
 
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Header } from "@/components/Header";
 import useGameStore from "@/features/game/store/useGameStore";
 import { Money } from "@/features/game/components/Money";
 import { ProductionUpgradeItem } from "@/features/upgrade/components/ProductionUpgradeItem";
 import { BonusUpgradeItem } from "@/features/upgrade/components/BonusUpgradeItem";
 import { useUpgradeIds } from "@/features/upgrade/hooks/useUpgradeIds";
+import { Button } from "@/components/ui/button";
+import { QrCode } from "lucide-react";
 
 export default function UpgradePage() {
+  const router = useRouter();
   const { registryReady, productionIds, bonusIds } = useUpgradeIds();
 
   useEffect(() => {
@@ -34,21 +38,30 @@ export default function UpgradePage() {
     <>
       <Header>
         <h1 className="text-4xl">素材強化</h1>
+        <Button
+          onClick={() => router.push("/unlock")}
+          className="flex items-center gap-2 bg-[#6ab87a] shadow-md hover:shadow-lg transition-all duration-200 rounded-xl px-4 py-2 ml-5 font-semibold"
+        >
+          <QrCode className="w-5 h-5" />
+          QRコード
+        </Button>
       </Header>
-      <div className="px-4 py-4 flex justify-end">
-        <Money />
-      </div>
-      <div className="max-w-lg mx-auto px-4 space-y-2 py-3">
-        <p className="text-sm font-bold text-muted-foreground">施設一覧</p>
-        {productionIds.map((id) => (
-          <ProductionUpgradeItem key={id} id={id} />
-        ))}
-      </div>
-      <div className="max-w-lg mx-auto px-4 space-y-2 py-3">
-        <p className="text-sm font-bold text-muted-foreground">ボーナス一覧</p>
-        {bonusIds.map((id) => (
-          <BonusUpgradeItem key={id} id={id} />
-        ))}
+      <div className="max-w-lg mx-auto p-4">
+        <div className="flex justify-end">
+          <Money />
+        </div>
+        <div className="space-y-2 py-3">
+          <p className="text-sm font-bold text-muted-foreground">施設一覧</p>
+          {productionIds.map((id) => (
+            <ProductionUpgradeItem key={id} id={id} />
+          ))}
+        </div>
+        <div className="space-y-2 py-3">
+          <p className="text-sm font-bold text-muted-foreground">ボーナス一覧</p>
+          {bonusIds.map((id) => (
+            <BonusUpgradeItem key={id} id={id} />
+          ))}
+        </div>
       </div>
     </>
   );
