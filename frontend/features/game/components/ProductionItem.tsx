@@ -12,10 +12,8 @@ type Props = {
 };
 
 export function ProductionItem({ id, level }: Props) {
-  const registryReady = useGameStore((s) => s.registryReady);
   const stat = useGameStore((s) => s.effectiveProductionStats[id]);
 
-  if (!registryReady) return null;
   const master = getMasterRegistry().production[id];
   if (!master) return null;
 

@@ -19,13 +19,13 @@ export const EncyclopediaGridItem = ({ entry, onSelect }: Props) => {
       onKeyDown={(e) => e.key === "Enter" && unlocked && onSelect?.(entry)}
       className={`
         flex flex-col gap-1 select-none min-w-0
-        ${unlocked ? "cursor-pointer" : "pointer-events-none grayscale opacity-50"}
+        ${unlocked ? "cursor-pointer" : "pointer-events-none"}
       `}
     >
       <Card
         className={`
           relative aspect-square w-full overflow-hidden rounded-2xl
-          ${unlocked ? "hover:brightness-95 active:scale-95 transition-transform" : ""}
+          ${unlocked ? "hover:brightness-95 active:scale-95 transition-transform" : "grayscale opacity-50"}
         `}
       >
         <Image src={imageSrc} alt={title} fill className="object-cover" />
