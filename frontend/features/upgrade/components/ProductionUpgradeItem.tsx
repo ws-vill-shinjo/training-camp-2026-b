@@ -41,15 +41,14 @@ export function ProductionUpgradeItem({ id }: Props) {
             className="rounded-md object-cover"
           />
         </div>
-        <p className="font-semibold text-sm w-28 flex-shrink-0 truncate">{name}</p>
+        <p className="font-semibold text-sm flex-1 truncate">{name}</p>
         <p className="text-xs text-muted-foreground w-16 flex-shrink-0 text-center">
           Lv.{level} / {maxLevel}
         </p>
-        <div className="flex-1" />
         {isMaxLevel ? (
-          <span className="text-xs font-semibold text-muted-foreground w-14 text-center">MAX</span>
+          <span className="text-xs font-semibold text-muted-foreground w-20 text-center">MAX</span>
         ) : isQrLocked ? (
-          <span className="text-xs font-semibold text-muted-foreground w-14 text-center">
+          <span className="text-xs font-semibold text-muted-foreground w-20 text-center">
             QRコードでアンロック
           </span>
         ) : (
