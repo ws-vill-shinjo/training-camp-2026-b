@@ -1,5 +1,6 @@
 "use client";
 
+import numbro from "numbro";
 import { Header } from "@/components/Header";
 import { getMasterRegistry } from "@/master/registry/getMasterRegistry";
 import useGameStore from "@/features/game/store/useGameStore";
@@ -11,14 +12,6 @@ import { Button } from "@/components/ui/button";
 import Decimal from "decimal.js";
 import Image from "next/image";
 import { Money } from "@/components/Money";
-
-function formatNumber(value: Decimal | number | string): string {
-  const d = new Decimal(value);
-  if (d.gte(1_000_000_000)) return d.div(1_000_000_000).toFixed(2) + "B";
-  if (d.gte(1_000_000)) return d.div(1_000_000).toFixed(2) + "M";
-  if (d.gte(1_000)) return d.div(1_000).toFixed(2) + "K";
-  return d.toFixed(0);
-}
 
 function ProductionItem({
   id,
@@ -77,7 +70,9 @@ function ProductionItem({
           className="flex-shrink-0 flex flex-col h-auto py-1 w-20 bg-[#6ab87a] hover:bg-[#57a567] text-white"
         >
           <span>{level === 0 ? "アンロック" : "強化"}</span>
-          {cost && <span className="text-xs opacity-80">{formatNumber(cost)}</span>}
+          {cost && (
+            <span className="text-xs opacity-80">{numbro(cost).format({ average: true })}</span>
+          )}
         </Button>
       )}
     </Card>
@@ -130,7 +125,9 @@ function BonusItem({
           className="flex-shrink-0 flex flex-col h-auto py-1 w-20 bg-[#6ab87a] hover:bg-[#57a567] text-white"
         >
           <span>{level === 0 ? "アンロック" : "強化"}</span>
-          {cost && <span className="text-xs opacity-80">{formatNumber(cost)}</span>}
+          {cost && (
+            <span className="text-xs opacity-80">{numbro(cost).format({ average: true })}</span>
+          )}
         </Button>
       )}
     </Card>
