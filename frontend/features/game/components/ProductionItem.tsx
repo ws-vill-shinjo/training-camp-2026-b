@@ -5,20 +5,42 @@ import { Card } from "@/components/ui/card";
 import { getMasterRegistry } from "@/master/registry/getMasterRegistry";
 import useGameStore from "@/features/game/store/useGameStore";
 import { ProductionItemProgress } from "./ProductionItemProgress";
+import { AnimatePresence } from "motion/react";
+import { FloatingLabel } from "./FloatingLabel";
+import { useState } from "react";
+
 type Props = {
   id: string;
   level: number;
 };
 
+type FloatingLabelType = {
+  id: number;
+  x: number;
+  y: number;
+};
+
 export function ProductionItem({ id, level }: Props) {
   const registryReady = useGameStore((s) => s.registryReady);
+  const [labels, setLabels] = useState<FloatingLabelType[]>([]);
 
   if (!registryReady) return null;
   const master = getMasterRegistry().production[id];
   if (!master) return null;
 
+  const handlePointerDown = (e: React.PointerEvent) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setLabels((prev) => [
+      ...prev,
+      { id: Date.now(), x: e.clientX - rect.left, y: e.clientY - rect.top },
+    ]);
+  };
+
   return (
-    <Card className="relative overflow-hidden w-full rounded-xl border-none shadow-md p-0 gap-0">
+    <Card
+      className="relative overflow-hidden w-full rounded-xl border-none shadow-md p-0 gap-0"
+      onPointerDown={handlePointerDown}
+    >
       <div className="flex items-center gap-0 px-3 py-3" style={{ backgroundColor: "#b5d9a8" }}>
         <Image
           src={master.imageSrc}
@@ -31,6 +53,16 @@ export function ProductionItem({ id, level }: Props) {
         <span className="text-white text-sm ms-2">Lv.{level}</span>
       </div>
       <ProductionItemProgress id={id} />
+
+      <AnimatePresence>
+        {labels.map((label) => (
+          <FloatingLabel
+            key={label.id}
+            {...label}
+            onComplete={(id) => setLabels((prev) => prev.filter((l) => l.id !== id))}
+          />
+        ))}
+      </AnimatePresence>
     </Card>
   );
 }
