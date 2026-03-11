@@ -2,13 +2,19 @@
 
 import { useEncyclopediaEntries } from "@/features/encyclopedia/hooks/useEncyclopediaEntries";
 import { EncyclopediaList } from "@/features/encyclopedia/components/EncyclopediaList";
+import { Header } from "@/components/Header";
 
 export default function EncyclopediaPage() {
   const entries = useEncyclopediaEntries();
 
   return (
-    <div>
-      <EncyclopediaList entries={entries} />
-    </div>
+    <>
+      <Header>
+        <h1 className="text-4xl">図鑑</h1>
+      </Header>
+      <div className="p-4">
+        <EncyclopediaList entries={entries} />
+      </div>
+    </>
   );
 }

@@ -1,12 +1,12 @@
 "use client";
 import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
 
 export default function Home() {
   return (
     <div>
-      <Header title="Home" />
-      <Footer />
+      <Header>
+        <h1 className="text-4xl">ホーム</h1>
+      </Header>
     </div>
   );
 }
