@@ -5,15 +5,18 @@ import { AnimatePresence } from "motion/react";
 import { FloatingLabel } from "./FloatingLabel";
 import { useState } from "react";
 import { tap } from "@/features/game/domain/tap";
+import useGameStore from "@/features/game/store/useGameStore";
 
 // 型を別途定義
 type FloatingLabelType = {
   id: number;
   x: number;
   y: number;
+  amount: string;
 };
 
 export const TapZone = () => {
+  const tapYield = useGameStore((s) => s.tapYield);
   const [labels, setLabels] = useState<FloatingLabelType[]>([]);
 
   const handlePointerDown = (e: React.PointerEvent) => {
@@ -22,7 +25,7 @@ export const TapZone = () => {
     const rect = e.currentTarget.getBoundingClientRect();
     setLabels((prev) => [
       ...prev,
-      { id: Date.now(), x: e.clientX - rect.left, y: e.clientY - rect.top },
+      { id: Date.now(), x: e.clientX - rect.left, y: e.clientY - rect.top, amount: tapYield },
     ]);
   };
 

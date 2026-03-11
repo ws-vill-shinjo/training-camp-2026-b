@@ -1,10 +1,12 @@
 "use client";
+
+import dynamic from "next/dynamic";
 import numbro from "numbro";
 import { Card } from "@/components/ui/card";
 import useGameStore from "@/features/game/store/useGameStore";
 import { CircleDollarSignIcon } from "lucide-react";
 
-export const Money = () => {
+const MoneyComponent = () => {
   const getMoneyDecimal = useGameStore((s) => s.getMoneyDecimal);
 
   useGameStore((s) => s.money);
@@ -23,3 +25,5 @@ export const Money = () => {
     </Card>
   );
 };
+
+export const Money = dynamic(() => Promise.resolve(MoneyComponent), { ssr: false });

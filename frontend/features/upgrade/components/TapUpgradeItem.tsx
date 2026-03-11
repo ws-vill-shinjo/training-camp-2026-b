@@ -5,29 +5,30 @@ import Image from "next/image";
 import Decimal from "decimal.js";
 import { getMasterRegistry } from "@/master/registry/getMasterRegistry";
 import useGameStore from "@/features/game/store/useGameStore";
-import { calcCost, upgradeProduction } from "@/features/game/domain/economy";
+import { calcCost } from "@/features/game/domain/economy";
+import { calcTapYield, TAP_MASTER_ID } from "@/features/game/domain/tap";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
-type Props = { id: string };
-
-export function ProductionUpgradeItem({ id }: Props) {
-  const level = useGameStore((s) => s.productionLevels[id] ?? 0);
+export function TapUpgradeItem() {
+  const level = useGameStore((s) => s.tapLevel);
   const money = useGameStore((s) => s.money);
-  const baseStat = useGameStore((s) => s.baseProductionStats[id]);
 
-  const registry = getMasterRegistry();
-  const config = registry.production[id];
-  if (!config) return null;
-
-  const { name, imageSrc, maxLevel, qrUnlockEnabled } = config;
+  const config = getMasterRegistry().tap[TAP_MASTER_ID];
+  const { name, imageSrc, maxLevel } = config;
   const isMaxLevel = level >= maxLevel;
-  const isQrLocked = level === 0 && qrUnlockEnabled;
   const cost = isMaxLevel ? null : calcCost(config, level + 1);
   const canAfford = cost ? new Decimal(money).gte(cost) : false;
 
-  const displayYield = level > 0 && baseStat ? baseStat.baseYield : "0";
-  const displayCycleSeconds = level > 0 && baseStat ? baseStat.baseCycleMs / 1000 : 0;
+  const currentYield = calcTapYield(config, level);
+
+  const handleUpgrade = () => {
+    const store = useGameStore.getState();
+    if (cost && !new Decimal(store.money).gte(cost)) return;
+    if (cost) store.spendMoney(cost);
+    store.upgradeTapLevel();
+    store.rebuildTapYield();
+  };
 
   return (
     <Card className="flex-col gap-2 px-4 py-3">
@@ -47,18 +48,14 @@ export function ProductionUpgradeItem({ id }: Props) {
         </p>
         {isMaxLevel ? (
           <span className="text-xs font-semibold text-muted-foreground w-20 text-center">MAX</span>
-        ) : isQrLocked ? (
-          <span className="text-xs font-semibold text-muted-foreground w-20 text-center">
-            QRコードでアンロック
-          </span>
         ) : (
           <Button
             size="sm"
             disabled={!canAfford}
-            onClick={() => upgradeProduction(id, config)}
+            onClick={handleUpgrade}
             className="flex-shrink-0 flex flex-col h-auto py-1 w-20 bg-[#6ab87a] hover:bg-[#57a567] text-white"
           >
-            <span>{level === 0 ? "アンロック" : "強化"}</span>
+            <span>強化</span>
             {cost && (
               <span className="text-xs opacity-80">{numbro(cost).format({ average: true })}</span>
             )}
@@ -66,8 +63,7 @@ export function ProductionUpgradeItem({ id }: Props) {
         )}
       </div>
       <div className="flex gap-4 text-xs text-muted-foreground">
-        <span>生産量: {numbro(displayYield).format({ average: true })}</span>
-        <span>生産時間: {displayCycleSeconds.toFixed(1)}秒</span>
+        <span>タップ収益: {numbro(currentYield.toNumber()).format({ average: true })}</span>
       </div>
     </Card>
   );

@@ -12,11 +12,11 @@ export const TAP_MASTER_ID = "tap";
 export const calcTapYield = (config: TapMaster, level: number): Decimal => {
   switch (config.yieldType) {
     case "growth": {
-      const growth = config.yieldGrowth ?? 0;
-      return new Decimal(config.baseYield ?? 0).times(1 + growth * Math.max(0, level - 1));
+      const growth = config.yieldGrowth ?? 1;
+      return new Decimal(config.baseYield ?? 1).times(new Decimal(growth).pow(level - 1));
     }
     case "fixed":
-      return new Decimal(config.baseYield ?? 0);
+      return new Decimal(config.baseYield ?? 1);
     case "table": {
       const entry = config.yieldTable[level - 1];
       if (entry === undefined) {

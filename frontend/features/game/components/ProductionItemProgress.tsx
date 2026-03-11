@@ -38,7 +38,7 @@ export function ProductionItemProgress({ id, onComplete }: Props) {
   if (!stat) return null;
 
   return (
-    <div className="px-3 py-2" style={{ backgroundColor: "#b5d9a8" }}>
+    <div className="px-3 py-2">
       <Progress value={progress} />
     </div>
   );
