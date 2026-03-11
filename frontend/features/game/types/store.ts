@@ -1,9 +1,3 @@
-import Decimal from "decimal.js";
-export type { Decimal };
-
-/** decimal.js が受け付ける入力型 (string | number | bigint | Decimal) */
-export type DecimalValue = Decimal.Value;
-
 import type { BaseStat, EffectiveStat, Modifier, RuntimeModifiers } from "./production";
 export type { BaseStat, EffectiveStat, Modifier, RuntimeModifiers };
 
@@ -20,9 +14,9 @@ export type GameEvent = {
 
 export interface EconomySlice {
   money: string;
-  getMoneyDecimal: () => Decimal;
-  addMoney: (amount: DecimalValue) => void;
-  spendMoney: (cost: DecimalValue) => boolean;
+  getMoney: () => number;
+  addMoney: (amount: number) => void;
+  spendMoney: (cost: number) => boolean;
 }
 
 export interface ProductionSlice {

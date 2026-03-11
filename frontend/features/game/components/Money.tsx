@@ -7,10 +7,7 @@ import useGameStore from "@/features/game/store/useGameStore";
 import { CircleDollarSignIcon } from "lucide-react";
 
 const MoneyComponent = () => {
-  const getMoneyDecimal = useGameStore((s) => s.getMoneyDecimal);
-
-  useGameStore((s) => s.money);
-  const value = getMoneyDecimal().toNumber();
+  const value = useGameStore((s) => s.getMoney());
   const formattedMoney =
     value >= 1_000_000
       ? numbro(value).format({ average: true }).toUpperCase()

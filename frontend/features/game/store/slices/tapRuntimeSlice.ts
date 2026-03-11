@@ -14,6 +14,6 @@ export const createTapRuntimeSlice: StateCreator<GameStore, [], [], TapRuntimeSl
     if (!tapMaster) return;
 
     const level = get().tapLevel;
-    set({ tapYield: calcTapYield(tapMaster, level).toFixed() });
+    set({ tapYield: String(calcTapYield(tapMaster, level)) });
   },
 });
