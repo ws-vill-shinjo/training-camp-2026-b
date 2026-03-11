@@ -1,22 +1,20 @@
-import Decimal from "decimal.js";
 import { StateCreator } from "zustand";
-import { DecimalValue, EconomySlice, GameStore } from "../../types/store";
+import { EconomySlice, GameStore } from "../../types/store";
 
 export const createEconomySlice: StateCreator<GameStore, [], [], EconomySlice> = (set, get) => ({
   money: "0",
 
-  getMoneyDecimal: () => new Decimal(get().money),
+  getMoney: () => Number(get().money),
 
-  addMoney: (amount: DecimalValue) => {
-    const next = new Decimal(get().money).plus(amount);
-    set({ money: next.toFixed() });
+  addMoney: (amount: number) => {
+    const next = Number(get().money) + amount;
+    set({ money: String(next) });
   },
 
-  spendMoney: (cost: DecimalValue) => {
-    const current = new Decimal(get().money);
-    const spend = new Decimal(cost);
-    if (current.lessThan(spend)) return false;
-    set({ money: current.minus(spend).toFixed() });
+  spendMoney: (cost: number) => {
+    const current = Number(get().money);
+    if (current < cost) return false;
+    set({ money: String(current - cost) });
     return true;
   },
 });

@@ -1,4 +1,3 @@
-import Decimal from "decimal.js";
 import type { ProductionMaster } from "../../../master/schema/productionSchema";
 import { getMasterRegistry } from "../../../master/registry/getMasterRegistry";
 import type {
@@ -12,22 +11,22 @@ import type {
 // レベル別 yield 導出
 // ---------------------------------------------------------------------------
 
-/** yield(level) を Decimal で返す */
-export const calcYield = (config: ProductionMaster, level: number): Decimal => {
+/** yield(level) を number で返す */
+export const calcYield = (config: ProductionMaster, level: number): number => {
   switch (config.yieldType) {
     case "growth": {
       const growth = config.yieldGrowth ?? 0;
       // yield(level) = baseYield * (1 + yieldGrowth * (level - 1))
-      return new Decimal(config.baseYield ?? 0).times(1 + growth * (level - 1));
+      return (config.baseYield ?? 0) * (1 + growth * (level - 1));
     }
     case "fixed":
-      return new Decimal(config.baseYield ?? 0);
+      return config.baseYield ?? 0;
     case "table": {
       const entry = config.yieldTable[level - 1];
       if (entry === undefined) {
         throw new RangeError(`yieldTable に level=${level} のエントリがありません`);
       }
-      return new Decimal(entry);
+      return entry;
     }
   }
 };
@@ -45,7 +44,7 @@ export const calcCycleMs = (config: ProductionMaster, level: number): number =>
 // ---------------------------------------------------------------------------
 
 export const calcBaseProductionStat = (config: ProductionMaster, level: number): BaseStat => ({
-  baseYield: calcYield(config, level).toFixed(),
+  baseYield: String(calcYield(config, level)),
   baseCycleMs: calcCycleMs(config, level),
 });
 
@@ -88,15 +87,14 @@ export const buildEffectiveStatFromBase = (
   };
 
   // effectiveYield = baseYield * global.yieldMultiplier * local.yieldMultiplier
-  const effectiveYield = new Decimal(baseYield)
-    .times(gMod.yieldMultiplier)
-    .times(local.yieldMultiplier);
+  const effectiveYield =
+    Number(baseYield) * Number(gMod.yieldMultiplier) * Number(local.yieldMultiplier);
 
   // effectiveCycleMs = baseCycleMs * global.cycleMultiplier * local.cycleMultiplier
   const effectiveCycleMs =
-    baseCycleMs * parseFloat(gMod.cycleMultiplier) * parseFloat(local.cycleMultiplier);
+    baseCycleMs * Number(gMod.cycleMultiplier) * Number(local.cycleMultiplier);
 
-  return { yield: effectiveYield.toFixed(), cycleMs: effectiveCycleMs };
+  return { yield: String(effectiveYield), cycleMs: effectiveCycleMs };
 };
 
 /**
@@ -155,8 +153,8 @@ export const calcCycles = (elapsedMs: number, effectiveCycleMs: number): number 
   Math.floor(elapsedMs / effectiveCycleMs);
 
 /** cycles * effectiveYield で収益を算出する */
-export const calcGain = (cycles: number, effectiveYield: string): Decimal =>
-  new Decimal(cycles).times(effectiveYield);
+export const calcGain = (cycles: number, effectiveYield: string): number =>
+  cycles * Number(effectiveYield);
 
 /** 現サイクル内の進捗率（0〜100）を返す */
 export const calcProgress = (elapsedMs: number, effectiveCycleMs: number): number =>

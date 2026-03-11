@@ -2,7 +2,6 @@
 
 import numbro from "numbro";
 import Image from "next/image";
-import Decimal from "decimal.js";
 import { getMasterRegistry } from "@/master/registry/getMasterRegistry";
 import useGameStore from "@/features/game/store/useGameStore";
 import { calcCost } from "@/features/game/domain/economy";
@@ -23,8 +22,8 @@ export function BonusUpgradeItem({ id }: Props) {
   const isMaxLevel = level >= maxLevel;
   const isQrLocked = level === 0 && qrUnlockEnabled;
   const cost = isMaxLevel ? null : calcCost(config, level + 1);
-  const canAfford = cost ? new Decimal(money).gte(cost) : false;
-  const currentMultiplier = level > 0 ? calcEffect(config, level).toNumber() : 1;
+  const canAfford = cost ? Number(money) >= cost : false;
+  const currentMultiplier = level > 0 ? calcEffect(config, level) : 1;
   const yieldIncreasePercent = ((currentMultiplier - 1) * 100).toFixed(0);
 
   return (
