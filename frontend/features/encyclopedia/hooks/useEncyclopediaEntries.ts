@@ -1,22 +1,19 @@
 import { useMemo } from "react";
-import type { EncyclopediaMaster } from "../../../master/schema/encyclopediaSchema";
 import { getMasterRegistry } from "../../../master/registry/getMasterRegistry";
 import useGameStore from "../../game/store/useGameStore";
-import { EncyclopediaEntry } from "../types/encyclopedia";
+import type { EncyclopediaEntry } from "../types/encyclopedia";
 
 /** sourceType / sourceId に基づいて解放済みかどうかを判定してエントリを返す */
 export const useEncyclopediaEntries = (): EncyclopediaEntry[] => {
+  const registryReady = useGameStore((s) => s.registryReady);
   const productionLevels = useGameStore((s) => s.productionLevels);
   const bonusLevels = useGameStore((s) => s.bonusLevels);
   const seenEvents = useGameStore((s) => s.seenEvents);
 
   return useMemo(() => {
-    let encyclopediaMap: Record<string, EncyclopediaMaster> = {};
-    try {
-      encyclopediaMap = getMasterRegistry().encyclopedia;
-    } catch {
-      return [];
-    }
+    if (!registryReady) return [];
+
+    const encyclopediaMap = getMasterRegistry().encyclopedia;
 
     return Object.values(encyclopediaMap).map((entry) => {
       let unlocked = false;
@@ -29,5 +26,5 @@ export const useEncyclopediaEntries = (): EncyclopediaEntry[] => {
       }
       return { ...entry, unlocked };
     });
-  }, [productionLevels, bonusLevels, seenEvents]);
+  }, [registryReady, productionLevels, bonusLevels, seenEvents]);
 };

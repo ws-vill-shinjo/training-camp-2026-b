@@ -8,6 +8,4 @@ const items =[{
 
 function ItemCard({label,lv}){
   <Card className="flex items-center "
-}
-
 };
