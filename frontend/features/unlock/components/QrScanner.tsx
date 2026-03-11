@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import QrScannerLib from "qr-scanner";
 import { parseQrPayload } from "../domain/parser";
 import { processQrUnlock } from "../domain/unlock";
@@ -13,6 +14,7 @@ type Props = {
 };
 
 export const QrScanner = ({ onSuccess, onError }: Props) => {
+  const router = useRouter();
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -38,15 +40,17 @@ export const QrScanner = ({ onSuccess, onError }: Props) => {
           onError?.(`アンロックに失敗しました: ${unlockResult.reason}`);
         }
       },
-      { returnDetailedScanResult: true }
+      { returnDetailedScanResult: true, maxScansPerSecond: 1 }
     );
 
-    scanner.start();
+    scanner.start().catch(() => {
+      router.push("/upgrade");
+    });
 
     return () => {
       scanner.destroy();
     };
-  }, [onSuccess, onError]);
+  }, [onSuccess, onError, router]);
 
   return (
     <div className="relative w-full aspect-square overflow-hidden rounded-2xl">
