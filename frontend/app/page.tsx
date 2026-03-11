@@ -1,15 +1,12 @@
 "use client";
 
 import { useMemo } from "react";
-import Image from "next/image";
-import { Header } from "@/components/Header";
 import { Money } from "@/features/game/components/Money";
 import { useGameLoop } from "@/features/game/hooks/useGameLoop";
 import useGameStore from "@/features/game/store/useGameStore";
 import { EventNotificationDialog } from "@/features/game/components/EventNotificationDialog";
 import { ProductionFacilities } from "@/features/game/components/ProductionFacilities";
 import { TapZone } from "@/features/game/components/TapZone";
-import { SettingsButton } from "@/components/SettingsButton";
 import { OpeningStory } from "@/features/game/components/OpeningStory";
 
 const GameLoop = () => {

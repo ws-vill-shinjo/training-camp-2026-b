@@ -2,7 +2,6 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Header } from "@/components/Header";
 import useGameStore from "@/features/game/store/useGameStore";
 import { Money } from "@/features/game/components/Money";
 import { useGameLoop } from "@/features/game/hooks/useGameLoop";
