@@ -1,1 +1,6 @@
 id,name,spawnWeight,effectType,targetType,targetId,value,durationMs,flavorText,encyclopediaId,imageSrc
+HarvestFestival,収穫祭,10,moneyGain,global,,2000,,村人総出で豊作を祝う祭りが始まった！農産物が飛ぶように売れ、売上が大幅にアップした。,HarvestFestival,/images/Wakihonjinkishirotei.jpg
+StormDamage,嵐の被害,8,moneyLoss,global,,1500,,突然の嵐で農作物が被害を受けた。復旧費用がかかり、売上が減少してしまった。,StormDamage,/images/Wakihonjinkishirotei.jpg
+TouristRush,観光客ラッシュ,15,moneyGain,global,,1000,,SNSで新庄村が話題になり、観光客が殺到！売上が一気にアップした。,TouristRush,/images/Wakihonjinkishirotei.jpg
+SakuraBlooming,がいせん桜満開,5,moneyGain,global,,3000,,がいせん桜が満開に！花見客で村が賑わい、特産品が大量に売れた。,SakuraBlooming,/images/Wakihonjinkishirotei.jpg
+CrowRaid,カラスの群れ,8,moneyLoss,global,,800,,カラスの大群がサルナシ畑を荒らした。収穫量が減り、売上に響いてしまった。,CrowRaid,/images/Wakihonjinkishirotei.jpg
