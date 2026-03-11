@@ -14,9 +14,11 @@ export const ProductionFacilities = ({ items }: Props) => {
         <p className="text-base font-bold text-black">生産一覧</p>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
-        {items.map(({ id, level }) => (
-          <ProductionItem key={id} id={id} level={level} />
-        ))}
+        {items.length === 0 ? (
+          <p className="text-sm text-gray-400 text-center py-4">生産施設がありません</p>
+        ) : (
+          items.map(({ id, level }) => <ProductionItem key={id} id={id} level={level} />)
+        )}
       </CardContent>
     </Card>
   );
