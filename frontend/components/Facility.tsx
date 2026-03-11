@@ -2,6 +2,12 @@
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 
+type FacilityType = {
+  label: string;
+  img: string;
+  progress: number;
+};
+
 const items = [
   {
     label: "じゃがいも",
@@ -20,7 +26,7 @@ const items = [
   },
 ];
 
-function ItemCard({ img, label, progress }) {
+function ItemCard({ img, label, progress }: FacilityType) {
   return (
     <Card className="overflow-hidden w-80 rounded-xl border-none shadow-md p-0 gap-0 w-70">
       <div className="flex items-center gap-0 px-3 py-3" style={{ backgroundColor: "#b5d9a8" }}>
