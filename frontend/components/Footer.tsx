@@ -7,7 +7,7 @@ export const Footer = (): JSX.Element => {
     <div className="fixed bottom-0 bg-[#B5D9A8] h-24 w-screen flex items-center justify-around">
       <Link href="/upgrade" className="text-center text-white flex flex-col items-center">
         <ArrowBigUpDash className="w-12 h-12 text-white" />
-        <span className="text-white">素材強化</span>
+        <span className="text-white">アップグレード</span>
       </Link>
       <Link href="/" className="text-center text-white flex flex-col items-center">
         <House className="w-12 h-12 text-white" />
@@ -15,7 +15,7 @@ export const Footer = (): JSX.Element => {
       </Link>
       <Link href="/encyclopedia" className="text-center text-white flex flex-col items-center">
         <BookSearch className="w-12 h-12 text-white" />
-        <span className="text-white">図鑑</span>
+        <span className="text-white">ライブラリ</span>
       </Link>
     </div>
   );

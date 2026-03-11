@@ -1,7 +1,7 @@
 "use client";
 
-import numbro from "numbro";
 import Image from "next/image";
+import { formatNumber } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
 import { getMasterRegistry } from "@/master/registry/getMasterRegistry";
 import useGameStore from "@/features/game/store/useGameStore";
@@ -17,7 +17,7 @@ export function ProductionItem({ id, level }: Props) {
   const master = getMasterRegistry().production[id];
   if (!master) return null;
 
-  const yieldValue = stat ? numbro(Number(stat.yield)).format({ average: true }) : "-";
+  const yieldValue = stat ? formatNumber(Number(stat.yield)) : "-";
   const cycleSeconds = stat ? (stat.cycleMs / 1000).toFixed(1) : "-";
 
   return (

@@ -8,13 +8,14 @@ import useGameStore from "../store/useGameStore";
 /**
  * costType ごとにレベルアップコストを算出する。
  *
- * growth: cost(level) = baseCost * (costGrowth ^ (level - 1))
+ * growth: cost(1) = baseCost, cost(level) = baseCost * (costGrowth ^ (level - 1))  (level >= 2)
  * fixed:  cost(level) = baseCost
  * table:  cost(level) = costTable[level - 1]
  */
 export const calcCost = (config: CostConfig, level: number): number => {
   switch (config.costType) {
     case "growth":
+      if (level <= 1) return config.baseCost;
       return config.baseCost * Math.pow(config.costGrowth, level - 1);
     case "fixed":
       return config.baseCost;

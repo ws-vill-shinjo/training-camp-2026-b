@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { ProductionItem } from "./ProductionItem";
 
 type Props = {
@@ -11,7 +11,7 @@ export const ProductionFacilities = ({ items }: Props) => {
   return (
     <Card className="mx-4">
       <CardHeader>
-        <CardTitle>生産施設</CardTitle>
+        <p className="text-base font-bold text-black">生産一覧</p>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
         {items.map(({ id, level }) => (

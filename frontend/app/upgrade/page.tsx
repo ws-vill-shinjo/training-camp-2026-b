@@ -33,7 +33,7 @@ export default function UpgradePage() {
     <>
       <GameLoop />
       <Header>
-        <h1 className="text-4xl">素材強化</h1>
+        <h1 className="text-4xl">アップグレード</h1>
         <Button
           onClick={() => router.push("/unlock")}
           className="flex items-center gap-2 bg-[#6ab87a] shadow-md hover:shadow-lg transition-all duration-200 rounded-xl px-4 py-2 ml-5 font-semibold"
@@ -47,17 +47,17 @@ export default function UpgradePage() {
           <Money />
         </div>
         <div className="space-y-2 py-3">
-          <p className="text-sm font-bold text-muted-foreground">タップ強化</p>
+          <p className="text-base font-bold text-black">タップ強化</p>
           <TapUpgradeItem />
         </div>
         <div className="space-y-2 py-3">
-          <p className="text-sm font-bold text-muted-foreground">施設一覧</p>
+          <p className="text-base font-bold text-black">生産強化</p>
           {productionIds.map((id) => (
             <ProductionUpgradeItem key={id} id={id} />
           ))}
         </div>
         <div className="space-y-2 py-3">
-          <p className="text-sm font-bold text-muted-foreground">ボーナス一覧</p>
+          <p className="text-base font-bold text-black">ボーナス強化</p>
           {bonusIds.map((id) => (
             <BonusUpgradeItem key={id} id={id} />
           ))}
