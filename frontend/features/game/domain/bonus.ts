@@ -3,6 +3,7 @@ import type { BonusMaster } from "../../../master/schema/bonusSchema";
 import type { RuntimeModifiers } from "../types/production";
 import { calcCost, canAfford } from "./economy";
 import useGameStore from "../store/useGameStore";
+import { Accum, ModifierAxis } from "../types/bonus";
 
 // ---------------------------------------------------------------------------
 // effect 導出
@@ -35,6 +36,42 @@ export const calcEffect = (config: BonusMaster, level: number): Decimal => {
 // RuntimeModifiers 構築
 // ---------------------------------------------------------------------------
 
+const initAccum = (): Accum => ({ yield: new Decimal(1), cycle: new Decimal(1) });
+
+const resolveAxis = (effectType: BonusMaster["effectType"]): ModifierAxis => {
+  if (effectType === "yieldMultiplier") return "yield";
+  if (effectType === "cycleMultiplier") return "cycle";
+  return null;
+};
+
+const resolveTarget = (
+  config: BonusMaster,
+  globalAccum: Accum,
+  perProd: Record<string, Accum>
+): Accum | null => {
+  if (config.targetType === "global") return globalAccum;
+  if (config.targetType === "production" && config.targetId) {
+    return (perProd[config.targetId] ??= initAccum());
+  }
+  return null;
+};
+
+const applyBonusEffect = (
+  config: BonusMaster,
+  level: number,
+  globalAccum: Accum,
+  perProd: Record<string, Accum>
+): void => {
+  const axis = resolveAxis(config.effectType);
+  if (!axis) return;
+
+  const target = resolveTarget(config, globalAccum, perProd);
+  if (!target) return;
+
+  const effect = calcEffect(config, level);
+  target[axis] = target[axis].times(effect);
+};
+
 /**
  * 全ボーナスのレベルから RuntimeModifiers を構築する。
  * - 適用順を id 昇順に固定して再現性を確保
@@ -48,33 +85,14 @@ export const buildRuntimeModifiers = (
   // 適用順固定
   const sorted = [...bonusMasters].sort((a, b) => a.id.localeCompare(b.id));
 
-  let globalYield = new Decimal(1);
-  let globalCycle = new Decimal(1);
-
+  const globalAccum = initAccum();
   // 施設別の中間集計（Decimal のまま保持）
-  const perProd: Record<string, { yield: Decimal; cycle: Decimal }> = {};
+  const perProd: Record<string, Accum> = {};
 
   for (const config of sorted) {
     const level = bonusLevels[config.id] ?? 0;
     if (level <= 0) continue;
-
-    const effect = calcEffect(config, level);
-
-    if (config.effectType === "yieldMultiplier") {
-      if (config.targetType === "global") {
-        globalYield = globalYield.times(effect);
-      } else if (config.targetType === "production" && config.targetId) {
-        perProd[config.targetId] ??= { yield: new Decimal(1), cycle: new Decimal(1) };
-        perProd[config.targetId].yield = perProd[config.targetId].yield.times(effect);
-      }
-    } else if (config.effectType === "cycleMultiplier") {
-      if (config.targetType === "global") {
-        globalCycle = globalCycle.times(effect);
-      } else if (config.targetType === "production" && config.targetId) {
-        perProd[config.targetId] ??= { yield: new Decimal(1), cycle: new Decimal(1) };
-        perProd[config.targetId].cycle = perProd[config.targetId].cycle.times(effect);
-      }
-    }
+    applyBonusEffect(config, level, globalAccum, perProd);
   }
 
   // 乗数が両方 1 のエントリは保持しない
@@ -89,8 +107,8 @@ export const buildRuntimeModifiers = (
 
   return {
     global: {
-      yieldMultiplier: globalYield.toFixed(),
-      cycleMultiplier: globalCycle.toFixed(),
+      yieldMultiplier: globalAccum.yield.toFixed(),
+      cycleMultiplier: globalAccum.cycle.toFixed(),
     },
     byProduction,
   };

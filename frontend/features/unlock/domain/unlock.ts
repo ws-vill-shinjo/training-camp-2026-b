@@ -1,5 +1,4 @@
 import { productionMaster } from "../../game/data/productionMaster";
-import { gameEvents } from "../../game/events/gameEvents";
 import useGameStore from "../../game/store/useGameStore";
 
 export type UnlockTarget = { type: "production"; id: string } | { type: "bonus"; id: string };
@@ -52,13 +51,4 @@ export function processQrUnlock(contentId: string): UnlockResult {
   }
 
   return { success: true, contentId, alreadyUnlocked: false };
-}
-
-/** アンロック結果に応じてゲームイベントを emit する。 */
-export function emitQrUnlockResult(result: UnlockResult): void {
-  if (result.success) {
-    gameEvents.emit("qr:unlockSuccess", { contentId: result.contentId });
-  } else {
-    gameEvents.emit("qr:unlockFailed", { reason: result.reason });
-  }
 }
