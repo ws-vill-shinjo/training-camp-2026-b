@@ -36,7 +36,7 @@ function ItemCard({ img, label, progress }) {
 
 export const Facility = () => {
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center p-5 gap-4 p-0">
+    <div className="flex flex-col items-center p-5 gap-4 p-0">
       {items.map((item) => (
         <ItemCard key={item.label} {...item} />
       ))}
