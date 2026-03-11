@@ -17,6 +17,7 @@ import { QrScanner } from "@/features/unlock/components/QrScanner";
 import type { UnlockResult } from "@/features/unlock/types/qr";
 import { getMasterRegistry } from "@/master/registry/getMasterRegistry";
 import { AlertCircle } from "lucide-react";
+import { Header } from "@/components/Header";
 
 export default function UnlockPage() {
   const router = useRouter();
@@ -25,7 +26,10 @@ export default function UnlockPage() {
 
   return (
     <>
-      <div className="min-h-[calc(100svh-2rem)] flex flex-col items-center justify-center gap-6">
+      <Header>
+        <h1 className="text-4xl">QRコードスキャン</h1>
+      </Header>
+      <div className="min-h-[calc(100svh-12rem)] flex flex-col items-center justify-center gap-6">
         <div className="w-full max-w-sm flex flex-col gap-4">
           <p className="text-sm text-muted-foreground text-center">
             カメラでQRコードを読み取ってください
@@ -60,7 +64,7 @@ export default function UnlockPage() {
             <DialogDescription>
               {(() => {
                 const bonus = unlockResult
-                  ? getMasterRegistry().bonus[unlockResult.contentId] ?? null
+                  ? (getMasterRegistry().bonus[unlockResult.contentId] ?? null)
                   : null;
                 return bonus ? (
                   <span className="flex flex-col items-center gap-3 pt-2">
