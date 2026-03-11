@@ -1,12 +1,14 @@
 import { z } from "zod";
-import { EffectTypeSchema, TargetTypeSchema } from "./common";
+import { TargetTypeSchema } from "./common";
+
+const EventEffectTypeSchema = z.enum(["moneyGain", "moneyLoss", "yieldMultiplier", "cycleMultiplier"]);
 
 export const EventMasterSchema = z
   .object({
     id: z.string().min(1),
     name: z.string().min(1),
     spawnWeight: z.number().int().min(1),
-    effectType: EffectTypeSchema,
+    effectType: EventEffectTypeSchema,
     targetType: TargetTypeSchema,
     targetId: z.string().optional(),
     value: z.number(),

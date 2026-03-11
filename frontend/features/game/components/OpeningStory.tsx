@@ -36,7 +36,7 @@ const scenes: Scene[] = [
     id: 4,
     image: "/images/Michinoekigaisensakurashinjosyuku.jpg",
     title: "村を巡る旅",
-    text: "道の駅や地元の施設を実際に訪れてみましょう\n各所に設置されたQRコードを読み込むと\n\n特別なボーナスが手に入ります！",
+    text: "道の駅や地元の施設を実際に訪れてみましょう\n各所に設置されたQRコードを読み込むと\n特別なボーナスが手に入ります！",
   },
   {
     id: 5,

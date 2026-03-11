@@ -19,13 +19,12 @@ export const gameEventEmitter = createNanoEvents<GameDomainEventMap>();
 
 /**
  * 有効期限内のイベントから RuntimeModifiers を構築する。
- * effectType が yieldMultiplier / cycleMultiplier / productionBoost / productionFreeze
- * のものだけを対象にする。
+ * effectType が yieldMultiplier / cycleMultiplier のものだけを対象にする。
  */
 
 const resolveAxis = (effectType: EventMaster["effectType"]): ModifierAxis => {
-  if (effectType === "yieldMultiplier" || effectType === "productionBoost") return "yield";
-  if (effectType === "cycleMultiplier" || effectType === "productionFreeze") return "cycle";
+  if (effectType === "yieldMultiplier") return "yield";
+  if (effectType === "cycleMultiplier") return "cycle";
   return null;
 };
 
@@ -106,30 +105,6 @@ export const combineModifiers = (a: RuntimeModifiers, b: RuntimeModifiers): Runt
     },
     byProduction,
   };
-};
-
-// ---------------------------------------------------------------------------
-// イベント耐性
-// ---------------------------------------------------------------------------
-
-/**
- * ボーナスの eventResist 効果量を合計して耐性値（0 以上の数値）を返す。
- * rollAndActivateEvent でランダム判定に使用する。
- */
-const calcEventResist = (): number => {
-  const registry = getMasterRegistry();
-  const store = useGameStore.getState();
-  let resist = 0;
-
-  for (const config of Object.values(registry.bonus)) {
-    if (config.effectType !== "eventResist") continue;
-    const level = store.bonusLevels[config.id] ?? 0;
-    if (level <= 0) continue;
-    // effectType=eventResist の value は耐性確率の増加量（0〜1 の範囲を想定）
-    resist += config.baseValue + (config.valueGrowth ?? 0) * (level - 1);
-  }
-
-  return Math.min(resist, 1);
 };
 
 // ---------------------------------------------------------------------------
@@ -221,10 +196,6 @@ export const rollAndActivateEvent = (now: number): void => {
   const selected = selectWeightedRandom(candidates);
   if (!selected) return;
 
-  // 耐性判定: resist が高いほどイベント発動確率が下がる
-  const resist = calcEventResist();
-  if (Math.random() < resist) return;
-
   activateEvent(selected, now);
 };
 
@@ -255,12 +226,7 @@ export const cleanupAndRebuildEvents = (now: number): void => {
   const hasDurationModifier = expired.some((ev) => {
     const master = registry.event[ev.id];
     if (!master) return false;
-    return (
-      master.effectType === "yieldMultiplier" ||
-      master.effectType === "cycleMultiplier" ||
-      master.effectType === "productionBoost" ||
-      master.effectType === "productionFreeze"
-    );
+    return master.effectType === "yieldMultiplier" || master.effectType === "cycleMultiplier";
   });
 
   if (hasDurationModifier) {
