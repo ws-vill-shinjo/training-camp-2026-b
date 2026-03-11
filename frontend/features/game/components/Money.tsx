@@ -2,6 +2,7 @@
 import numbro from "numbro";
 import { Card } from "@/components/ui/card";
 import useGameStore from "@/features/game/store/useGameStore";
+import { CircleDollarSignIcon } from "lucide-react";
 
 export const Money = () => {
   const getMoneyDecimal = useGameStore((s) => s.getMoneyDecimal);
@@ -15,7 +16,9 @@ export const Money = () => {
 
   return (
     <Card className="flex flex-row items-center gap-1 bg-[#b5d9a8] rounded-full px-3 py-1 shadow-sm w-fit min-w-[100px] justify-center border-none">
-      <span className="text-yellow-400 text-base">🪙</span>
+      <span className="text-yellow-400 text-base">
+        <CircleDollarSignIcon />
+      </span>
       <span className="text-white font-bold text-sm">{formattedMoney}</span>
     </Card>
   );
