@@ -126,14 +126,23 @@ const selectWeightedRandom = (masters: EventMaster[]): EventMaster | null => {
 // 即時効果の適用
 // ---------------------------------------------------------------------------
 
-const applyInstantEffect = (master: EventMaster): void => {
-  const store = useGameStore.getState();
-  const value = Number(master.value);
+const MIN_MONEY_GAIN_AMOUNT = 3000;
+const MIN_MONEY_LOSS_AMOUNT = 1000;
 
+const calcMoneyEventAmount = (master: EventMaster): number => {
+  const store = useGameStore.getState();
+  const rate = Number(master.value);
+  const currentMoney = store.getMoney();
+  const min = master.effectType === "moneyLoss" ? MIN_MONEY_LOSS_AMOUNT : MIN_MONEY_GAIN_AMOUNT;
+  return Math.max(min, Math.floor(currentMoney * rate));
+};
+
+const applyInstantEffect = (master: EventMaster, amount: number): void => {
+  const store = useGameStore.getState();
   if (master.effectType === "moneyGain") {
-    store.addMoney(value);
+    store.addMoney(amount);
   } else if (master.effectType === "moneyLoss") {
-    if (!store.spendMoney(value)) {
+    if (!store.spendMoney(amount)) {
       store.addMoney(-store.getMoney());
     }
   }
@@ -162,12 +171,13 @@ export const activateEvent = (master: EventMaster, now: number): void => {
     store.addActiveEvent(event);
     gameEventEmitter.emit("eventActivated", event, master);
   } else {
-    applyInstantEffect(master);
-    // 即時イベントは duration=0 として通知のみ行う
+    const amount = calcMoneyEventAmount(master);
+    applyInstantEffect(master, amount);
+    // 即時イベントは duration=0 として通知のみ行う（value に計算済み金額を格納）
     const event: GameEvent = {
       id: master.id,
       durationMs: 0,
-      value: String(master.value),
+      value: String(amount),
       startedAt: now,
     };
     store.recordSeenEvent(master.id);
@@ -180,10 +190,18 @@ export const activateEvent = (master: EventMaster, now: number): void => {
 // ---------------------------------------------------------------------------
 
 /**
+ * イベントなし枠の基準重み（固定値）。
+ * イベント発生率 = sum(spawnWeight) / (sum(spawnWeight) + NO_EVENT_WEIGHT)
+ * CSV の spawnWeight 合計を調整することで発生確率を制御する。
+ * 例: spawnWeight 合計 300 → 300 / (300 + 100) = 75%
+ */
+// const NO_EVENT_WEIGHT = 100;
+const NO_EVENT_WEIGHT = 0;
+
+/**
  * イベントを抽選して発動する。useGameLoop の useInterval から呼ぶ。
  * - lastEventCheckAt を更新
- * - 加重ランダムで候補を 1 件選択
- * - eventResist 判定でキャンセルされる場合がある
+ * - 加重ランダムで候補を 1 件選択（NO_EVENT_WEIGHT の確率で空振り）
  */
 export const rollAndActivateEvent = (now: number): void => {
   const store = useGameStore.getState();
@@ -192,6 +210,9 @@ export const rollAndActivateEvent = (now: number): void => {
   const registry = getMasterRegistry();
   const candidates = Object.values(registry.event);
   if (candidates.length === 0) return;
+
+  const eventTotalWeight = candidates.reduce((sum, m) => sum + m.spawnWeight, 0);
+  if (Math.random() * (eventTotalWeight + NO_EVENT_WEIGHT) < NO_EVENT_WEIGHT) return;
 
   const selected = selectWeightedRandom(candidates);
   if (!selected) return;
