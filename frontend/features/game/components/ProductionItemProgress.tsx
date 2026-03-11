@@ -26,10 +26,7 @@ export function ProductionItemProgress({ id, onComplete }: Props) {
   // lastProducedAt が増加したとき = 生産サイクル完了
   const prevLastProducedAt = useRef<number | null>(null);
   useEffect(() => {
-    if (
-      prevLastProducedAt.current !== null &&
-      lastProducedAt > prevLastProducedAt.current
-    ) {
+    if (prevLastProducedAt.current !== null && lastProducedAt > prevLastProducedAt.current) {
       onCompleteRef.current?.();
     }
     prevLastProducedAt.current = lastProducedAt;

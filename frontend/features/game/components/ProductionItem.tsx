@@ -40,7 +40,7 @@ export function ProductionItem({ id, level }: Props) {
 
   return (
     <Card className="relative overflow-hidden w-full rounded-xl border-none shadow-md p-0 gap-0">
-      <div className="flex items-center gap-0 px-3 py-3">
+      <div className="flex items-center gap-0 px-3 py-2">
         <Image
           src={master.imageSrc}
           alt={master.name}
@@ -50,10 +50,10 @@ export function ProductionItem({ id, level }: Props) {
         />
         <span className="font-semibold text-sm ms-4">{master.name}</span>
         <span className="text-xs text-muted-foreground ms-2">Lv.{level}</span>
-      </div>
-      <div className="flex gap-4 px-3 py-1 text-xs text-muted-foreground">
-        <span>収益: {yieldValue}</span>
-        <span>生産時間: {cycleSeconds}s</span>
+        <div className="flex gap-3 ms-auto text-xs text-muted-foreground">
+          <span>収益: {yieldValue}</span>
+          <span>{cycleSeconds}s</span>
+        </div>
       </div>
       <ProductionItemProgress id={id} onComplete={handleComplete} />
 

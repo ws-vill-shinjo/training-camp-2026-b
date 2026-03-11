@@ -23,16 +23,20 @@ export default function Home() {
   );
 
   return (
-    <div>
+    <div className="overflow-hidden">
       <GameLoop />
       <OpeningStory />
       <EventNotificationDialog />
-      <div className="max-w-lg mx-auto py-4 flex flex-col gap-4">
-        <div className="flex justify-end mr-4">
+      <div className="max-w-lg mx-auto py-4 flex flex-col gap-4 h-[calc(100dvh-12rem)]">
+        <div className="flex justify-end mr-4 flex-shrink-0">
           <Money />
         </div>
-        <ProductionFacilities items={items} />
-        <TapZone />
+        <div className="flex-1 min-h-0">
+          <ProductionFacilities items={items} />
+        </div>
+        <div className="flex-shrink-0">
+          <TapZone />
+        </div>
       </div>
     </div>
   );

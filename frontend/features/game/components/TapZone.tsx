@@ -47,13 +47,22 @@ const CARROT_POSITIONS = [
   { x: 235, y: 115 },
 ];
 
-const FieldSVG = ({ count, tapped }: { count: number; tapped: boolean }) => (
+const FieldSVG = ({
+  count,
+  tapped,
+  onAnimationComplete,
+}: {
+  count: number;
+  tapped: boolean;
+  onAnimationComplete?: () => void;
+}) => (
   <motion.svg
     width="300"
     height="180"
     viewBox="0 0 300 180"
     animate={tapped ? { scale: [1, 0.92, 1.03, 1], y: [0, 8, -2, 0] } : {}}
     transition={{ duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
+    onAnimationComplete={onAnimationComplete}
     style={{
       filter: tapped
         ? "brightness(0.85) drop-shadow(0 2px 4px rgba(0,0,0,0.3))"
@@ -124,10 +133,10 @@ export const TapZone = () => {
   };
 
   return (
-    <Card
+    <div
       role="button"
       onPointerDown={handlePointerDown}
-      className="relative flex justify-center items-center pt-5 bg-transparent border-none shadow-none ring-0 cursor-pointer select-none"
+      className="relative flex justify-center items-center bg-transparent border-none shadow-none ring-0 cursor-pointer select-none"
     >
       <FieldSVG count={carrotCount} tapped={tapped} onAnimationComplete={() => setTapped(false)} />
       <AnimatePresence>
@@ -139,6 +148,6 @@ export const TapZone = () => {
           />
         ))}
       </AnimatePresence>
-    </Card>
+    </div>
   );
 };
