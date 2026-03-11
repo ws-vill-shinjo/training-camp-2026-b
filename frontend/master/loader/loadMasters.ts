@@ -16,11 +16,12 @@ export async function loadMasters(fetcher?: CsvFetcher): Promise<ValidatedMaster
         fetcher(path).then((text) => parseCsv(text))
     : fetchCsv;
 
-  const [productionRaw, bonusRaw, eventRaw, encyclopediaRaw] = await Promise.all([
+  const [productionRaw, bonusRaw, eventRaw, encyclopediaRaw, tapRaw] = await Promise.all([
     load("/master/data/productionMaster.csv"),
     load("/master/data/bonusMaster.csv"),
     load("/master/data/eventMaster.csv"),
     load("/master/data/encyclopediaMaster.csv"),
+    load("/master/data/tapMaster.csv"),
   ]);
 
   const result = validateMasters({
@@ -28,6 +29,7 @@ export async function loadMasters(fetcher?: CsvFetcher): Promise<ValidatedMaster
     bonus: bonusRaw.map(coerceMasterRow),
     event: eventRaw.map(coerceMasterRow),
     encyclopedia: encyclopediaRaw.map(coerceMasterRow),
+    tap: tapRaw.map(coerceMasterRow),
   });
 
   if (!result.success) {
