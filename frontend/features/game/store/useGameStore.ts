@@ -6,7 +6,6 @@ import { createEventSlice } from "./slices/eventSlice";
 import { createMetaSlice } from "./slices/metaSlice";
 import { createProductionRuntimeSlice } from "./slices/productionRuntimeSlice";
 import { createProductionSlice } from "./slices/productionSlice";
-import { createTapSlice } from "./slices/tapSlice";
 import { createTapRuntimeSlice } from "./slices/tapRuntimeSlice";
 import type { GameStore } from "../types/store";
 
@@ -20,8 +19,6 @@ type PersistedState = Pick<
   | "lastProducedAtByProduction"
   // bonusSlice
   | "bonusLevels"
-  // tapSlice
-  | "tapLevel"
   // eventSlice
   | "lastEventCheckAt"
   | "activeEvents"
@@ -39,7 +36,6 @@ const useGameStore = create<GameStore>()(
       ...createBonusSlice(...a),
       ...createEventSlice(...a),
       ...createMetaSlice(...a),
-      ...createTapSlice(...a),
       ...createProductionRuntimeSlice(...a),
       ...createTapRuntimeSlice(...a),
     }),
@@ -51,7 +47,6 @@ const useGameStore = create<GameStore>()(
         productionLevels: state.productionLevels,
         lastProducedAtByProduction: state.lastProducedAtByProduction,
         bonusLevels: state.bonusLevels,
-        tapLevel: state.tapLevel,
         lastEventCheckAt: state.lastEventCheckAt,
         activeEvents: state.activeEvents,
         seenEvents: state.seenEvents,
