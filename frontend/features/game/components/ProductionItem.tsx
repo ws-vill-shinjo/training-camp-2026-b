@@ -7,9 +7,10 @@ import { ProductionItemProgress } from "./ProductionItemProgress";
 
 type Props = {
   id: string;
+  level: number;
 };
 
-export function ProductionItem({ id }: Props) {
+export function ProductionItem({ id, level }: Props) {
   const master = getMasterRegistry().production[id];
   if (!master) return null;
 
@@ -24,6 +25,7 @@ export function ProductionItem({ id }: Props) {
           className="rounded-md object-cover flex-shrink-0"
         />
         <span className="text-white text-lg font-bold tracking-wide ms-4">{master.name}</span>
+        <span className="text-white text-sm ms-2">Lv.{level}</span>
       </div>
       <ProductionItemProgress id={id} />
     </Card>

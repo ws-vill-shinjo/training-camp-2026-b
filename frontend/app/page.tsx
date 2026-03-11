@@ -18,7 +18,10 @@ export default function Home() {
   const registryReady = useGameStore((s) => s.registryReady);
   const productionLevels = useGameStore((s) => s.productionLevels);
 
-  const unlockedIds = useMemo(() => Object.keys(productionLevels), [productionLevels]);
+  const items = useMemo(
+    () => Object.entries(productionLevels).map(([id, level]) => ({ id, level })),
+    [productionLevels]
+  );
 
   return (
     <div>
@@ -29,7 +32,7 @@ export default function Home() {
       </Header>
       <div className="px-4 py-4 flex flex-col gap-4">
         <Money />
-        <ProductionFacilities ids={unlockedIds} />
+        <ProductionFacilities items={items} />
         <TapZone />
       </div>
     </div>
