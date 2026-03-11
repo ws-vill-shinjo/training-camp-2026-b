@@ -1,7 +1,7 @@
 "use client";
 
-import numbro from "numbro";
 import Image from "next/image";
+import { formatNumber } from "@/lib/utils";
 import { getMasterRegistry } from "@/master/registry/getMasterRegistry";
 import useGameStore from "@/features/game/store/useGameStore";
 import { calcCost } from "@/features/game/domain/economy";
@@ -56,13 +56,13 @@ export function TapUpgradeItem() {
           >
             <span>強化</span>
             {cost && (
-              <span className="text-xs opacity-80">{numbro(cost).format({ average: true })}</span>
+              <span className="text-xs opacity-80">{formatNumber(cost)}</span>
             )}
           </Button>
         )}
       </div>
       <div className="flex gap-4 text-xs text-muted-foreground">
-        <span>タップ収益: {numbro(currentYield).format({ average: true })}</span>
+        <span>タップ収益: {formatNumber(currentYield)}</span>
       </div>
     </Card>
   );

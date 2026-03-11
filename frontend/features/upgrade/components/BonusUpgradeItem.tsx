@@ -1,7 +1,7 @@
 "use client";
 
-import numbro from "numbro";
 import Image from "next/image";
+import { formatNumber } from "@/lib/utils";
 import { getMasterRegistry } from "@/master/registry/getMasterRegistry";
 import useGameStore from "@/features/game/store/useGameStore";
 import { calcCost } from "@/features/game/domain/economy";
@@ -57,7 +57,7 @@ export function BonusUpgradeItem({ id }: Props) {
           >
             <span>{level === 0 ? "アンロック" : "強化"}</span>
             {cost && (
-              <span className="text-xs opacity-80">{numbro(cost).format({ average: true })}</span>
+              <span className="text-xs opacity-80">{formatNumber(cost)}</span>
             )}
           </Button>
         )}

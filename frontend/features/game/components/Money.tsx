@@ -10,7 +10,7 @@ const MoneyComponent = () => {
   const value = useGameStore((s) => s.getMoney());
   const formattedMoney =
     value >= 1_000_000
-      ? numbro(value).format({ average: true }).toUpperCase()
+      ? numbro(value).format({ average: true, mantissa: 1, trimMantissa: true })
       : numbro(value).format({ thousandSeparated: true, mantissa: 0 });
 
   return (

@@ -1,10 +1,11 @@
 "use client";
 
-import numbro from "numbro";
 import Image from "next/image";
 import { getMasterRegistry } from "@/master/registry/getMasterRegistry";
 import useGameStore from "@/features/game/store/useGameStore";
 import { calcCost, upgradeProduction } from "@/features/game/domain/economy";
+import { calcYield, calcCycleMs } from "@/features/game/domain/production";
+import { formatNumber } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
@@ -13,8 +14,6 @@ type Props = { id: string };
 export function ProductionUpgradeItem({ id }: Props) {
   const level = useGameStore((s) => s.productionLevels[id] ?? 0);
   const money = useGameStore((s) => s.money);
-  const baseStat = useGameStore((s) => s.baseProductionStats[id]);
-
   const registry = getMasterRegistry();
   const config = registry.production[id];
   if (!config) return null;
@@ -25,8 +24,9 @@ export function ProductionUpgradeItem({ id }: Props) {
   const cost = isMaxLevel ? null : calcCost(config, level + 1);
   const canAfford = cost ? Number(money) >= cost : false;
 
-  const displayYield = level > 0 && baseStat ? baseStat.baseYield : "0";
-  const displayCycleSeconds = level > 0 && baseStat ? baseStat.baseCycleMs / 1000 : 0;
+  const displayLevel = Math.max(level, 1);
+  const displayYield = calcYield(config, displayLevel);
+  const displayCycleSeconds = calcCycleMs(config, displayLevel) / 1000;
 
   return (
     <Card className="flex-col gap-2 px-4 py-3">
@@ -59,13 +59,13 @@ export function ProductionUpgradeItem({ id }: Props) {
           >
             <span>{level === 0 ? "アンロック" : "強化"}</span>
             {cost && (
-              <span className="text-xs opacity-80">{numbro(cost).format({ average: true })}</span>
+              <span className="text-xs opacity-80">{formatNumber(cost)}</span>
             )}
           </Button>
         )}
       </div>
       <div className="flex gap-4 text-xs text-muted-foreground">
-        <span>生産量: {numbro(displayYield).format({ average: true })}</span>
+        <span>生産量: {formatNumber(displayYield)}</span>
         <span>生産時間: {displayCycleSeconds.toFixed(1)}秒</span>
       </div>
     </Card>

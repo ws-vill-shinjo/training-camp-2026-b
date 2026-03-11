@@ -36,7 +36,7 @@ export const EncyclopediaList = ({ entries }: Props) => {
             <Card key={type}>
               <CardHeader>
                 <div className="flex items-center gap-2">
-                  <CardTitle>{SECTION_LABEL[type]}</CardTitle>
+                  <p className="text-base font-bold text-black">{SECTION_LABEL[type]}</p>
                   <span className="text-xs text-muted-foreground">
                     {unlockedCount} / {section.length}
                   </span>
