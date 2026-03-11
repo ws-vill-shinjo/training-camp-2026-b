@@ -32,7 +32,7 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body className={`${geistSans.variable} ${geistMono.variable} bg-[#F0F9EC]`}>
-        <div className="mb-24">
+        <div className="mb-24 overflow-x-hidden">
           <GameProvider>{children}</GameProvider>
         </div>
         <Footer />
