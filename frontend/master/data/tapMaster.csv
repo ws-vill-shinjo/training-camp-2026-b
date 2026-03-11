@@ -1,2 +1,2 @@
 id,name,maxLevel,yieldType,baseYield,yieldGrowth,yieldTable,costType,baseCost,costGrowth,costTable,imageSrc
-tap,タップ,5,growth,1,0.5,,growth,10,2,,/images/TapCarrotField.png
+tap,タップ,5,growth,1,2,,growth,10,2,,/images/TapCarrotField.png
