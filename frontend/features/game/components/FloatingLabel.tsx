@@ -6,10 +6,11 @@ type Props = {
   id: number;
   x: number;
   y: number;
+  amount: string;
   onComplete: (id: number) => void;
 };
 
-export const FloatingLabel = ({ id, x, y, onComplete }: Props) => {
+export const FloatingLabel = ({ id, x, y, amount, onComplete }: Props) => {
   return (
     <motion.span
       initial={{ opacity: 1, y: 0, x: "-50%" }}
@@ -22,7 +23,7 @@ export const FloatingLabel = ({ id, x, y, onComplete }: Props) => {
     >
       <div className="flex items-center gap-1 text-yellow-400">
         <CircleDollarSignIcon size={20} />
-        <span>+1</span>
+        <span>+{amount}</span>
       </div>
     </motion.span>
   );

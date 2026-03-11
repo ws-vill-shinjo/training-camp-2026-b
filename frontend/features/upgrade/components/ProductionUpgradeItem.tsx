@@ -14,7 +14,7 @@ type Props = { id: string };
 export function ProductionUpgradeItem({ id }: Props) {
   const level = useGameStore((s) => s.productionLevels[id] ?? 0);
   const money = useGameStore((s) => s.money);
-  const effectiveStat = useGameStore((s) => s.effectiveProductionStats[id]);
+  const baseStat = useGameStore((s) => s.baseProductionStats[id]);
 
   const registry = getMasterRegistry();
   const config = registry.production[id];
@@ -26,8 +26,8 @@ export function ProductionUpgradeItem({ id }: Props) {
   const cost = isMaxLevel ? null : calcCost(config, level + 1);
   const canAfford = cost ? new Decimal(money).gte(cost) : false;
 
-  const displayYield = level > 0 && effectiveStat ? effectiveStat.yield : "0";
-  const displayCycleSeconds = level > 0 && effectiveStat ? effectiveStat.cycleMs / 1000 : 0;
+  const displayYield = level > 0 && baseStat ? baseStat.baseYield : "0";
+  const displayCycleSeconds = level > 0 && baseStat ? baseStat.baseCycleMs / 1000 : 0;
 
   return (
     <Card className="flex-col gap-2 px-4 py-3">
