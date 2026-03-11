@@ -1,15 +1,13 @@
 import { JSX } from "react";
+import { Card } from "./ui/card";
 
-type upgrade_cardprops = {
-  name: string;
-  level: number;
-};
+const items =[{
+  label:"じゃがいも",
+  lv: 1,
+}]
 
-export const Upgrade_card = ({ name, level }: upgrade_cardprops): JSX.Element => {
-  return (
-    <div className="bg-[#E8A87C] w-313px h-80px items-center z--1">
-      <h2 className="bg=[#F2E4D8] w-84px h-67px">{name}</h2>
-      <h4>{level}</h4>
-    </div>
-  );
+function ItemCard({label,lv}){
+  <Card className="flex items-center "
+}
+
 };
