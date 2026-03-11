@@ -13,7 +13,7 @@ export const calcTapYield = (config: TapMaster, level: number): Decimal => {
   switch (config.yieldType) {
     case "growth": {
       const growth = config.yieldGrowth ?? 0;
-      return new Decimal(config.baseYield ?? 0).times(1 + growth * Math.max(0, level - 1));
+      return new Decimal(config.baseYield ?? 0).times(growth * Math.max(0, level - 1));
     }
     case "fixed":
       return new Decimal(config.baseYield ?? 0);
