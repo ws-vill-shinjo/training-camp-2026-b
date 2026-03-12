@@ -6,7 +6,7 @@ import { Card } from "@/components/ui/card";
 import { getMasterRegistry } from "@/master/registry/getMasterRegistry";
 import useGameStore from "@/features/game/store/useGameStore";
 import { ProductionItemProgress } from "./ProductionItemProgress";
-import { AnimatePresence } from "motion/react";
+import { AnimatePresence, motion, useAnimation } from "motion/react";
 import { FloatingLabel } from "./FloatingLabel";
 import { useState, useCallback } from "react";
 
@@ -27,10 +27,13 @@ export function ProductionItem({ id, level }: Props) {
   const [labels, setLabels] = useState<FloatingLabelType[]>([]);
   const stat = useGameStore((s) => s.effectiveProductionStats[id]);
 
+  const controls = useAnimation();
+
   const handleComplete = useCallback(() => {
     const amount = Math.round(Number(effectiveYield ?? 1));
     setLabels((prev) => [...prev, { id: Date.now(), x: 150, y: 30, amount }]);
-  }, [effectiveYield]);
+    controls.start({ scale: [1, 1.03, 1], transition: { duration: 0.25, ease: "easeOut" } });
+  }, [effectiveYield, controls]);
 
   const master = getMasterRegistry().production[id];
   if (!master) return null;
@@ -39,6 +42,7 @@ export function ProductionItem({ id, level }: Props) {
   const cycleSeconds = stat ? (stat.cycleMs / 1000).toFixed(1) : "-";
 
   return (
+    <motion.div animate={controls} className="flex flex-col">
     <Card className="relative overflow-hidden w-full rounded-xl border-none shadow-md p-0 gap-0">
       <div className="flex items-center gap-0 px-3 py-2">
         <Image
@@ -70,5 +74,6 @@ export function ProductionItem({ id, level }: Props) {
         ))}
       </AnimatePresence>
     </Card>
+    </motion.div>
   );
 }

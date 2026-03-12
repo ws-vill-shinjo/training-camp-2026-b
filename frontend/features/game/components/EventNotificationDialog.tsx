@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { formatNumber } from "@/lib/utils";
 import Image from "next/image";
 
 type PendingEvent = {
@@ -56,7 +57,7 @@ export const EventNotificationDialog = () => {
         </DialogHeader>
         {current && (
           <p className={`text-center text-lg font-bold ${current.master.effectType === "moneyGain" ? "text-green-600" : "text-red-600"}`}>
-            {current.master.effectType === "moneyGain" ? "+" : "-"}{current.amount.toLocaleString()} コイン
+            {current.master.effectType === "moneyGain" ? "+" : "-"}{formatNumber(current.amount)} コイン
           </p>
         )}
         <DialogFooter>
