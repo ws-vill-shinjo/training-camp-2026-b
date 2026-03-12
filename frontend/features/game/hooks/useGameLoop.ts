@@ -10,7 +10,7 @@ import { runTick } from "../domain/tick";
 import useGameStore from "../store/useGameStore";
 
 /** ドメイン Tick の最小間隔 (ms) */
-const TICK_MS = 100;
+const TICK_MS = 50;
 
 /** イベント抽選の実行間隔 (ms) */
 const EVENT_CHECK_INTERVAL_MS = 60 * 1000;

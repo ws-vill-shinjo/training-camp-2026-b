@@ -8,7 +8,7 @@ import useGameStore from "@/features/game/store/useGameStore";
 import { ProductionItemProgress } from "./ProductionItemProgress";
 import { AnimatePresence, motion, useAnimation } from "motion/react";
 import { FloatingLabel } from "./FloatingLabel";
-import { useState, useCallback } from "react";
+import { useState, useCallback, memo } from "react";
 
 type Props = {
   id: string;
@@ -22,18 +22,24 @@ type FloatingLabelType = {
   amount: number;
 };
 
-export function ProductionItem({ id, level }: Props) {
-  const effectiveYield = useGameStore((s) => s.effectiveProductionStats[id]?.yield);
-  const [labels, setLabels] = useState<FloatingLabelType[]>([]);
+export const ProductionItem = memo(function ProductionItem({ id, level }: Props) {
   const stat = useGameStore((s) => s.effectiveProductionStats[id]);
+  const [labels, setLabels] = useState<FloatingLabelType[]>([]);
 
   const controls = useAnimation();
 
-  const handleComplete = useCallback((cycles: number) => {
-    const amount = Math.round(Number(effectiveYield ?? 1) * cycles);
-    setLabels((prev) => [...prev, { id: Date.now(), x: 150, y: 30, amount }]);
-    controls.start({ scale: [1, 1.03, 1], transition: { duration: 0.25, ease: "easeOut" } });
-  }, [effectiveYield, controls]);
+  const handleComplete = useCallback(
+    (cycles: number) => {
+      const amount = Math.round(Number(stat?.yield ?? 1) * cycles);
+      setLabels((prev) => [...prev, { id: Date.now(), x: 150, y: 30, amount }]);
+      controls.start({ scale: [1, 1.03, 1], transition: { duration: 0.25, ease: "easeOut" } });
+    },
+    [stat?.yield, controls]
+  );
+
+  const handleLabelComplete = useCallback((labelId: number) => {
+    setLabels((prev) => prev.filter((l) => l.id !== labelId));
+  }, []);
 
   const master = getMasterRegistry().production[id];
   if (!master) return null;
@@ -71,11 +77,11 @@ export function ProductionItem({ id, level }: Props) {
               x={label.x}
               y={label.y}
               amount={label.amount}
-              onComplete={(id) => setLabels((prev) => prev.filter((l) => l.id !== id))}
+              onComplete={handleLabelComplete}
             />
           ))}
         </AnimatePresence>
       </Card>
     </motion.div>
   );
-}
+});

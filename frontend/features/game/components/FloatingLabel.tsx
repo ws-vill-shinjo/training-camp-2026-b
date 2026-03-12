@@ -2,6 +2,7 @@
 import { motion } from "motion/react";
 import { CircleDollarSignIcon } from "lucide-react";
 import { formatNumber } from "@/lib/utils";
+import { memo } from "react";
 
 type Props = {
   id: number;
@@ -11,7 +12,7 @@ type Props = {
   onComplete: (id: number) => void;
 };
 
-export const FloatingLabel = ({ id, x, y, amount, onComplete }: Props) => {
+export const FloatingLabel = memo(function FloatingLabel({ id, x, y, amount, onComplete }: Props) {
   return (
     <motion.span
       initial={{ opacity: 1, y: 0, x: "-50%" }}
@@ -28,4 +29,4 @@ export const FloatingLabel = ({ id, x, y, amount, onComplete }: Props) => {
       </div>
     </motion.span>
   );
-};
+});
