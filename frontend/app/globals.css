@@ -136,6 +136,23 @@ a {
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/* ── 常時スクロールバー ── */
+.always-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #94a3b8 #e2e8f0;
+}
+.always-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+.always-scrollbar::-webkit-scrollbar-track {
+  background: #e2e8f0;
+  border-radius: 4px;
+}
+.always-scrollbar::-webkit-scrollbar-thumb {
+  background: #94a3b8;
+  border-radius: 4px;
+}
+
 /* ── 川の背景アニメーション ── */
 
 /* 波レイヤー（速さ別） */
