@@ -54,6 +54,9 @@ export default function UpgradePage() {
         </div>
         <div className="space-y-2 py-3">
           <p className="text-base font-bold text-black">ボーナス強化</p>
+          <p className="text-xs text-muted-foreground px-1 pt-1">
+            ※ QRコードは現地施設に設置されています。
+          </p>
           {bonusIds.map((id) => (
             <BonusUpgradeItem key={id} id={id} />
           ))}
