@@ -1,6 +1,7 @@
 // features/game/components/FloatingLabel.tsx
 import { motion } from "motion/react";
 import { CircleDollarSignIcon } from "lucide-react";
+import { formatNumber } from "@/lib/utils";
 
 type Props = {
   id: number;
@@ -23,7 +24,7 @@ export const FloatingLabel = ({ id, x, y, amount, onComplete }: Props) => {
     >
       <div className="flex items-center gap-1 text-yellow-400">
         <CircleDollarSignIcon size={20} />
-        <span>+{amount}</span>
+        <span>+{formatNumber(amount)}</span>
       </div>
     </motion.span>
   );

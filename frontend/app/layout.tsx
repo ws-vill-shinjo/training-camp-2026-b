@@ -6,6 +6,7 @@ import { GameProvider } from "@/features/game/components/GameProvider";
 import { Header } from "@/components/Header";
 import Image from "next/image";
 import { SettingsButton } from "@/components/SettingsButton";
+import { NavigationLoadingProvider } from "@/components/NavigationLoadingProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -58,10 +59,12 @@ export default function RootLayout({
             </div>
           </div>
         </Header>
-        <div className="mb-24 overflow-x-hidden">
-          <GameProvider>{children}</GameProvider>
-        </div>
-        <Footer />
+        <NavigationLoadingProvider>
+          <div className="mb-24 overflow-x-hidden">
+            <GameProvider>{children}</GameProvider>
+          </div>
+          <Footer />
+        </NavigationLoadingProvider>
       </body>
     </html>
   );

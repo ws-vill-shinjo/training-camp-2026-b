@@ -17,9 +17,11 @@ import { QrScanner } from "@/features/unlock/components/QrScanner";
 import type { UnlockResult } from "@/features/unlock/types/qr";
 import { getMasterRegistry } from "@/master/registry/getMasterRegistry";
 import { AlertCircle } from "lucide-react";
+import { useNavigationLoading } from "@/components/NavigationLoadingProvider";
 
 export default function UnlockPage() {
   const router = useRouter();
+  const { setLoading } = useNavigationLoading();
   const [unlockResult, setUnlockResult] = useState<(UnlockResult & { success: true }) | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -80,7 +82,7 @@ export default function UnlockPage() {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button onClick={() => router.push("/upgrade")} className="bg-[#B5D9A8] text-[#484234] hover:bg-[#9fcb91] w-full">OK</Button>
+            <Button onClick={() => { setLoading(true); router.push("/upgrade"); }} className="bg-[#B5D9A8] text-[#484234] hover:bg-[#9fcb91] w-full">OK</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
