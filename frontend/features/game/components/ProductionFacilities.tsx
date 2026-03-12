@@ -3,12 +3,13 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { ScrollContainer } from "@/components/ui/scroll-container";
 import { ProductionItem } from "./ProductionItem";
+import { memo } from "react";
 
 type Props = {
   items: { id: string; level: number }[];
 };
 
-export const ProductionFacilities = ({ items }: Props) => {
+export const ProductionFacilities = memo(function ProductionFacilities({ items }: Props) {
   return (
     <Card className="mx-4 h-full flex flex-col">
       <CardHeader className="flex-shrink-0">
@@ -31,4 +32,4 @@ export const ProductionFacilities = ({ items }: Props) => {
       </CardContent>
     </Card>
   );
-};
+});

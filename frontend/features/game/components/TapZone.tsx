@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion } from "motion/react";
 import { FloatingLabel } from "./FloatingLabel";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, memo, useCallback } from "react";
 import { tap } from "@/features/game/domain/tap";
 import useGameStore from "@/features/game/store/useGameStore";
 import { FieldSVG } from "./DaikonSVG";
@@ -16,7 +16,7 @@ type FloatingLabelType = {
   amount: number;
 };
 
-export const TapZone = () => {
+export const TapZone = memo(function TapZone() {
   const tapYield = useGameStore((s) => s.tapYield);
   const [labels, setLabels] = useState<FloatingLabelType[]>([]);
   const [tapped, setTapped] = useState(false);
@@ -25,6 +25,10 @@ export const TapZone = () => {
   const hintTapCountRef = useRef(0);
   const ctxRef = useRef<AudioContext | null>(null);
   const bufferRef = useRef<AudioBuffer | null>(null);
+
+  const handleLabelComplete = useCallback((id: number) => {
+    setLabels((prev) => prev.filter((l) => l.id !== id));
+  }, []);
 
   useEffect(() => {
     const ctx = new AudioContext();
@@ -104,13 +108,9 @@ export const TapZone = () => {
       </AnimatePresence>
       <AnimatePresence>
         {labels.map((label) => (
-          <FloatingLabel
-            key={label.id}
-            {...label}
-            onComplete={(id) => setLabels((prev) => prev.filter((l) => l.id !== id))}
-          />
+          <FloatingLabel key={label.id} {...label} onComplete={handleLabelComplete} />
         ))}
       </AnimatePresence>
     </div>
   );
-};
+});
