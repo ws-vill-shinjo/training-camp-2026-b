@@ -55,35 +55,6 @@ export function RiverBackground() {
         />
       </svg>
 
-      {/* ── 杉の木（左岸） ── */}
-      <svg
-        className="absolute left-0"
-        style={{ bottom: "29%", height: "110px", width: "45%" }}
-        viewBox="0 0 360 110"
-        preserveAspectRatio="xMinYMax meet"
-      >
-        <g transform="translate(28,110)">
-          <rect x="-4" y="-14" width="8" height="14" fill="#6D4C41" />
-          <polygon points="0,-90 -19,-35 19,-35" fill="#2D6A4F" />
-          <polygon points="0,-68 -24,-18 24,-18" fill="#40916C" />
-        </g>
-        <g transform="translate(78,110)">
-          <rect x="-3" y="-12" width="6" height="12" fill="#6D4C41" />
-          <polygon points="0,-75 -15,-30 15,-30" fill="#1B4332" />
-          <polygon points="0,-55 -19,-14 19,-14" fill="#2D6A4F" />
-        </g>
-        <g transform="translate(140,110)">
-          <rect x="-4" y="-13" width="8" height="13" fill="#6D4C41" />
-          <polygon points="0,-82 -17,-32 17,-32" fill="#40916C" />
-          <polygon points="0,-60 -21,-17 21,-17" fill="#52B788" />
-        </g>
-        <g transform="translate(200,110)">
-          <rect x="-3" y="-11" width="6" height="11" fill="#6D4C41" />
-          <polygon points="0,-68 -14,-27 14,-27" fill="#2D6A4F" />
-          <polygon points="0,-50 -18,-13 18,-13" fill="#40916C" />
-        </g>
-      </svg>
-
       {/* ── 川エリア ── */}
       <div
         className="absolute left-0 right-0"
