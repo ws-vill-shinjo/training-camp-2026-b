@@ -1,8 +1,7 @@
 "use client";
 
-import numbro from "numbro";
 import Image from "next/image";
-import Decimal from "decimal.js";
+import { formatNumber } from "@/lib/utils";
 import { getMasterRegistry } from "@/master/registry/getMasterRegistry";
 import useGameStore from "@/features/game/store/useGameStore";
 import { calcCost } from "@/features/game/domain/economy";
@@ -18,13 +17,13 @@ export function TapUpgradeItem() {
   const { name, imageSrc, maxLevel } = config;
   const isMaxLevel = level >= maxLevel;
   const cost = isMaxLevel ? null : calcCost(config, level + 1);
-  const canAfford = cost ? new Decimal(money).gte(cost) : false;
+  const canAfford = cost ? Number(money) >= cost : false;
 
   const currentYield = calcTapYield(config, level);
 
   const handleUpgrade = () => {
     const store = useGameStore.getState();
-    if (cost && !new Decimal(store.money).gte(cost)) return;
+    if (cost && Number(store.money) < cost) return;
     if (cost) store.spendMoney(cost);
     store.upgradeTapLevel();
     store.rebuildTapYield();
@@ -56,14 +55,12 @@ export function TapUpgradeItem() {
             className="flex-shrink-0 flex flex-col h-auto py-1 w-20 bg-[#6ab87a] hover:bg-[#57a567] text-white"
           >
             <span>強化</span>
-            {cost && (
-              <span className="text-xs opacity-80">{numbro(cost).format({ average: true })}</span>
-            )}
+            {cost && <span className="text-xs opacity-80">{formatNumber(cost)}</span>}
           </Button>
         )}
       </div>
       <div className="flex gap-4 text-xs text-muted-foreground">
-        <span>タップ収益: {numbro(currentYield.toNumber()).format({ average: true })}</span>
+        <span>タップ収益: {formatNumber(currentYield)}</span>
       </div>
     </Card>
   );

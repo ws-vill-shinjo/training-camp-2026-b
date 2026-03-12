@@ -17,13 +17,14 @@ export const SettingsButton = () => {
       originalSetItem(key, value);
     };
     localStorage.removeItem("game-store");
+    localStorage.removeItem("opening_story_shown");
     window.location.reload();
   };
 
   return (
     <>
-      <button type="button" onClick={() => setOpen(true)} aria-label="設定">
-        <Settings className="w-6 h-6 text-white" />
+      <button type="button" onClick={() => setOpen(true)} aria-label="設定" className="p-2 rounded-xl text-[#484234] active:bg-[#9fcb91] transition-colors">
+        <Settings className="w-6 h-6" />
       </button>
 
       <Dialog open={open} onOpenChange={setOpen}>

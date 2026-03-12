@@ -13,19 +13,15 @@ export const EncyclopediaGridItem = ({ entry, onSelect }: Props) => {
   return (
     <div
       role="button"
-      tabIndex={unlocked ? 0 : -1}
-      aria-disabled={!unlocked}
-      onClick={() => unlocked && onSelect?.(entry)}
-      onKeyDown={(e) => e.key === "Enter" && unlocked && onSelect?.(entry)}
-      className={`
-        flex flex-col gap-1 select-none min-w-0
-        ${unlocked ? "cursor-pointer" : "pointer-events-none grayscale opacity-50"}
-      `}
+      tabIndex={0}
+      onClick={() => onSelect?.(entry)}
+      onKeyDown={(e) => e.key === "Enter" && onSelect?.(entry)}
+      className="flex flex-col gap-1 select-none min-w-0 cursor-pointer"
     >
       <Card
         className={`
           relative aspect-square w-full overflow-hidden rounded-2xl
-          ${unlocked ? "hover:brightness-95 active:scale-95 transition-transform" : ""}
+          ${unlocked ? "hover:brightness-95 active:scale-95 transition-transform" : "grayscale opacity-60 hover:brightness-95 active:scale-95 transition-transform"}
         `}
       >
         <Image src={imageSrc} alt={title} fill className="object-cover" />

@@ -17,7 +17,6 @@ import { QrScanner } from "@/features/unlock/components/QrScanner";
 import type { UnlockResult } from "@/features/unlock/types/qr";
 import { getMasterRegistry } from "@/master/registry/getMasterRegistry";
 import { AlertCircle } from "lucide-react";
-import { Header } from "@/components/Header";
 
 export default function UnlockPage() {
   const router = useRouter();
@@ -26,9 +25,6 @@ export default function UnlockPage() {
 
   return (
     <>
-      <Header>
-        <h1 className="text-4xl">QRコードスキャン</h1>
-      </Header>
       <div className="min-h-[calc(100svh-12rem)] flex flex-col items-center justify-center gap-6">
         <div className="w-full max-w-sm flex flex-col gap-4">
           <p className="text-sm text-muted-foreground text-center">
@@ -84,7 +80,7 @@ export default function UnlockPage() {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button onClick={() => router.push("/upgrade")}>OK</Button>
+            <Button onClick={() => router.push("/upgrade")} className="bg-[#B5D9A8] text-[#484234] hover:bg-[#9fcb91] w-full">OK</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

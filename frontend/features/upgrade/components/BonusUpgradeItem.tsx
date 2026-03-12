@@ -1,8 +1,7 @@
 "use client";
 
-import numbro from "numbro";
 import Image from "next/image";
-import Decimal from "decimal.js";
+import { formatNumber } from "@/lib/utils";
 import { getMasterRegistry } from "@/master/registry/getMasterRegistry";
 import useGameStore from "@/features/game/store/useGameStore";
 import { calcCost } from "@/features/game/domain/economy";
@@ -23,9 +22,11 @@ export function BonusUpgradeItem({ id }: Props) {
   const isMaxLevel = level >= maxLevel;
   const isQrLocked = level === 0 && qrUnlockEnabled;
   const cost = isMaxLevel ? null : calcCost(config, level + 1);
-  const canAfford = cost ? new Decimal(money).gte(cost) : false;
-  const currentMultiplier = level > 0 ? calcEffect(config, level).toNumber() : 1;
-  const yieldIncreasePercent = ((currentMultiplier - 1) * 100).toFixed(0);
+  const canAfford = cost ? Number(money) >= cost : false;
+  const displayLevel = isMaxLevel ? level : level + 1;
+  const multiplier = calcEffect(config, displayLevel);
+  const increasePercent = ((multiplier - 1) * 100).toFixed(0);
+  const effectLabel = config.effectType === "yieldMultiplier" ? "生産量上昇" : "生産速度上昇";
 
   return (
     <Card className="flex-col gap-2 px-4 py-3">
@@ -46,7 +47,7 @@ export function BonusUpgradeItem({ id }: Props) {
         {isMaxLevel ? (
           <span className="text-xs font-semibold text-muted-foreground w-14 text-center">MAX</span>
         ) : isQrLocked ? (
-          <span className="text-xs font-semibold text-muted-foreground w-20 text-center">
+          <span className="flex-shrink-0 text-xs font-semibold text-white w-20 text-center bg-gray-300 rounded-md px-1 py-1 leading-tight">
             QRコードでアンロック
           </span>
         ) : (
@@ -57,14 +58,14 @@ export function BonusUpgradeItem({ id }: Props) {
             className="flex-shrink-0 flex flex-col h-auto py-1 w-20 bg-[#6ab87a] hover:bg-[#57a567] text-white"
           >
             <span>{level === 0 ? "アンロック" : "強化"}</span>
-            {cost && (
-              <span className="text-xs opacity-80">{numbro(cost).format({ average: true })}</span>
-            )}
+            {cost && <span className="text-xs opacity-80">{formatNumber(cost)}</span>}
           </Button>
         )}
       </div>
       <div className="flex gap-4 text-xs text-muted-foreground">
-        <span>生産量上昇: +{yieldIncreasePercent}%</span>
+        <span>
+          {effectLabel}: +{increasePercent}%
+        </span>
       </div>
     </Card>
   );

@@ -1,7 +1,7 @@
 id,name,spawnWeight,effectType,targetType,targetId,value,durationMs,flavorText,encyclopediaId,imageSrc
-HarvestFestival,秋祭り,10,moneyGain,global,,2000,,村人総出で豊作を祝う祭りが始まった！農産物が飛ぶように売れ、売上が大幅にアップした。,HarvestFestival,/images/Akimatsuri.jpg
-StormDamage,嵐の被害,8,moneyLoss,global,,1500,,突然の嵐で農作物が被害を受けた。復旧費用がかかり、売上が減少してしまった。,StormDamage,/images/Storm.png
-TouristRush,観光客ラッシュ,15,moneyGain,global,,1000,,SNSで新庄村が話題になり、観光客が殺到！売上が一気にアップした。,TouristRush,/images/Wadai_sns.png
-SakuraBlooming,がいせん桜満開,5,moneyGain,global,,3000,,がいせん桜が満開に！花見客で村が賑わい、特産品が大量に売れた。,SakuraBlooming,/images/Sakuranamiki.jpg
-CrowRaid,カラスの群れ,8,moneyLoss,global,,800,,カラスの大群がサルナシ畑を荒らした。収穫量が減り、売上に響いてしまった。,CrowRaid,/images/Crow.png
-Thunder,落雷,8,moneyLoss,global,,800,,新庄村が落雷の被害を受けた。復旧で売上が減少してしまった。,Thunder,/images/Thunder.png
+HarvestFestival,秋祭り,55,moneyGain,global,,0.10,,村人総出で豊作を祝う祭りが始まった！農産物が飛ぶように売れ、売上が大幅にアップした。,HarvestFestival,/images/Akimatsuri.jpg
+StormDamage,嵐の被害,45,moneyLoss,global,,0.08,,突然の嵐で農作物が被害を受けた。復旧費用がかかり、売上が減少してしまった。,StormDamage,/images/Storm.png
+TouristRush,観光客ラッシュ,80,moneyGain,global,,0.05,,SNSで新庄村が話題になり、観光客が殺到！売上が一気にアップした。,TouristRush,/images/Wadai_sns.png
+SakuraBlooming,がいせん桜満開,25,moneyGain,global,,0.15,,がいせん桜が満開に！花見客で村が賑わい、特産品が大量に売れた。,SakuraBlooming,/images/Sakuranamiki.jpg
+CrowRaid,カラスの群れ,45,moneyLoss,global,,0.05,,カラスの大群がサルナシ畑を荒らした。収穫量が減り、売上に響いてしまった。,CrowRaid,/images/Crow.png
+Thunder,落雷,50,moneyLoss,global,,0.05,,新庄村が落雷の被害を受けた。復旧で売上が減少してしまった。,Thunder,/images/Thunder.png

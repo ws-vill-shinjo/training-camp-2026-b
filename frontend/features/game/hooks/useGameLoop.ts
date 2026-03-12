@@ -2,6 +2,7 @@
 
 import { differenceInMilliseconds } from "date-fns";
 import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import { useInterval, useRafLoop } from "react-use";
 import { rollAndActivateEvent } from "../domain/event";
 import { runOfflineCatchup } from "../domain/offline";
@@ -12,7 +13,8 @@ import useGameStore from "../store/useGameStore";
 const TICK_MS = 100;
 
 /** イベント抽選の実行間隔 (ms) */
-const EVENT_CHECK_INTERVAL_MS = 60 * 1000;
+const EVENT_CHECK_INTERVAL_MS = 2 * 60 * 1000;
+// const EVENT_CHECK_INTERVAL_MS = 10 * 1000;
 
 const runResume = (): void => {
   const store = useGameStore.getState();
@@ -26,6 +28,7 @@ const runResume = (): void => {
 export const useGameLoop = (): void => {
   const lastTickAtRef = useRef<number>(0);
   const resumedRef = useRef<boolean>(false);
+  const pathname = usePathname();
 
   // --- 初回マウント時の復帰処理 ---
   useEffect(() => {
@@ -60,8 +63,10 @@ export const useGameLoop = (): void => {
     }
   });
 
-  // --- イベント抽選（EVENT_CHECK_INTERVAL_MS ごと）---
+  // --- イベント抽選（EVENT_CHECK_INTERVAL_MS ごと、Home 画面かつオープニングストーリー終了後のみ）---
   useInterval(() => {
+    if (pathname !== "/") return;
+    if (!localStorage.getItem("opening_story_shown")) return;
     const now = Date.now();
     rollAndActivateEvent(now);
   }, EVENT_CHECK_INTERVAL_MS);

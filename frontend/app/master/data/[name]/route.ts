@@ -10,6 +10,9 @@ export async function GET(
   const filePath = path.join(process.cwd(), "master/data", name);
   const text = await fs.readFile(filePath, "utf-8");
   return new NextResponse(text, {
-    headers: { "Content-Type": "text/csv" },
+    headers: {
+      "Content-Type": "text/csv",
+      "Cache-Control": "no-store",
+    },
   });
 }

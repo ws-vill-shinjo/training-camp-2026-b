@@ -25,7 +25,12 @@ export const EncyclopediaDetail = ({ entry, onClose }: Props) => (
       {entry && (
         <div className="flex flex-col py-4 gap-4">
           <Card className="relative mx-4 aspect-square overflow-hidden">
-            <Image src={entry.imageSrc} alt={entry.title} fill className="object-cover" />
+            <Image
+              src={entry.imageSrc}
+              alt={entry.title}
+              fill
+              className={`object-cover ${entry.unlocked ? "" : "grayscale"}`}
+            />
           </Card>
           <div className="flex items-start justify-between gap-2 px-4">
             <CardTitle>{entry.title}</CardTitle>
@@ -34,7 +39,11 @@ export const EncyclopediaDetail = ({ entry, onClose }: Props) => (
             </Badge>
           </div>
           <CardDescription className="px-4">{entry.shortText}</CardDescription>
-          <p className="px-4 text-sm text-foreground/80">{entry.detailText}</p>
+          <p
+            className={`px-4 text-sm ${entry.unlocked ? "text-foreground/80" : "text-center text-muted-foreground"}`}
+          >
+            {entry.unlocked ? entry.detailText : "アンロック後に解放"}
+          </p>
         </div>
       )}
     </DialogContent>

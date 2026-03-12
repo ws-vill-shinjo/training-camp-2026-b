@@ -1,4 +1,3 @@
-import Decimal from "decimal.js";
 import type { TapMaster } from "../../../master/schema/tapSchema";
 import useGameStore from "../store/useGameStore";
 
@@ -9,20 +8,20 @@ export const TAP_MASTER_ID = "tap";
 // ---------------------------------------------------------------------------
 
 /** tap マスターのレベルからタップ 1 回の収益を返す */
-export const calcTapYield = (config: TapMaster, level: number): Decimal => {
+export const calcTapYield = (config: TapMaster, level: number): number => {
   switch (config.yieldType) {
     case "growth": {
       const growth = config.yieldGrowth ?? 1;
-      return new Decimal(config.baseYield ?? 1).times(growth * (level - 1));
+      return (config.baseYield ?? 1) * Math.pow(growth, level - 1);
     }
     case "fixed":
-      return new Decimal(config.baseYield ?? 1);
+      return config.baseYield ?? 1;
     case "table": {
       const entry = config.yieldTable[level - 1];
       if (entry === undefined) {
         throw new RangeError(`yieldTable に level=${level} のエントリがありません`);
       }
-      return new Decimal(entry);
+      return entry;
     }
   }
 };
@@ -37,5 +36,5 @@ export const calcTapYield = (config: TapMaster, level: number): Decimal => {
  */
 export const tap = (): void => {
   const store = useGameStore.getState();
-  store.addMoney(store.tapYield);
+  store.addMoney(Number(store.tapYield));
 };
