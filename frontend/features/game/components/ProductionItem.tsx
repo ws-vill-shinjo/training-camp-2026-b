@@ -43,37 +43,39 @@ export function ProductionItem({ id, level }: Props) {
 
   return (
     <motion.div animate={controls} className="flex flex-col">
-    <Card className="relative overflow-hidden w-full rounded-xl border-none shadow-md p-0 gap-0">
-      <div className="flex items-center gap-0 px-3 py-2">
-        <Image
-          src={master.imageSrc}
-          alt={master.name}
-          width={40}
-          height={40}
-          className="rounded-md object-cover flex-shrink-0"
-        />
-        <span className="font-semibold text-sm ms-4">{master.name}</span>
-        <span className="text-xs text-muted-foreground ms-2">Lv.{level}</span>
-        <div className="flex gap-3 ms-auto text-xs text-muted-foreground">
-          <span>収益: {yieldValue}</span>
-          <span>{cycleSeconds}s</span>
-        </div>
-      </div>
-      <ProductionItemProgress id={id} onComplete={handleComplete} />
-
-      <AnimatePresence>
-        {labels.map((label) => (
-          <FloatingLabel
-            key={label.id}
-            id={label.id}
-            x={label.x}
-            y={label.y}
-            amount={label.amount}
-            onComplete={(id) => setLabels((prev) => prev.filter((l) => l.id !== id))}
+      <Card className="relative overflow-hidden w-full rounded-xl border-none shadow-md p-0 gap-0">
+        <div className="flex items-center gap-0 px-3 py-2">
+          <Image
+            src={master.imageSrc}
+            alt={master.name}
+            width={40}
+            height={40}
+            className="rounded-md object-cover flex-shrink-0"
           />
-        ))}
-      </AnimatePresence>
-    </Card>
+          <div className="flex items-baseline gap-1 ms-4 flex-1 min-w-0">
+            <span className="font-semibold text-sm truncate">{master.name}</span>
+            <span className="text-xs text-muted-foreground flex-shrink-0">Lv.{level}</span>
+          </div>
+          <div className="flex gap-3 ms-auto text-xs text-muted-foreground">
+            <span>収益: {yieldValue}</span>
+            <span>{cycleSeconds}s</span>
+          </div>
+        </div>
+        <ProductionItemProgress id={id} onComplete={handleComplete} />
+
+        <AnimatePresence>
+          {labels.map((label) => (
+            <FloatingLabel
+              key={label.id}
+              id={label.id}
+              x={label.x}
+              y={label.y}
+              amount={label.amount}
+              onComplete={(id) => setLabels((prev) => prev.filter((l) => l.id !== id))}
+            />
+          ))}
+        </AnimatePresence>
+      </Card>
     </motion.div>
   );
 }
