@@ -18,7 +18,7 @@ export const TapZone = () => {
   const tapYield = useGameStore((s) => s.tapYield);
   const [labels, setLabels] = useState<FloatingLabelType[]>([]);
   const [tapped, setTapped] = useState(false);
-  const [carrotCount, setCarrotCount] = useState(1);
+  const [carrotCount, setCarrotCount] = useState(6);
   const ctxRef = useRef<AudioContext | null>(null);
   const bufferRef = useRef<AudioBuffer | null>(null);
 
@@ -54,7 +54,7 @@ export const TapZone = () => {
     playSound();
     tap();
     setTapped(true);
-    setCarrotCount((prev) => (prev % 6) + 1);
+    setCarrotCount((prev) => (prev <= 1 ? 6 : prev - 1));
 
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left;
