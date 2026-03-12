@@ -1,11 +1,13 @@
 "use client";
 
-import { AnimatePresence } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { FloatingLabel } from "./FloatingLabel";
 import { useState, useEffect, useRef } from "react";
 import { tap } from "@/features/game/domain/tap";
 import useGameStore from "@/features/game/store/useGameStore";
 import { FieldSVG } from "./DaikonSVG";
+
+const HINT_TAP_THRESHOLD = 3;
 
 type FloatingLabelType = {
   id: number;
@@ -19,6 +21,8 @@ export const TapZone = () => {
   const [labels, setLabels] = useState<FloatingLabelType[]>([]);
   const [tapped, setTapped] = useState(false);
   const [carrotCount, setCarrotCount] = useState(6);
+  const [showHint, setShowHint] = useState(true);
+  const hintTapCountRef = useRef(0);
   const ctxRef = useRef<AudioContext | null>(null);
   const bufferRef = useRef<AudioBuffer | null>(null);
 
@@ -56,6 +60,13 @@ export const TapZone = () => {
     setTapped(true);
     setCarrotCount((prev) => (prev <= 1 ? 6 : prev - 1));
 
+    if (showHint) {
+      hintTapCountRef.current += 1;
+      if (hintTapCountRef.current >= HINT_TAP_THRESHOLD) {
+        setShowHint(false);
+      }
+    }
+
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
@@ -72,6 +83,25 @@ export const TapZone = () => {
       className="relative flex justify-center items-center bg-transparent border-none shadow-none ring-0 cursor-pointer select-none"
     >
       <FieldSVG count={carrotCount} tapped={tapped} onAnimationComplete={() => setTapped(false)} />
+      <AnimatePresence>
+        {showHint && (
+          <motion.div
+            key="tap-hint"
+            className="absolute inset-0 flex items-end justify-center pb-1 pointer-events-none"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0, transition: { duration: 0.4 } }}
+          >
+            <motion.span
+              className="text-2xl font-bold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)] select-none"
+              animate={{ scale: [1, 1.15, 1] }}
+              transition={{ duration: 0.9, repeat: Infinity, ease: "easeInOut" }}
+            >
+              タップ！
+            </motion.span>
+          </motion.div>
+        )}
+      </AnimatePresence>
       <AnimatePresence>
         {labels.map((label) => (
           <FloatingLabel
