@@ -21,7 +21,7 @@ export const EncyclopediaGridItem = ({ entry, onSelect }: Props) => {
       <Card
         className={`
           relative aspect-square w-full overflow-hidden rounded-2xl
-          ${unlocked ? "hover:brightness-95 active:scale-95 transition-transform" : "grayscale opacity-60 hover:brightness-95 active:scale-95 transition-transform"}
+          ${unlocked ? "hover:brightness-95 active:scale-90 transition-transform" : "grayscale opacity-60 hover:brightness-95 active:scale-90 transition-transform"}
         `}
       >
         <Image src={imageSrc} alt={title} fill className="object-cover" />

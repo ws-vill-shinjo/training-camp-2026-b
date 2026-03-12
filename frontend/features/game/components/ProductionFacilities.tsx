@@ -21,8 +21,10 @@ export const ProductionFacilities = ({ items }: Props) => {
               <p className="text-sm text-gray-400">生産施設がありません</p>
             </div>
           ) : (
-            <div className="flex flex-col gap-4 px-4 pb-4">
-              {items.map(({ id, level }) => <ProductionItem key={id} id={id} level={level} />)}
+            <div className="flex flex-col gap-4 px-4 py-2">
+              {items.map(({ id, level }) => (
+                <ProductionItem key={id} id={id} level={level} />
+              ))}
             </div>
           )}
         </ScrollArea>
