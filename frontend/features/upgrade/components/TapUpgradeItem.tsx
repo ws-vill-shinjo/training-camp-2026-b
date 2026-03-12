@@ -1,7 +1,7 @@
 "use client";
 
-import Image from "next/image";
 import { formatNumber } from "@/lib/utils";
+import { CarrotSVG } from "@/features/game/components/CarrotSVG";
 import { getMasterRegistry } from "@/master/registry/getMasterRegistry";
 import useGameStore from "@/features/game/store/useGameStore";
 import { calcCost } from "@/features/game/domain/economy";
@@ -16,7 +16,7 @@ export function TapUpgradeItem() {
   const money = useGameStore((s) => s.money);
 
   const config = getMasterRegistry().tap[TAP_MASTER_ID];
-  const { name, imageSrc, maxLevel } = config;
+  const { name, maxLevel } = config;
   const isMaxLevel = level >= maxLevel;
   const cost = isMaxLevel ? null : calcCost(config, level + 1);
   const canAfford = cost ? Number(money) >= cost : false;
@@ -36,13 +36,7 @@ export function TapUpgradeItem() {
     <Card className="flex-col gap-2 px-4 py-3">
       <div className="flex items-center gap-3">
         <div className="flex-shrink-0">
-          <Image
-            src={imageSrc}
-            alt={name}
-            width={48}
-            height={48}
-            className="rounded-md object-cover"
-          />
+          <CarrotSVG size={48} className="rounded-md" />
         </div>
         <p className="font-semibold text-sm flex-1 truncate">{name}</p>
         <div className="flex items-center gap-1 flex-shrink-0">
