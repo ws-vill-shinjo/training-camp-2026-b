@@ -3,14 +3,17 @@
 import { Progress } from "@/components/ui/progress";
 import { getProductionProgress } from "@/features/game/domain/production";
 import useGameStore from "@/features/game/store/useGameStore";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, memo } from "react";
 
 type Props = {
   id: string;
   onComplete?: (cycles: number) => void;
 };
 
-export function ProductionItemProgress({ id, onComplete }: Props) {
+export const ProductionItemProgress = memo(function ProductionItemProgress({
+  id,
+  onComplete,
+}: Props) {
   const tickAt = useGameStore((s) => s.tickAt);
   const stat = useGameStore((s) => s.effectiveProductionStats[id]);
   const lastProducedAt = useGameStore((s) => s.lastProducedAtByProduction[id] ?? tickAt);
@@ -26,8 +29,15 @@ export function ProductionItemProgress({ id, onComplete }: Props) {
   // lastProducedAt が増加したとき = 生産サイクル完了
   const prevLastProducedAt = useRef<number | null>(null);
   useEffect(() => {
-    if (prevLastProducedAt.current !== null && lastProducedAt > prevLastProducedAt.current && stat) {
-      const cycles = Math.max(1, Math.round((lastProducedAt - prevLastProducedAt.current) / stat.cycleMs));
+    if (
+      prevLastProducedAt.current !== null &&
+      lastProducedAt > prevLastProducedAt.current &&
+      stat
+    ) {
+      const cycles = Math.max(
+        1,
+        Math.round((lastProducedAt - prevLastProducedAt.current) / stat.cycleMs)
+      );
       onCompleteRef.current?.(cycles);
     }
     prevLastProducedAt.current = lastProducedAt;
@@ -40,4 +50,4 @@ export function ProductionItemProgress({ id, onComplete }: Props) {
       <Progress value={progress} />
     </div>
   );
-}
+});
