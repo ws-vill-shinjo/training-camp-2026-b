@@ -8,6 +8,7 @@ import { EventNotificationDialog } from "@/features/game/components/EventNotific
 import { ProductionFacilities } from "@/features/game/components/ProductionFacilities";
 import { TapZone } from "@/features/game/components/TapZone";
 import { OpeningStory } from "@/features/game/components/OpeningStory";
+import { RiverBackground } from "@/features/game/components/RiverBackground";
 
 const GameLoop = () => {
   useGameLoop();
@@ -24,6 +25,7 @@ export default function Home() {
 
   return (
     <div className="overflow-hidden">
+      <RiverBackground />
       <GameLoop />
       <OpeningStory />
       <EventNotificationDialog />

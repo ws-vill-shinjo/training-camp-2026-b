@@ -136,6 +136,44 @@ a {
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/* ── 川の背景アニメーション ── */
+
+/* 波レイヤー（速さ別） */
+@keyframes river-flow {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.river-wave-1 { animation: river-flow 6.4s linear infinite; }
+.river-wave-2 { animation: river-flow 8.0s linear infinite; }
+.river-wave-3 { animation: river-flow 5.6s linear infinite; }
+.river-wave-4 { animation: river-flow 7.5s linear infinite; }
+
+/* 水面きらめき */
+@keyframes shimmer {
+  0%   { left: -40%; opacity: 0; }
+  15%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { left: 140%; opacity: 0; }
+}
+.river-shimmer   { animation: shimmer 4.0s ease-in-out infinite; }
+.river-shimmer-2 { animation: shimmer 6.5s ease-in-out infinite 2.5s; }
+
+/* 水泡 */
+@keyframes bubble-rise {
+  0%   { transform: translateY(0) translateX(0)  scale(1);   opacity: 0.7; }
+  50%  { transform: translateY(-50px) translateX(6px) scale(0.8); opacity: 0.5; }
+  100% { transform: translateY(-100px) translateX(-4px) scale(0.3); opacity: 0; }
+}
+.bubble-rise { animation: bubble-rise 5s ease-out infinite; }
+
+/* 雲の流れ */
+@keyframes cloud-slow { 0%,100% { transform: translateX(0); } 50% { transform: translateX(22px); } }
+@keyframes cloud-med  { 0%,100% { transform: translateX(0); } 50% { transform: translateX(-14px); } }
+@keyframes cloud-fast { 0%,100% { transform: translateX(0); } 50% { transform: translateX(30px); } }
+.cloud-slow { animation: cloud-slow 14s ease-in-out infinite; }
+.cloud-med  { animation: cloud-med  10s ease-in-out infinite 2s; }
+.cloud-fast { animation: cloud-fast  8s ease-in-out infinite 1s; }
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
