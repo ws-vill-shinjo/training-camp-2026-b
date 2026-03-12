@@ -29,8 +29,8 @@ export function ProductionItem({ id, level }: Props) {
 
   const controls = useAnimation();
 
-  const handleComplete = useCallback(() => {
-    const amount = Math.round(Number(effectiveYield ?? 1));
+  const handleComplete = useCallback((cycles: number) => {
+    const amount = Math.round(Number(effectiveYield ?? 1) * cycles);
     setLabels((prev) => [...prev, { id: Date.now(), x: 150, y: 30, amount }]);
     controls.start({ scale: [1, 1.03, 1], transition: { duration: 0.25, ease: "easeOut" } });
   }, [effectiveYield, controls]);

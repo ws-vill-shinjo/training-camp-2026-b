@@ -11,6 +11,7 @@ import { TapUpgradeItem } from "@/features/upgrade/components/TapUpgradeItem";
 import { useUpgradeIds } from "@/features/upgrade/hooks/useUpgradeIds";
 import { Button } from "@/components/ui/button";
 import { QrCode } from "lucide-react";
+import { useNavigationLoading } from "@/components/NavigationLoadingProvider";
 
 const GameLoop = () => {
   useGameLoop();
@@ -19,6 +20,7 @@ const GameLoop = () => {
 
 export default function UpgradePage() {
   const router = useRouter();
+  const { setLoading } = useNavigationLoading();
   const { productionIds, bonusIds } = useUpgradeIds();
 
   useEffect(() => {
@@ -34,7 +36,7 @@ export default function UpgradePage() {
       <div className="max-w-lg mx-auto p-4">
         <div className="flex justify-between">
           <Button
-            onClick={() => router.push("/unlock")}
+            onClick={() => { setLoading(true); router.push("/unlock"); }}
             className="flex items-center gap-2 bg-[#6ab87a] shadow-md hover:shadow-lg transition-all duration-200 rounded-xl px-4 py-2 font-semibold"
           >
             <QrCode className="w-5 h-5" />
