@@ -74,7 +74,10 @@ export function ProductionUpgradeItem({ id }: Props) {
             <Button
               size="sm"
               disabled={!canAfford}
-              onClick={() => upgradeProduction(id, config)}
+              onClick={() => {
+                upgradeProduction(id, config);
+                if (level === 0) setOpen(true);
+              }}
               className="flex-shrink-0 flex flex-col h-auto py-1 w-20 bg-[#6ab87a] hover:bg-[#57a567] text-white"
             >
               <span>{level === 0 ? "アンロック" : "強化"}</span>
@@ -87,6 +90,13 @@ export function ProductionUpgradeItem({ id }: Props) {
           <span>生産時間: {displayCycleSeconds.toFixed(1)}秒</span>
         </div>
       </Card>
+      <UpgradeCard
+        open={open}
+        setOpen={setOpen}
+        name={name}
+        imageSrc={imageSrc}
+        shortText={shortText}
+      />
     </LevelUpCard>
   );
 }
