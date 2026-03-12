@@ -13,7 +13,7 @@ export const SECTION_ORDER = [
 ] as const satisfies EncyclopediaSourceType[];
 
 export const SECTION_LABEL: Record<EncyclopediaSourceType, string> = {
-  production: "施設",
+  production: "生産",
   bonus: "ボーナス",
   event: "イベント",
 };
