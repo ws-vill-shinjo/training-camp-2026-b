@@ -1,5 +1,5 @@
 "use client";
-import { Card } from "@/components/ui/card";
+
 import { AnimatePresence, motion } from "motion/react";
 import { FloatingLabel } from "./FloatingLabel";
 import { useState, useEffect, useRef } from "react";

@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "motion/react";
 import { formatNumber } from "@/lib/utils";
 import { getMasterRegistry } from "@/master/registry/getMasterRegistry";
 import useGameStore from "@/features/game/store/useGameStore";
@@ -9,6 +8,8 @@ import { calcCost } from "@/features/game/domain/economy";
 import { calcEffect, upgradeBonus } from "@/features/game/domain/bonus";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { LevelUpArrow } from "./LevelUpArrow";
+import { LevelUpCard } from "./LevelUpCard";
 
 type Props = { id: string };
 
@@ -30,12 +31,7 @@ export function BonusUpgradeItem({ id }: Props) {
   const effectLabel = config.effectType === "yieldMultiplier" ? "生産量上昇" : "生産速度上昇";
 
   return (
-    <motion.div
-      key={level}
-      initial={level > 0 ? { scale: 1.04 } : { scale: 1 }}
-      animate={{ scale: 1 }}
-      transition={{ duration: 0.4, ease: "easeOut" }}
-    >
+    <LevelUpCard level={level}>
       <Card className="flex-col gap-2 px-4 py-3">
         <div className="flex items-center gap-3">
           <div className="flex-shrink-0">
@@ -48,11 +44,16 @@ export function BonusUpgradeItem({ id }: Props) {
             />
           </div>
           <p className="font-semibold text-sm flex-1 truncate">{name}</p>
-          <p className="text-xs text-muted-foreground flex-shrink-0 text-center whitespace-nowrap">
-            Lv.{level} / {maxLevel}
-          </p>
+          <div className="flex items-center gap-1 flex-shrink-0">
+            <p className="text-xs text-muted-foreground whitespace-nowrap">
+              Lv.{level} / {maxLevel}
+            </p>
+            <LevelUpArrow level={level} />
+          </div>
           {isMaxLevel ? (
-            <span className="text-xs font-semibold text-muted-foreground w-14 text-center">MAX</span>
+            <span className="text-xs font-semibold text-muted-foreground w-14 text-center">
+              MAX
+            </span>
           ) : isQrLocked ? (
             <span className="flex-shrink-0 text-xs font-semibold text-white w-20 text-center bg-gray-300 rounded-md px-1 py-1 leading-tight">
               QRコードでアンロック
@@ -75,6 +76,6 @@ export function BonusUpgradeItem({ id }: Props) {
           </span>
         </div>
       </Card>
-    </motion.div>
+    </LevelUpCard>
   );
 }

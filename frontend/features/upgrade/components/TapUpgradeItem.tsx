@@ -6,9 +6,10 @@ import { getMasterRegistry } from "@/master/registry/getMasterRegistry";
 import useGameStore from "@/features/game/store/useGameStore";
 import { calcCost } from "@/features/game/domain/economy";
 import { calcTapYield, TAP_MASTER_ID } from "@/features/game/domain/tap";
-import { motion } from "motion/react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { LevelUpArrow } from "./LevelUpArrow";
+import { LevelUpCard } from "./LevelUpCard";
 
 export function TapUpgradeItem() {
   const level = useGameStore((s) => s.tapLevel);
@@ -31,12 +32,7 @@ export function TapUpgradeItem() {
   };
 
   return (
-    <motion.div
-      key={level}
-      initial={level > 0 ? { scale: 1.04 } : { scale: 1 }}
-      animate={{ scale: 1 }}
-      transition={{ duration: 0.4, ease: "easeOut" }}
-    >
+    <LevelUpCard level={level}>
     <Card className="flex-col gap-2 px-4 py-3">
       <div className="flex items-center gap-3">
         <div className="flex-shrink-0">
@@ -49,9 +45,12 @@ export function TapUpgradeItem() {
           />
         </div>
         <p className="font-semibold text-sm flex-1 truncate">{name}</p>
-        <p className="text-xs text-muted-foreground flex-shrink-0 text-center whitespace-nowrap">
-          Lv.{level} / {maxLevel}
-        </p>
+        <div className="flex items-center gap-1 flex-shrink-0">
+          <p className="text-xs text-muted-foreground whitespace-nowrap">
+            Lv.{level} / {maxLevel}
+          </p>
+          <LevelUpArrow level={level} />
+        </div>
         {isMaxLevel ? (
           <span className="text-xs font-semibold text-muted-foreground w-20 text-center">MAX</span>
         ) : (
@@ -70,6 +69,6 @@ export function TapUpgradeItem() {
         <span>タップ収益: {formatNumber(currentYield)}</span>
       </div>
     </Card>
-    </motion.div>
+    </LevelUpCard>
   );
 }
