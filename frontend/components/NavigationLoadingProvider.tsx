@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect, useRef } from "react";
+import { createContext, useContext, useState, useCallback } from "react";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
 
@@ -11,16 +11,17 @@ const LoadingContext = createContext<{ setLoading: (v: boolean) => void }>({
 export const useNavigationLoading = () => useContext(LoadingContext);
 
 export const NavigationLoadingProvider = ({ children }: { children: React.ReactNode }) => {
-  const [loading, setLoading] = useState(false);
+  const [loadingPathname, setLoadingPathname] = useState<string | null>(null);
   const pathname = usePathname();
-  const prevPathname = useRef(pathname);
 
-  useEffect(() => {
-    if (pathname !== prevPathname.current) {
-      prevPathname.current = pathname;
-      setLoading(false);
-    }
-  }, [pathname]);
+  const loading = loadingPathname === pathname;
+
+  const setLoading = useCallback(
+    (v: boolean) => {
+      setLoadingPathname(v ? pathname : null);
+    },
+    [pathname]
+  );
 
   return (
     <LoadingContext.Provider value={{ setLoading }}>

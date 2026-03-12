@@ -7,7 +7,7 @@ import { useEffect, useRef } from "react";
 
 type Props = {
   id: string;
-  onComplete?: () => void;
+  onComplete?: (cycles: number) => void;
 };
 
 export function ProductionItemProgress({ id, onComplete }: Props) {
@@ -26,11 +26,12 @@ export function ProductionItemProgress({ id, onComplete }: Props) {
   // lastProducedAt が増加したとき = 生産サイクル完了
   const prevLastProducedAt = useRef<number | null>(null);
   useEffect(() => {
-    if (prevLastProducedAt.current !== null && lastProducedAt > prevLastProducedAt.current) {
-      onCompleteRef.current?.();
+    if (prevLastProducedAt.current !== null && lastProducedAt > prevLastProducedAt.current && stat) {
+      const cycles = Math.max(1, Math.round((lastProducedAt - prevLastProducedAt.current) / stat.cycleMs));
+      onCompleteRef.current?.(cycles);
     }
     prevLastProducedAt.current = lastProducedAt;
-  }, [lastProducedAt]);
+  }, [lastProducedAt, stat]);
 
   if (!stat) return null;
 
