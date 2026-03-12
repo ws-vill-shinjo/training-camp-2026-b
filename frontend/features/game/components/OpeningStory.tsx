@@ -124,7 +124,7 @@ export function OpeningStory() {
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.15, duration: 0.3 }}
-                    className="text-xl font-bold mb-3"
+                    className="text-xl mb-3"
                     style={{ color: "#c8e6a0" }}
                   >
                     {scene.title}
@@ -160,7 +160,7 @@ export function OpeningStory() {
                   <motion.button
                     whileTap={{ scale: 0.97 }}
                     onClick={handleNext}
-                    className="w-full py-3 font-bold rounded-xl text-white transition-colors"
+                    className="w-full py-3 rounded-xl text-white transition-colors"
                     style={{ background: "#4a8c2a" }}
                     onMouseEnter={(e) => {
                       (e.currentTarget as HTMLButtonElement).style.background = "#5a9c3a";
