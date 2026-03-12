@@ -1,5 +1,5 @@
 import { Button } from "./ui/button";
-import { Card, CardContent, CardFooter } from "./ui/card";
+import { Card, CardTitle, CardDescription } from "./ui/card";
 import { Dispatch, JSX, SetStateAction, useState } from "react";
 import Image from "next/image";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
@@ -34,19 +34,21 @@ export const UpgradeCard = ({
           <DialogTitle>{name ?? ""}</DialogTitle>
         </VisuallyHidden>
         {name && (
-          <div className="flex justify-center items-center pt-5">
-            <Card className=" bg-white rounded justify-center items-center flex gap-2 z-99">
-              <Image src={imageSrc} width={400} height={400} alt={name} />
-              <CardContent className="bg-green-100 h-40 w-full">
-                <div className="text-black text-3xl">{name}</div>
-                <p className="text-black text-xl mt-5">{shortText}</p>
-              </CardContent>
-              <CardFooter className="w-full">
-                <Button className="w-full items-center" onClick={() => setIsVisible(false)}>
-                  OK
-                </Button>
-              </CardFooter>
+          <div className="flex flex-col py-4 gap-4">
+            <Card className="relative mx-4 aspect-square overflow-hidden">
+              <Image src={imageSrc} alt={name} fill className="object-cover" />
             </Card>
+            <p className="px-4 text-sm">アンロックしました！</p>
+            <CardTitle className="px-4">{name}</CardTitle>
+            <CardDescription className="px-4">{shortText}</CardDescription>
+            <div className="px-4">
+              <Button
+                className="w-full bg-[#B5D9A8] text-[#484234] hover:bg-[#9fcb91] text-white"
+                onClick={() => setIsVisible(false)}
+              >
+                OK
+              </Button>
+            </div>
           </div>
         )}
       </DialogContent>
