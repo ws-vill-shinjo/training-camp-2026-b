@@ -1,7 +1,7 @@
 "use client";
 
 const BUBBLES = [
-  { left: "4%",  delay: 0.0, duration: 5.0 },
+  { left: "4%", delay: 0.0, duration: 5.0 },
   { left: "11%", delay: 2.4, duration: 4.3 },
   { left: "18%", delay: 0.8, duration: 5.6 },
   { left: "25%", delay: 3.1, duration: 4.8 },
@@ -81,35 +81,6 @@ export function RiverBackground() {
           <rect x="-3" y="-11" width="6" height="11" fill="#6D4C41" />
           <polygon points="0,-68 -14,-27 14,-27" fill="#2D6A4F" />
           <polygon points="0,-50 -18,-13 18,-13" fill="#40916C" />
-        </g>
-      </svg>
-
-      {/* ── 杉の木（右岸） ── */}
-      <svg
-        className="absolute right-0"
-        style={{ bottom: "29%", height: "110px", width: "40%" }}
-        viewBox="0 0 320 110"
-        preserveAspectRatio="xMaxYMax meet"
-      >
-        <g transform="translate(295,110)">
-          <rect x="-4" y="-14" width="8" height="14" fill="#6D4C41" />
-          <polygon points="0,-85 -18,-33 18,-33" fill="#2D6A4F" />
-          <polygon points="0,-62 -22,-16 22,-16" fill="#40916C" />
-        </g>
-        <g transform="translate(238,110)">
-          <rect x="-3" y="-12" width="6" height="12" fill="#6D4C41" />
-          <polygon points="0,-74 -15,-29 15,-29" fill="#1B4332" />
-          <polygon points="0,-54 -19,-13 19,-13" fill="#2D6A4F" />
-        </g>
-        <g transform="translate(175,110)">
-          <rect x="-4" y="-13" width="8" height="13" fill="#6D4C41" />
-          <polygon points="0,-80 -16,-31 16,-31" fill="#40916C" />
-          <polygon points="0,-58 -20,-16 20,-16" fill="#52B788" />
-        </g>
-        <g transform="translate(115,110)">
-          <rect x="-3" y="-11" width="6" height="11" fill="#6D4C41" />
-          <polygon points="0,-65 -13,-26 13,-26" fill="#2D6A4F" />
-          <polygon points="0,-48 -17,-12 17,-12" fill="#40916C" />
         </g>
       </svg>
 

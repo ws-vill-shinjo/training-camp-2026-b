@@ -5,7 +5,7 @@ import { FloatingLabel } from "./FloatingLabel";
 import { useState, useEffect, useRef } from "react";
 import { tap } from "@/features/game/domain/tap";
 import useGameStore from "@/features/game/store/useGameStore";
-import { FieldSVG } from "./CarrotSVG";
+import { FieldSVG } from "./DaikonSVG";
 
 type FloatingLabelType = {
   id: number;
