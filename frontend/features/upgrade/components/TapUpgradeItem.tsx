@@ -55,9 +55,7 @@ export function TapUpgradeItem() {
             className="flex-shrink-0 flex flex-col h-auto py-1 w-20 bg-[#6ab87a] hover:bg-[#57a567] text-white"
           >
             <span>強化</span>
-            {cost && (
-              <span className="text-xs opacity-80">{formatNumber(cost)}</span>
-            )}
+            {cost && <span className="text-xs opacity-80">{formatNumber(cost)}</span>}
           </Button>
         )}
       </div>
