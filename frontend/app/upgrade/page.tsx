@@ -38,7 +38,7 @@ export default function UpgradePage() {
             className="flex items-center gap-2 bg-[#6ab87a] shadow-md hover:shadow-lg transition-all duration-200 rounded-xl px-4 py-2 font-semibold"
           >
             <QrCode className="w-5 h-5" />
-            QRコード
+            QRコード撮影
           </Button>
           <Money />
         </div>
