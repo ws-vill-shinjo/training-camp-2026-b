@@ -5,7 +5,7 @@ import { EncyclopediaGridItem } from "./EncyclopediaGridItem";
 import { EncyclopediaDetail } from "./EncyclopediaDetail";
 import type { EncyclopediaEntry } from "../types/encyclopedia";
 import { SECTION_ORDER, SECTION_LABEL } from "../types/encyclopedia";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Card, CardHeader, CardContent } from "@/components/ui/card";
 
 type Props = {
   entries: EncyclopediaEntry[];

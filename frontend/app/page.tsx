@@ -8,6 +8,7 @@ import { EventNotificationDialog } from "@/features/game/components/EventNotific
 import { ProductionFacilities } from "@/features/game/components/ProductionFacilities";
 import { TapZone } from "@/features/game/components/TapZone";
 import { OpeningStory } from "@/features/game/components/OpeningStory";
+import { RiverBackground } from "@/features/game/components/RiverBackground";
 
 const GameLoop = () => {
   useGameLoop();
@@ -23,16 +24,21 @@ export default function Home() {
   );
 
   return (
-    <div>
+    <div className="overflow-hidden">
+      <RiverBackground />
       <GameLoop />
       <OpeningStory />
       <EventNotificationDialog />
-      <div className="max-w-lg mx-auto py-4 flex flex-col gap-4">
-        <div className="flex justify-end mr-4">
+      <div className="max-w-lg mx-auto py-4 flex flex-col gap-4 h-[calc(100dvh-12rem)]">
+        <div className="flex justify-end mr-4 flex-shrink-0">
           <Money />
         </div>
-        <ProductionFacilities items={items} />
-        <TapZone />
+        <div className="flex-1 min-h-0">
+          <ProductionFacilities items={items} />
+        </div>
+        <div className="flex-shrink-0">
+          <TapZone />
+        </div>
       </div>
     </div>
   );
