@@ -80,7 +80,7 @@ export default function UnlockPage() {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button onClick={() => router.push("/upgrade")}>OK</Button>
+            <Button onClick={() => router.push("/upgrade")} className="bg-[#B5D9A8] text-[#484234] hover:bg-[#9fcb91] w-full">OK</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
