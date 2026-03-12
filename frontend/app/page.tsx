@@ -9,6 +9,7 @@ import { ProductionFacilities } from "@/features/game/components/ProductionFacil
 import { TapZone } from "@/features/game/components/TapZone";
 import { OpeningStory } from "@/features/game/components/OpeningStory";
 import { RiverBackground } from "@/features/game/components/RiverBackground";
+import { ShareButton } from "@/features/game/components/ShareButton";
 
 const GameLoop = () => {
   useGameLoop();
@@ -30,7 +31,8 @@ export default function Home() {
       <OpeningStory />
       <EventNotificationDialog />
       <div className="max-w-lg mx-auto py-4 flex flex-col gap-4 h-[calc(100dvh-12rem)]">
-        <div className="flex justify-end mr-4 flex-shrink-0">
+        <div className="flex justify-between items-center mx-4 flex-shrink-0">
+          <ShareButton />
           <Money />
         </div>
         <div className="flex-1 min-h-0">
