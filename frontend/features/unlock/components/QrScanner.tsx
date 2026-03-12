@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { useNavigationLoading } from "@/components/NavigationLoadingProvider";
 import QrScannerLib from "qr-scanner";
 import { parseQrPayload } from "../domain/parser";
 import { processQrUnlock } from "../domain/unlock";
@@ -15,6 +16,7 @@ type Props = {
 
 export const QrScanner = ({ onSuccess, onError }: Props) => {
   const router = useRouter();
+  const { setLoading } = useNavigationLoading();
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -44,13 +46,14 @@ export const QrScanner = ({ onSuccess, onError }: Props) => {
     );
 
     scanner.start().catch(() => {
+      setLoading(true);
       router.push("/upgrade");
     });
 
     return () => {
       scanner.destroy();
     };
-  }, [onSuccess, onError, router]);
+  }, [onSuccess, onError, router, setLoading]);
 
   return (
     <div className="relative w-full aspect-square overflow-hidden rounded-2xl">
