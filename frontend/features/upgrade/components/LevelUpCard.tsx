@@ -21,15 +21,11 @@ export function LevelUpCard({ level, children }: Props) {
       prevLevelRef.current = level;
       const t = setTimeout(() => {
         controls.start({ scale: [1, 1.04, 1], transition: { duration: 0.35, ease: "easeOut" } });
-      }, 0);
+      }, 150);
       return () => clearTimeout(t);
     }
     prevLevelRef.current = level;
   }, [level, controls]);
 
-  return (
-    <motion.div animate={controls}>
-      {children}
-    </motion.div>
-  );
+  return <motion.div animate={controls}>{children}</motion.div>;
 }
