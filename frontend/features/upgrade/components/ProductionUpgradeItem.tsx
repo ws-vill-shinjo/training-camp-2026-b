@@ -8,6 +8,8 @@ import { calcYield, calcCycleMs } from "@/features/game/domain/production";
 import { formatNumber } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { LevelUpArrow } from "./LevelUpArrow";
+import { LevelUpCard } from "./LevelUpCard";
 
 type Props = { id: string };
 
@@ -30,6 +32,7 @@ export function ProductionUpgradeItem({ id }: Props) {
   const displayCycleSeconds = effectiveStat ? effectiveStat.cycleMs / 1000 : calcCycleMs(config) / 1000;
 
   return (
+    <LevelUpCard level={level}>
     <Card className="flex-col gap-2 px-4 py-3">
       <div className="flex items-center gap-3">
         <div className="flex-shrink-0">
@@ -42,9 +45,12 @@ export function ProductionUpgradeItem({ id }: Props) {
           />
         </div>
         <p className="font-semibold text-sm flex-1 truncate">{name}</p>
-        <p className="text-xs text-muted-foreground w-16 flex-shrink-0 text-center">
-          Lv.{level} / {maxLevel}
-        </p>
+        <div className="flex items-center gap-1 flex-shrink-0">
+          <p className="text-xs text-muted-foreground whitespace-nowrap">
+            Lv.{level} / {maxLevel}
+          </p>
+          <LevelUpArrow level={level} />
+        </div>
         {isMaxLevel ? (
           <span className="text-xs font-semibold text-muted-foreground w-20 text-center">MAX</span>
         ) : isQrLocked ? (
@@ -70,5 +76,6 @@ export function ProductionUpgradeItem({ id }: Props) {
         <span>生産時間: {displayCycleSeconds.toFixed(1)}秒</span>
       </div>
     </Card>
+    </LevelUpCard>
   );
 }
